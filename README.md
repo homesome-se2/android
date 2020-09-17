@@ -1,2 +1,2 @@
 # android
-Companion-app for local/remote access to the home server features.
+Companion-app for remote access to the home server features, via the public application server.
