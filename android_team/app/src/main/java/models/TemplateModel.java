@@ -15,7 +15,6 @@ public TemplateModel(int type){
 }
 
 public int getType(){
-
     return type;
 }
 
