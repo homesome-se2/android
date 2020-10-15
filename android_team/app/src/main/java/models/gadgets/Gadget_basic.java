@@ -1,4 +1,4 @@
-package comtest.example.android_team.models.gadgets;
+package models.gadgets;
 
 public class Gadget_basic extends Gadget {
 
