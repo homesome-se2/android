@@ -3,8 +3,9 @@ import android.util.Log;
 
 import java.net.URI;
 import java.net.URISyntaxException;
-import android.os.Handler
+import android.os.Handler;
 
+import comtest.example.android_team.AppManager;
 import tech.gusavila92.websocketclient.WebSocketClient;
 
 public class HTTPNetworkService {
