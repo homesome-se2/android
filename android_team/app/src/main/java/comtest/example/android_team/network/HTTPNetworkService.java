@@ -3,7 +3,7 @@ import android.util.Log;
 
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.logging.Handler;
+import android.os.Handler
 
 import tech.gusavila92.websocketclient.WebSocketClient;
 
@@ -40,6 +40,7 @@ public class HTTPNetworkService {
             @Override
             public void onTextReceived(String message) {
                 Log.i(TAG,"Message received: " + message);
+                updateUIThread(message);
             }
 
             @Override
@@ -70,7 +71,14 @@ public class HTTPNetworkService {
         Log.i(TAG, "C: Trying to connect...");
         webSocketClient.connect();
     }
-    //private void updateUIThread(final String request){}
+    private void updateUIThread(final String request){
+        handler.post(new Runnable() {
+            @Override
+            public void run() {
+                //AppManager.getInstance().handleServerResponse(request);
+            }
+        });
+    }
 
 
 }
