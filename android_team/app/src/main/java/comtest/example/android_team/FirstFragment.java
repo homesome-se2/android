@@ -28,7 +28,13 @@ public class FirstFragment extends Fragment {
             public void onClick(View view) {
                 NavHostFragment.findNavController(FirstFragment.this)
                         .navigate(R.id.action_FirstFragment_to_SecondFragment);
+                AppManager.getInstance().requestToServer("101::Robert::Hejhej");
             }
         });
+    }
+    @Override
+    public void onResume(){
+        super.onResume();
+        AppManager.getInstance().establishConnection();
     }
 }
