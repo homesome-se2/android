@@ -11,23 +11,26 @@
         android:layout_height="match_parent"
         android:layout_margin="4dp">
 
-    <ImageView
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:padding="2dp"
-        android:id="@+id/imageView"/>
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:padding="2dp" />
 
         <TextView
-            android:id="@+id/textView"
+            android:id="@+id/set_value_card"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Line 1"
-            android:textSize="20sp"
-            android:textStyle="bold"
             android:layout_alignParentTop="true"
+            android:layout_marginStart="-23dp"
+            android:layout_marginLeft="-23dp"
+            android:layout_marginTop="0dp"
             android:layout_toEndOf="@+id/imageView"
             android:layout_toRightOf="@+id/imageView"
-            android:textColor="@android:color/black" />
+            android:text="Line 1"
+            android:textColor="@android:color/black"
+            android:textSize="20sp"
+            android:textStyle="bold" />
 
     </RelativeLayout>
 </androidx.cardview.widget.CardView>
