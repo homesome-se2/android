@@ -38,12 +38,11 @@ public class Adapters extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
         public SwitchTemplateViewHolder(@NonNull View itemView) {
             super(itemView);
-            this.aliasGadget = aliasGadget;
-            this.template = template;
-            this.background = background;
-            this.switchLamp = switchLamp;
+            this.aliasGadget = itemView.findViewById(R.id.switch_sensor_card_name);
+            this.template = itemView.findViewById(R.id.switch_temp);
+            this.background = itemView.findViewById(R.id.sensorBackground);
+            this.switchLamp = itemView.findViewById(R.id.switch_state);
 
-            // Lägg till ID senare på våra gadgets INTE KLAR DENNA!
         }
     }
 
@@ -52,14 +51,13 @@ public class Adapters extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         TextView alias, state, template;
         RelativeLayout background;
 
-        public BinarySensorTemplateViewHolder(@NonNull View itemView, TextView alias, TextView state, TextView template, RelativeLayout background) {
+        public BinarySensorTemplateViewHolder(@NonNull View itemView) {
             super(itemView);
-            this.alias = alias;
-            this.state = state;
-            this.template = template;
-            this.background = background;
+            this.alias = itemView.findViewById(R.id.binary_sensor_card_name);
+            this.state = itemView.findViewById(R.id.binary_state);
+            this.template = itemView.findViewById(R.id.binary_temp);
+            this.background = itemView.findViewById(R.id.sensorBackground);
 
-            // Lägg till ID senare på våra gadgets INTE KLAR DENNA!
         }
     }
 
@@ -70,13 +68,25 @@ public class Adapters extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
         public SensorTemplateViewHolder(@NonNull View itemView) {
             super(itemView);
-            this.alias = alias;
-            this.state = state;
-            this.template = template;
-            this.background = background;
+            this.alias = itemView.findViewById(R.id.sensor_card_name);
+            this.state = itemView.findViewById(R.id.text_State);
+            this.template = itemView.findViewById(R.id.text_temp);
+            this.background = itemView.findViewById(R.id.sensorBackground);
         }
 
-        // Lägg till ID senare på våra gadgets INTE KLAR DENNA!
+    }
+    public static class SetValueTemplateViewHolder extends RecyclerView.ViewHolder{
+        TextView alias, state, template;
+        RelativeLayout background;
+
+        public SetValueTemplateViewHolder(@NonNull View itemView){
+            super(itemView);
+            this.alias = itemView.findViewById(R.id.set_value_card_name);
+            this.state = itemView.findViewById(R.id.setValue_state);
+            this.template = itemView.findViewById(R.id.setValue_temp);
+            this.background = itemView.findViewById(R.id.sensorBackground);
+
+        }
     }
 
 
@@ -94,16 +104,16 @@ public class Adapters extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             case TemplateModel.BINARY_SENSOR_CARD:
                 view = LayoutInflater.from(parent.getContext()).inflate(R.layout.binary_sensor_card, parent, false);
                 Log.i(TAG, "BinarySensorTemplateViewHolder view created.");
-                return new SensorTemplateViewHolder(view);
+                return new BinarySensorTemplateViewHolder(view);
             case TemplateModel.SENSOR_CARD:
                 view = LayoutInflater.from(parent.getContext()).inflate(R.layout.sensor_card, parent, false);
-                Log.i(TAG, "BinarySensorTemplateViewHolder view created.");
+                Log.i(TAG, "SensorTemplateViewHolder view created.");
                 return new SensorTemplateViewHolder(view);
 
             case TemplateModel.SET_VALUE:
                 view = LayoutInflater.from(parent.getContext()).inflate(R.layout.set_value_card, parent, false);
                 Log.i(TAG, "SensorTemplateViewHolder view created.");
-                return new SensorTemplateViewHolder(view);
+                return new SetValueTemplateViewHolder(view);
         }
         return null;
     }
@@ -127,6 +137,8 @@ public class Adapters extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                 case TemplateModel.SENSOR_CARD:
                     setSensorDetails(((SensorTemplateViewHolder) holder), gadget);
                     break;
+                case TemplateModel.SET_VALUE:
+                    setValueCardDetails(((SetValueTemplateViewHolder) holder), gadget);
 
 
             }
@@ -180,6 +192,13 @@ public class Adapters extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         gadget.alias.setText(gadget_basic.gadgetName);
         gadget.state.setText(String.valueOf(gadget_basic.getState()));
         gadget.background.setBackgroundColor(Color.GRAY);
+    }
+
+    private void setValueCardDetails(SetValueTemplateViewHolder gadget, Gadget_basic gadget_basic){
+        gadget.template.setText(gadget_basic.valueTemplate);
+        gadget.alias.setText(gadget_basic.gadgetName);
+        gadget.state.setText(String.valueOf(gadget_basic.getState()));
+        gadget.background.setBackgroundColor(Color.GREEN);
     }
 
 }
