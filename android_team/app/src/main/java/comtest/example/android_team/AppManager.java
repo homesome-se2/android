@@ -3,7 +3,11 @@ package comtest.example.android_team;
 import android.os.Handler;
 import android.util.Log;
 
+import java.util.HashMap;
+
 import comtest.example.android_team.network.HTTPNetworkService;
+import models.gadgets.Gadget;
+import models.gadgets.Gadget_basic;
 
 public class AppManager {
     private static final String TAG = "Info";
@@ -14,6 +18,11 @@ public class AppManager {
     public void establishConnection(){
         httpNetworkService = new HTTPNetworkService(handler);
 
+    }
+    public HashMap<Integer, Gadget_basic> gadgets;
+    public HashMap<Integer, Gadget_basic> getGadgets () {
+
+        return gadgets;
     }
 
     public void endConnection(){
