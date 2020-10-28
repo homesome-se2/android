@@ -58,7 +58,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        AppManager.getInstance().establishConnection();
+    //    AppManager.getInstance().establishConnection();
 
     }
 
@@ -80,5 +80,6 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onPause(){
         super.onPause();
+        AppManager.getInstance().endConnection();
     }
 }
