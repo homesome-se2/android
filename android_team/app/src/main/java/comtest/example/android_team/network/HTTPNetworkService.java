@@ -73,12 +73,12 @@ public class HTTPNetworkService {
         webSocketClient.connect();
     }
     private void updateUIThread(final String request){
-        handler.post(new Runnable() {
-            @Override
-            public void run() {
-                //AppManager.getInstance().handleServerResponse(request);
-            }
-        });
+//        handler.post(new Runnable() {
+//            @Override
+//            public void run() {
+//                //AppManager.getInstance().handleServerResponse(request);
+//            }
+//        });
     }
 
 

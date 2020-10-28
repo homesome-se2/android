@@ -15,31 +15,35 @@ public class AppManager {
 
     private HTTPNetworkService httpNetworkService;
 
-    public void establishConnection(){
-        httpNetworkService = new HTTPNetworkService(handler);
-
-    }
-    public HashMap<Integer, Gadget_basic> gadgets;
-    public HashMap<Integer, Gadget_basic> getGadgets () {
-
-        return gadgets;
-    }
-
-    public void endConnection(){
-        httpNetworkService.getWebSocketClient().close();
-        Log.i(TAG,"C: Socket is closed!");
-    }
-
-    public void requestToServer(String request){
-        httpNetworkService.getWebSocketClient().send(request);
-    }
-
     public static AppManager instance = null;
 
-    public static AppManager getInstance(){
-        if (instance == null){
+    public HashMap<Integer, Gadget_basic> gadgets;
+
+    public static AppManager getInstance() {
+        if (instance == null) {
             instance = new AppManager();
         }
         return instance;
     }
+
+    public HashMap<Integer, Gadget_basic> getGadgets() {
+
+        return gadgets;
+    }
+
+
+    public void establishConnection() {
+        httpNetworkService = new HTTPNetworkService(handler);
+
+    }
+
+    public void endConnection() {
+        httpNetworkService.getWebSocketClient().close();
+        Log.i(TAG, "C: Socket is closed!");
+    }
+
+    public void requestToServer(String request) {
+        httpNetworkService.getWebSocketClient().send(request);
+    }
+
 }

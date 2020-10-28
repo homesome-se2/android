@@ -39,7 +39,7 @@ public class FirstFragment extends Fragment {
                 NavHostFragment.findNavController(FirstFragment.this)
                         .navigate(R.id.action_FirstFragment_to_SecondFragment);
                 AppManager.getInstance().establishConnection();
-                AppManager.getInstance().requestToServer("101::Robert::Hejhej");
+                AppManager.getInstance().requestToServer("101::Homer::1234");
             }
         });
     }
@@ -60,8 +60,9 @@ public class FirstFragment extends Fragment {
     @Override
     public void onResume(){
         super.onResume();
-        AppManager.getInstance().establishConnection();
+ //       AppManager.getInstance().establishConnection();
     }
+
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
@@ -80,7 +81,7 @@ public class FirstFragment extends Fragment {
     public void onPause() {
         super.onPause();
         Log.d(TAG, "HomeFragment: In the onPause() event");
-        gadgets.clear();
+//        gadgets.clear();
     }
 
 
