@@ -110,7 +110,7 @@ public class Adapters extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                 Log.i(TAG, "SensorTemplateViewHolder view created.");
                 return new SensorTemplateViewHolder(view);
 
-            case TemplateModel.SET_VALUE:
+            case TemplateModel.SET_VALUE_CARD:
                 view = LayoutInflater.from(parent.getContext()).inflate(R.layout.set_value_card, parent, false);
                 Log.i(TAG, "SensorTemplateViewHolder view created.");
                 return new SetValueTemplateViewHolder(view);
@@ -137,7 +137,7 @@ public class Adapters extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                 case TemplateModel.SENSOR_CARD:
                     setSensorDetails(((SensorTemplateViewHolder) holder), gadget);
                     break;
-                case TemplateModel.SET_VALUE:
+                case TemplateModel.SET_VALUE_CARD:
                     setValueCardDetails(((SetValueTemplateViewHolder) holder), gadget);
 
 
@@ -159,7 +159,7 @@ public class Adapters extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                 return TemplateModel.SENSOR_CARD;
 
             case 3:
-                return TemplateModel.SET_VALUE;
+                return TemplateModel.SET_VALUE_CARD;
             default:
                 return -1;
         }
