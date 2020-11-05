@@ -76,7 +76,7 @@ public class HTTPNetworkService {
 //        handler.post(new Runnable() {
 //            @Override
 //            public void run() {
-//                //AppManager.getInstance().handleServerResponse(request);
+                AppManager.getInstance().handleServerResponse(request);
 //            }
 //        });
     }
