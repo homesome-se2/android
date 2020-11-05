@@ -76,6 +76,20 @@ public class MultiViewTypeAdapter extends RecyclerView.Adapter<RecyclerView.View
         }
     }
 
+    public static class SetValueTemplateViewHolder extends RecyclerView.ViewHolder{
+        TextView alias, state, template;
+        RelativeLayout background;
+
+        public SetValueTemplateViewHolder(@NonNull View itemView){
+            super(itemView);
+            this.alias = itemView.findViewById(R.id.text_alias);
+            this.state = itemView.findViewById(R.id.setValue_state);
+            this.template = itemView.findViewById(R.id.setValue_temp);
+            this.background = itemView.findViewById(R.id.sensorBackground);
+
+        }
+    }
+
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -93,6 +107,10 @@ public class MultiViewTypeAdapter extends RecyclerView.Adapter<RecyclerView.View
                 view = LayoutInflater.from(parent.getContext()).inflate(R.layout.sensor_card_item, parent, false);
                 Log.i(TAG, "SensorTemplateViewHolder( view created.");
                 return new SensorTemplateViewHolder(view);
+            case TemplateModel.SET_VALUE_CARD:
+                view = LayoutInflater.from(parent.getContext()).inflate(R.layout.set_value_card, parent, false);
+                Log.i(TAG, "SensorTemplateViewHolder view created.");
+                return new SetValueTemplateViewHolder(view);
         }
         return null;
     }
@@ -101,6 +119,7 @@ public class MultiViewTypeAdapter extends RecyclerView.Adapter<RecyclerView.View
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         //position is item card index
         TemplateModel object = dataSet.get(position);
+        Log.i(TAG, "In onBindViewHolder");
         ArrayList<Gadget_basic> valuesList = new ArrayList<>(AppManager.getInstance().getGadgets().values());
         Gadget_basic gadget = valuesList.get(position);
         if (object != null) {
@@ -114,6 +133,8 @@ public class MultiViewTypeAdapter extends RecyclerView.Adapter<RecyclerView.View
                 case TemplateModel.SENSOR_CARD:
                     setSensorDetails(((SensorTemplateViewHolder) holder), gadget);
                     break;
+                case TemplateModel.SET_VALUE_CARD:
+                    setValueCardDetails(((Adapters.SetValueTemplateViewHolder) holder), gadget);
             }
         }
     }
@@ -128,6 +149,8 @@ public class MultiViewTypeAdapter extends RecyclerView.Adapter<RecyclerView.View
                 return TemplateModel.BINARY_SENSOR_CARD;
             case 2:
                 return TemplateModel.SENSOR_CARD;
+            case 3:
+                return TemplateModel.SET_VALUE_CARD;
             default:
                 return -1;
         }
@@ -181,5 +204,11 @@ public class MultiViewTypeAdapter extends RecyclerView.Adapter<RecyclerView.View
         gadget.alias.setText(gadget_basic.gadgetName);
         gadget.state.setText(String.valueOf(gadget_basic.getState()));
         gadget.background.setBackgroundColor(Color.GRAY);
+    }
+    private void setValueCardDetails(Adapters.SetValueTemplateViewHolder gadget, Gadget_basic gadget_basic){
+        gadget.template.setText(gadget_basic.valueTemplate);
+        gadget.alias.setText(gadget_basic.gadgetName);
+        gadget.state.setText(String.valueOf(gadget_basic.getState()));
+        gadget.background.setBackgroundColor(Color.GREEN);
     }
 }
