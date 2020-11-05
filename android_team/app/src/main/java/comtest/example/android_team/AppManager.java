@@ -15,6 +15,7 @@ public class AppManager {
     // Handler of UI-thread. For communication: Service threads -> UI thread
     private Handler handler;
 
+    public UpdateResponse currentFragment;
     // NetWork service
     private HTTPNetworkService httpNetworkService;
 
@@ -37,7 +38,7 @@ public class AppManager {
 
     private AppManager() {
         handler = new Handler();
-       // currentFragmentView = null;
+        currentFragment = null;
         gadgets = new HashMap<>();
 
     }
@@ -89,7 +90,7 @@ public class AppManager {
             Gadget_basic gadgetBasic = new Gadget_basic(gadgetID, alias, type, valueTemplate, state);
             gadgets.put(gadgetID, gadgetBasic);
         }
-    //    currentFragmentView.update(304, "");
+        currentFragment.update(304, "");
 
         //TODO tempt print! delete later
         for(Map.Entry<Integer, Gadget_basic> entry : gadgets.entrySet()) {
