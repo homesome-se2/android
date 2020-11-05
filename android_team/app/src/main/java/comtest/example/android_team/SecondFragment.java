@@ -62,7 +62,7 @@ public class SecondFragment extends Fragment implements UpdateResponse {
                             gadgetCards.add(new TemplateModel(TemplateModel.SENSOR_CARD));
                             break;
                         case SET_VALUE:
-
+                            gadgetCards.add(new TemplateModel(TemplateModel.SET_VALUE_CARD));
                             break;
                     }
                 }
