@@ -1,4 +1,4 @@
-package models;
+package comtest.example.android_team.models;
 
 public class TemplateModel {
 

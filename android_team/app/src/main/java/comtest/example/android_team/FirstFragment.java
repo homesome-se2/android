@@ -11,10 +11,9 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.fragment.NavHostFragment;
+import comtest.example.android_team.models.TemplateModel;
 
 import java.util.ArrayList;
-
-import models.TemplateModel;
 
 public class FirstFragment extends Fragment {
 

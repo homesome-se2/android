@@ -1,4 +1,4 @@
-package models;
+package comtest.example.android_team.models;
 
 import android.content.Context;
 import android.graphics.Color;
@@ -17,11 +17,11 @@ import java.util.ArrayList;
 
 import comtest.example.android_team.AppManager;
 import comtest.example.android_team.R;
-import models.gadgets.Gadget_basic;
+import comtest.example.android_team.models.gadgets.Gadget_basic;
 
 public class Adapters extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-    private ArrayList<TemplateModel> gadgetList;
+    public ArrayList<TemplateModel> gadgetList;
     private Context mContext;
     private static final String TAG = "Info >> ";
 
