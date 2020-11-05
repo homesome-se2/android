@@ -1,9 +1,11 @@
 package comtest.example.android_team.models;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Color;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
@@ -137,15 +139,35 @@ public class MultiViewTypeAdapter extends RecyclerView.Adapter<RecyclerView.View
     }
 
 
-    private void setSwitchDetails(SwitchTemplateViewHolder gadget, Gadget_basic gadget_basic) {
+    @SuppressLint("ClickableViewAccessibility")
+    private void setSwitchDetails(final SwitchTemplateViewHolder gadget, final Gadget_basic gadget_basic) {
         gadget.template.setText(gadget_basic.valueTemplate);
         gadget.alias.setText(gadget_basic.gadgetName);
+
+        gadget.switchLamp.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent event) {
+                if (event.getAction() == MotionEvent.ACTION_UP) {
+                    if (gadget.switchLamp.isChecked()) {
+                        String set = "311::"+gadget_basic.id+"::0";
+                        AppManager.getInstance().requestToServer(set);
+                    } else {
+                        String set = "311::"+gadget_basic.id+"::1";
+                        AppManager.getInstance().requestToServer(set);
+                    }
+                }
+                return true;
+            }
+        });
+
         if (gadget_basic.getState() == 1) {
             gadget.switchLamp.setChecked(true);
         } else {
             gadget.switchLamp.setChecked(false);
         }
+
     }
+
 
     private void setBinarySensorDetails(BinarySensorTemplateViewHolder gadget, Gadget_basic gadget_basic) {
         gadget.template.setText(gadget_basic.valueTemplate);

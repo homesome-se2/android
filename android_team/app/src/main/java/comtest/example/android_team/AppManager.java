@@ -47,12 +47,15 @@ public class AppManager {
     // =========================== HANDLE NETWORK CONNECTION ===============================
     public void establishConnection() {
         httpNetworkService = new HTTPNetworkService(handler);
-
     }
 
     public void endConnection() {
         httpNetworkService.getWebSocketClient().close();
         Log.i(TAG, "C: Socket is closed!");
+    }
+
+    public boolean networkNotNull(){
+        return httpNetworkService != null;
     }
 
     public void requestToServer(String request) {
@@ -64,7 +67,10 @@ public class AppManager {
         String[] commands = response.split("::");
         switch (commands[0]) {
             case "102":
-                currentFragment.update(102, "Login: Succesfull");
+                manuelLogin(commands);
+                break;
+            case "104":
+                automaticLogin(commands);
                 break;
             case "304":
                 receiveAllGadgets(commands);
@@ -73,11 +79,27 @@ public class AppManager {
                 gadgetStateUpdate(commands);
                 break;
             case "901":
-                Log.e(TAG, "Exception msg: " + commands[1]);
+                exceptionMSG(commands);
+                break;
+            case "903":
+                exceptionFailedLogIn(commands);
                 break;
         }
 
     }
+
+
+    // #102
+    private void manuelLogin(String[] commands){
+        String cache = String.format("%s:%s", commands[1], commands[4]);
+        currentFragment.update(102, cache);
+    }
+
+    // #104
+    private void automaticLogin(String[] commands) {
+        currentFragment.update(104, "");
+    }
+
 
     // #304
     private void receiveAllGadgets(String[] commands) {
@@ -110,6 +132,18 @@ public class AppManager {
         currentFragment.update(316, String.valueOf(newState));
     }
 
+    // #901
+    private void exceptionMSG(String[] commands){
+        String error = "Exception msg: " + commands[1];
+        Log.e(TAG, error);
+        currentFragment.update(901, error);
+    }
 
+    // #903
+    private void exceptionFailedLogIn(String[] commands){
+        String error = "Exception msg: " + commands[1];
+        Log.e(TAG, error);
+        currentFragment.update(903, error);
+    }
 
 }

@@ -11,13 +11,13 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 
-
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
-
+import comtest.example.android_team.models.ReadWriteCache;
 
 
 public class FirstFragment extends Fragment implements UpdateResponse {
@@ -46,22 +46,20 @@ public class FirstFragment extends Fragment implements UpdateResponse {
                 logIn();
             }
         });
+
+
     }
 
 
-
-    private void init(View view){
+    private void init(View view) {
         login_btn = view.findViewById(R.id.btnLogin);
         logAcc = view.findViewById(R.id.username);
         logPass = view.findViewById(R.id.passwordField);
     }
 
-    private void logIn(){
+    private void logIn() {
         String username = logAcc.getText().toString().trim();
         String password = logPass.getText().toString().trim();
-
-        Log.i(TAG,username);
-        Log.i(TAG,password);
 
         AppManager.getInstance().establishConnection();
         AppManager.getInstance().requestToServer("101::Homer::1234");
@@ -69,7 +67,38 @@ public class FirstFragment extends Fragment implements UpdateResponse {
     }
 
 
+    @Override
+    public void update(int indexProtocol, String message) {
 
+        switch (indexProtocol) {
+
+            case 102:
+                ReadWriteCache readWriteCache = new ReadWriteCache(getContext());
+                navController.navigate(R.id.SecondFragment);
+                readWriteCache.writeToCache(message);
+                break;
+            case 901:
+            case 903:
+                Toast.makeText(getContext(), message, Toast.LENGTH_LONG).show();
+                break;
+        }
+    }
+
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        Log.d(TAG, "HomeFragment: In the OnCreate event()");
+        // This callback will only be called when Fragment is at least Started.
+        OnBackPressedCallback callback = new OnBackPressedCallback(true /* enabled by default */) {
+            @Override
+            public void handleOnBackPressed() {
+                getActivity().finish();
+            }
+        };
+        requireActivity().getOnBackPressedDispatcher().addCallback(this, callback);
+        // The callback can be enabled or disabled here or in handleOnBackPressed()
+    }
 
     @Override
     public void onDestroyView() {
@@ -85,7 +114,7 @@ public class FirstFragment extends Fragment implements UpdateResponse {
     }
 
     @Override
-    public void onResume(){
+    public void onResume() {
         super.onResume();
         //       AppManager.getInstance().establishConnection();
     }
@@ -132,17 +161,4 @@ public class FirstFragment extends Fragment implements UpdateResponse {
         Log.d(TAG, "HomeFragment: In the onDetach() event");
     }
 
-    @Override
-    public void update(int indexProtocol, String message) {
-
-        switch (indexProtocol){
-
-            case 102:
-                Toast.makeText(getContext(), message, Toast.LENGTH_LONG).show();
-                navController.navigate(R.id.SecondFragment);
-                Log.i(TAG, "Open Second fragment");
-                break;
-
-        }
-    }
 }
