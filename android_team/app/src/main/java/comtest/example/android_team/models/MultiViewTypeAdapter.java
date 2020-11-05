@@ -117,6 +117,7 @@ public class MultiViewTypeAdapter extends RecyclerView.Adapter<RecyclerView.View
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         //position is item card index
         TemplateModel object = dataSet.get(position);
+        Log.i(TAG, "In onBindViewHolder");
         ArrayList<Gadget_basic> valuesList = new ArrayList<>(AppManager.getInstance().getGadgets().values());
         Gadget_basic gadget = valuesList.get(position);
         if (object != null) {
