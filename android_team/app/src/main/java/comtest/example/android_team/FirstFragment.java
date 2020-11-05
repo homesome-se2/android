@@ -6,42 +6,72 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 import androidx.navigation.fragment.NavHostFragment;
 import comtest.example.android_team.models.TemplateModel;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class FirstFragment extends Fragment {
 
     private static final String TAG = "Info";
-    private ArrayList<TemplateModel> gadgets;
+    private NavController navController;
+    private Button login_btn;
+    private EditText logAcc, logPass;
+    private TextView regClickText;
 
     @Override
     public View onCreateView(
-            LayoutInflater inflater, ViewGroup container,
-            Bundle savedInstanceState
-    ) {
+            LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
+        navController = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment);
         return inflater.inflate(R.layout.fragment_first, container, false);
     }
 
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        init(view);
 
-        view.findViewById(R.id.btnLogin).setOnClickListener(new View.OnClickListener() {
+        login_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                NavHostFragment.findNavController(FirstFragment.this)
-                        .navigate(R.id.action_FirstFragment_to_SecondFragment);
-                AppManager.getInstance().establishConnection();
-                AppManager.getInstance().requestToServer("101::Homer::1234");
+                logIn();
             }
         });
     }
+
+
+
+    private void init(View view){
+        login_btn = view.findViewById(R.id.btnLogin);
+        logAcc = view.findViewById(R.id.username);
+        logPass = view.findViewById(R.id.passwordField);
+    }
+
+    private void logIn(){
+        String username = logAcc.getText().toString().trim();
+        String password = logPass.getText().toString().trim();
+
+        Log.i(TAG,username);
+        Log.i(TAG,password);
+
+        AppManager.getInstance().establishConnection();
+        AppManager.getInstance().requestToServer("101::Homer::1234");
+
+        navController.navigate(R.id.SecondFragment);
+    }
+
+
+
 
     @Override
     public void onDestroyView() {

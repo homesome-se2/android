@@ -22,7 +22,6 @@ public class AppManager {
     private HashMap<Integer, Gadget_basic> gadgets;
 
     public HashMap<Integer, Gadget_basic> getGadgets() {
-
         return gadgets;
     }
 
