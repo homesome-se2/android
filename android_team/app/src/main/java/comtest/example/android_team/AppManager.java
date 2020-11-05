@@ -63,11 +63,14 @@ public class AppManager {
     public void handleServerResponse(String response) {
         String[] commands = response.split("::");
         switch (commands[0]) {
+            case "102":
+                currentFragment.update(102, "Login: Succesfull");
+                break;
             case "304":
                 receiveAllGadgets(commands);
                 break;
             case "316":
-        //        gadgetStateUpdate(commands);
+                gadgetStateUpdate(commands);
                 break;
             case "901":
                 Log.e(TAG, "Exception msg: " + commands[1]);
@@ -96,6 +99,15 @@ public class AppManager {
         for(Map.Entry<Integer, Gadget_basic> entry : gadgets.entrySet()) {
             Log.i(TAG, entry.toString());
         }
+    }
+
+    // #316
+    private void gadgetStateUpdate(String[] commands) {
+        int gadgetID = Integer.parseInt(commands[1]);
+        float newState = Float.parseFloat(commands[2]);
+        // Set new state
+        gadgets.get(gadgetID).setState(newState);
+        currentFragment.update(316, String.valueOf(newState));
     }
 
 
