@@ -9,8 +9,8 @@
    <androidx.recyclerview.widget.RecyclerView
        android:id="@+id/gadgetListView"
        android:layout_width="match_parent"
-       android:layout_height="627dp"
-       android:background="@android:color/darker_gray"
+       android:layout_height="637dp"
+       android:background="@android:color/white"
        android:padding="4dp"
        android:scrollbars="vertical" />
 
