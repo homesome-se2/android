@@ -14,12 +14,13 @@ import comtest.example.android_team.models.gadgets.Gadget_basic;
 
 public class AppManager {
     private static final String TAG = "Info";
+    private static HTTPNetworkService httpNetworkService;
     // Handler of UI-thread. For communication: Service threads -> UI thread
     private Handler handler;
 
     public UpdateResponse currentFragment;
     // NetWork service
-    private HTTPNetworkService httpNetworkService;
+
 
     // map for gadgets. GadgetID/object
     private HashMap<Integer, Gadget_basic> gadgets;
@@ -51,7 +52,7 @@ public class AppManager {
         httpNetworkService = new HTTPNetworkService(handler);
     }
 
-    public void endConnection() {
+    public static void endConnection() {
         httpNetworkService.getWebSocketClient().close();
         Log.i(TAG, "C: Socket is closed!");
     }

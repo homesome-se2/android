@@ -7,7 +7,6 @@ import com.google.android.material.snackbar.Snackbar;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.work.impl.constraints.NetworkState;
 
 import android.util.Log;
 import android.view.View;
@@ -55,6 +54,8 @@ public class MainActivity extends AppCompatActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+
+
             return true;
         }
 

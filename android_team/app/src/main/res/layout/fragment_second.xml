@@ -9,11 +9,29 @@
    <androidx.recyclerview.widget.RecyclerView
        android:id="@+id/gadgetListView"
        android:layout_width="match_parent"
-       android:layout_height="match_parent"
-       android:padding="4dp"
+       android:layout_height="627dp"
        android:background="@android:color/darker_gray"
-       android:scrollbars="vertical"
-       />
+       android:padding="4dp"
+       android:scrollbars="vertical" />
+
+   <Button
+       android:id="@+id/btn_logOut"
+       android:layout_width="141dp"
+       android:layout_height="59dp"
+       android:layout_below="@+id/gadgetListView"
+       android:layout_alignParentStart="true"
+       android:layout_alignParentLeft="true"
+       android:layout_alignParentEnd="true"
+       android:layout_alignParentRight="true"
+       android:layout_alignParentBottom="true"
+       android:layout_marginStart="135dp"
+       android:layout_marginLeft="135dp"
+       android:layout_marginTop="24dp"
+       android:layout_marginEnd="135dp"
+       android:layout_marginRight="135dp"
+       android:layout_marginBottom="21dp"
+       android:background="#43AEC8"
+       android:text="Log Out" />
 
 
 </RelativeLayout>
