@@ -1,13 +1,14 @@
 package comtest.example.android_team;
 
+
 import android.os.Bundle;
-import android.os.Handler;
+
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.Toast;
+
 
 import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
@@ -22,21 +23,21 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 import java.util.Map;
 
-import comtest.example.android_team.models.Adapters;
 import comtest.example.android_team.models.MultiViewTypeAdapter;
 import comtest.example.android_team.models.ReadWriteCache;
 import comtest.example.android_team.models.TemplateModel;
 import comtest.example.android_team.models.gadgets.Gadget_basic;
+import comtest.example.android_team.voiceSystem.TTS;
 
 public class SecondFragment extends Fragment implements UpdateResponse {
 
     private static final String TAG = "Info";
     private ArrayList<TemplateModel> gadgetCards;
     private RecyclerView recyclerView;
-    private Adapters adapters;
     private MultiViewTypeAdapter multiViewTypeAdapter;
     private Button btnLogOut;
     private NavController navController;
+    private TTS tts;
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_second, container, false);
@@ -61,7 +62,6 @@ public class SecondFragment extends Fragment implements UpdateResponse {
 
     private void initbtnLogOut(View view) {
         btnLogOut = view.findViewById(R.id.btn_logOut);
-
     }
 
     private void logOut() {
@@ -76,9 +76,6 @@ public class SecondFragment extends Fragment implements UpdateResponse {
 
         switch (indexProtocol) {
             case 304:
-
-
-// TODO still unstable server side
                 for(Map.Entry<Integer, Gadget_basic> entry : AppManager.getInstance().getGadgets().entrySet()) {
                     switch (entry.getValue().type){
 
@@ -100,32 +97,9 @@ public class SecondFragment extends Fragment implements UpdateResponse {
                 recyclerView.setAdapter(multiViewTypeAdapter);
                 multiViewTypeAdapter.notifyDataSetChanged();
                 break;
-
-//                for (Map.Entry<Integer, Gadget_basic> entry : AppManager.getInstance().getGadgets().entrySet()) {
-//                    Log.i(TAG, entry.toString());
-//                    switch (entry.getValue().type) {
-//                        case SWITCH:
-//                            gadgetCards.add(new TemplateModel(TemplateModel.SWITCH_CARD));
-//                            break;
-//                        case BINARY_SENSOR:
-//                            gadgetCards.add(new TemplateModel(TemplateModel.BINARY_SENSOR_CARD));
-//                            break;
-//                        case SENSOR:
-//                            gadgetCards.add(new TemplateModel(TemplateModel.SENSOR_CARD));
-//                            break;
-//                        case SET_VALUE:
-//                            gadgetCards.add(new TemplateModel(TemplateModel.SET_VALUE_CARD));
-//                            break;
-//                    }
-//                }
-//                adapters = new Adapters(gadgetCards, getContext());
-//                recyclerView.setAdapter(adapters);
-//                adapters.notifyDataSetChanged();
-//                break;
-
             case 316:
-                Toast.makeText(getContext(), message, Toast.LENGTH_LONG).show();
-                //    adapters.notifyDataSetChanged();
+                Log.i(TAG, message);
+                tts.textToSpeak(message);
                 multiViewTypeAdapter.notifyDataSetChanged();
                 break;
         }
@@ -150,6 +124,9 @@ public class SecondFragment extends Fragment implements UpdateResponse {
     public void onStart() {
         super.onStart();
         Log.d(TAG, "SecondFragment: In the onStartView() event");
+        tts = new TTS(getContext());
+        tts.initTTS();
+
     }
 
     @Override
@@ -168,6 +145,7 @@ public class SecondFragment extends Fragment implements UpdateResponse {
     public void onStop() {
         super.onStop();
         Log.d(TAG, "SecondFragment: In the onStopView() event");
+        tts.stopTTS();
     }
 
     @Override

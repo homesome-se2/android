@@ -9,6 +9,7 @@ import java.util.Map;
 import comtest.example.android_team.models.gadgets.GadgetType;
 import comtest.example.android_team.network.HTTPNetworkService;
 import comtest.example.android_team.models.gadgets.Gadget_basic;
+import comtest.example.android_team.voiceSystem.VoiceController;
 
 /* This class works to manipulate and work with the data. To connect to the network, and handle server respones. Background work is done here! */
 
@@ -57,7 +58,7 @@ public class AppManager {
         Log.i(TAG, "C: Socket is closed!");
     }
 
-    public boolean networkNotNull(){
+    public boolean networkNotNull() {
         return httpNetworkService != null;
     }
 
@@ -93,7 +94,7 @@ public class AppManager {
 
 
     // #102
-    private void manuelLogin(String[] commands){
+    private void manuelLogin(String[] commands) {
         String cache = String.format("%s:%s", commands[1], commands[4]);
         currentFragment.update(102, cache);
     }
@@ -121,10 +122,11 @@ public class AppManager {
         currentFragment.update(304, "");
 
         //TODO tempt print! delete later
-        for(Map.Entry<Integer, Gadget_basic> entry : gadgets.entrySet()) {
+        for (Map.Entry<Integer, Gadget_basic> entry : gadgets.entrySet()) {
             Log.i(TAG, entry.toString());
         }
     }
+
 
     // #316
     private void gadgetStateUpdate(String[] commands) {
@@ -132,18 +134,19 @@ public class AppManager {
         float newState = Float.parseFloat(commands[2]);
         // Set new state
         gadgets.get(gadgetID).setState(newState);
-        currentFragment.update(316, String.valueOf(newState));
+        String response = VoiceController.generateVoiceAnswer(gadgets.get(gadgetID));
+        currentFragment.update(316, response);
     }
 
     // #901
-    private void exceptionMSG(String[] commands){
+    private void exceptionMSG(String[] commands) {
         String error = "Exception msg: " + commands[1];
         Log.e(TAG, error);
         currentFragment.update(901, error);
     }
 
     // #903
-    private void exceptionFailedLogIn(String[] commands){
+    private void exceptionFailedLogIn(String[] commands) {
         String error = "Exception msg: " + commands[1];
         Log.e(TAG, error);
         currentFragment.update(903, error);
