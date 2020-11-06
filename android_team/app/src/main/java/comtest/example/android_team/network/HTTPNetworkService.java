@@ -10,6 +10,8 @@ import tech.gusavila92.websocketclient.WebSocketClient;
 
 public class HTTPNetworkService {
 
+    /* Establish a connection to the server, and the void methods where we have Log.i logs what is happening in this class */
+
     private WebSocketClient webSocketClient;
     public static final String TAG = "Info";
 

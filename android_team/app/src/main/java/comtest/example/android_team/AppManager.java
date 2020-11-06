@@ -10,6 +10,8 @@ import comtest.example.android_team.models.gadgets.GadgetType;
 import comtest.example.android_team.network.HTTPNetworkService;
 import comtest.example.android_team.models.gadgets.Gadget_basic;
 
+/* This class works to manipulate and work with the data. To connect to the network, and handle server respones. Background work is done here! */
+
 public class AppManager {
     private static final String TAG = "Info";
     // Handler of UI-thread. For communication: Service threads -> UI thread

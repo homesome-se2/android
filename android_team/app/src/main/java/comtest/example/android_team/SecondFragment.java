@@ -51,7 +51,7 @@ public class SecondFragment extends Fragment implements UpdateResponse {
 
         switch (indexProtocol) {
             case 304:
-// TODO still unstable
+// TODO still unstable server side
                 for(Map.Entry<Integer, Gadget_basic> entry : AppManager.getInstance().getGadgets().entrySet()) {
                     switch (entry.getValue().type){
                         case SWITCH:

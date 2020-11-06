@@ -19,6 +19,7 @@ import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import comtest.example.android_team.models.ReadWriteCache;
 
+/* This works with the first page in the application. When we login we send request to the public server with Appmanager getInstance () */
 
 public class FirstFragment extends Fragment implements UpdateResponse {
 

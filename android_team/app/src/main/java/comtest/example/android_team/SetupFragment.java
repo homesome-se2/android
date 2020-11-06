@@ -18,6 +18,8 @@ import comtest.example.android_team.models.ReadWriteCache;
 
 public class SetupFragment extends Fragment implements UpdateResponse {
 
+    /* A middle hand that is there when we are setting up new fragments */
+
     private static final String TAG = "Info";
     private NavController navController;
 
