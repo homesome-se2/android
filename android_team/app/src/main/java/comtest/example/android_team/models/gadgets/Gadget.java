@@ -2,6 +2,8 @@ package comtest.example.android_team.models.gadgets;
 
 public abstract class Gadget {
 
+    /* Here we define our parameters for a gadget. Then we add a constructor to the parameters. Method setState is there to make the system to dont bother
+     what gadget that is toggled. It is indedendent in that way and only checks for the update */
 
     public final int id;
     public final String gadgetName;

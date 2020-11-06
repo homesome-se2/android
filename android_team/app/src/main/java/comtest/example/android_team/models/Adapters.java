@@ -19,6 +19,8 @@ import comtest.example.android_team.AppManager;
 import comtest.example.android_team.R;
 import comtest.example.android_team.models.gadgets.Gadget_basic;
 
+/* This class is used to show a different card (like a lamp) */
+
 public class Adapters extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     public ArrayList<TemplateModel> gadgetList;
@@ -75,11 +77,12 @@ public class Adapters extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         }
 
     }
-    public static class SetValueTemplateViewHolder extends RecyclerView.ViewHolder{
+
+    public static class SetValueTemplateViewHolder extends RecyclerView.ViewHolder {
         TextView alias, state, template;
         RelativeLayout background;
 
-        public SetValueTemplateViewHolder(@NonNull View itemView){
+        public SetValueTemplateViewHolder(@NonNull View itemView) {
             super(itemView);
             this.alias = itemView.findViewById(R.id.set_value_card_name);
             this.state = itemView.findViewById(R.id.setValue_state);
@@ -194,7 +197,7 @@ public class Adapters extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         gadget.background.setBackgroundColor(Color.GRAY);
     }
 
-    private void setValueCardDetails(SetValueTemplateViewHolder gadget, Gadget_basic gadget_basic){
+    private void setValueCardDetails(SetValueTemplateViewHolder gadget, Gadget_basic gadget_basic) {
         gadget.template.setText(gadget_basic.valueTemplate);
         gadget.alias.setText(gadget_basic.gadgetName);
         gadget.state.setText(String.valueOf(gadget_basic.getState()));
