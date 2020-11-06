@@ -7,6 +7,7 @@ import com.google.android.material.snackbar.Snackbar;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import comtest.example.android_team.voiceSystem.ResourceHelper;
 
 import android.util.Log;
 import android.view.View;
@@ -22,6 +23,9 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        if (ResourceHelper.resources ==null){
+            ResourceHelper.resources = getResources();
+        }
 
         Log.i(TAG, "MainActivity: In the onCreate() event");
 
@@ -86,9 +90,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onPause() {
         super.onPause();
         Log.i(TAG, "MainActivity: In the onPause() event");
-        if (AppManager.getInstance().networkNotNull()) {
-            AppManager.getInstance().endConnection();
-        }
     }
 
     protected void onStop() {
@@ -99,6 +100,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         Log.i(TAG, "MainActivity: In the onDestroy() event");
-
+        if (AppManager.getInstance().networkNotNull()) {
+            AppManager.getInstance().endConnection();
+        }
     }
 }
