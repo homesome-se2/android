@@ -1,5 +1,11 @@
 package comtest.example.android_team.voiceSystem;
 
+import android.content.Intent;
+import android.speech.RecognizerIntent;
+import android.speech.tts.TextToSpeech;
+
+import java.util.HashMap;
+
 import comtest.example.android_team.R;
 import comtest.example.android_team.models.gadgets.Gadget_basic;
 
@@ -32,5 +38,5 @@ public class VoiceController {
         return text;
     }
 
-
+    
 }

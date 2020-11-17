@@ -1,8 +1,10 @@
 package comtest.example.android_team;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 
+import android.speech.RecognizerIntent;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,11 +23,14 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
+import java.util.Locale;
 import java.util.Map;
+import java.util.Objects;
 
 import comtest.example.android_team.models.MultiViewTypeAdapter;
 import comtest.example.android_team.models.ReadWriteCache;
 import comtest.example.android_team.models.TemplateModel;
+import comtest.example.android_team.models.gadgets.Gadget;
 import comtest.example.android_team.models.gadgets.Gadget_basic;
 import comtest.example.android_team.voiceSystem.TTS;
 
@@ -35,9 +40,10 @@ public class SecondFragment extends Fragment implements UpdateResponse {
     private ArrayList<TemplateModel> gadgetCards;
     private RecyclerView recyclerView;
     private MultiViewTypeAdapter multiViewTypeAdapter;
-    private Button btnLogOut;
+    private Button btnLogOut, btnSpeech;
     private NavController navController;
     private TTS tts;
+    private AppManager appManager = new AppManager();
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_second, container, false);
@@ -45,7 +51,6 @@ public class SecondFragment extends Fragment implements UpdateResponse {
         AppManager.getInstance().currentFragment = this;
         gadgetCards = new ArrayList<>();
         recyclerView = view.findViewById(R.id.gadgetListView);
-
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         initbtnLogOut(view);
@@ -57,11 +62,51 @@ public class SecondFragment extends Fragment implements UpdateResponse {
             }
         });
 
+        // Voice to text
+
+        btnSpeech.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
+
+
         return view;
     }
 
     private void initbtnLogOut(View view) {
         btnLogOut = view.findViewById(R.id.btn_logOut);
+    }
+
+    private void btnSpeech(View view) {
+        btnSpeech = view.findViewById(R.id.btnSpeech);
+    }
+
+    private void speak() {
+        Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
+        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault());
+        intent.putExtra(RecognizerIntent.EXTRA_PROMPT, "Hello! Say something :-)");
+
+        try {
+            // Compare with a string like turn on the lamp
+            ArrayList<String> result = intent.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
+            for (int i = 0; i < appManager.getGadgets().size(); i++) {
+
+
+                if (Objects.requireNonNull(appManager.getGadgets().get(i)).gadgetName.contains(result.get(0))) {
+
+                    AppManager.getInstance().requestToServer("311::" + Objects.requireNonNull(appManager.getGadgets().get(i)).id + "::1");
+                }
+
+            }
+
+
+        } catch (Exception e) {
+
+            e.printStackTrace();
+        }
     }
 
     private void logOut() {
@@ -71,13 +116,14 @@ public class SecondFragment extends Fragment implements UpdateResponse {
         navController.navigate(R.id.FirstFragment);
     }
 
+
     @Override
     public void update(int indexProtocol, String message) {
 
         switch (indexProtocol) {
             case 304:
-                for(Map.Entry<Integer, Gadget_basic> entry : AppManager.getInstance().getGadgets().entrySet()) {
-                    switch (entry.getValue().type){
+                for (Map.Entry<Integer, Gadget_basic> entry : AppManager.getInstance().getGadgets().entrySet()) {
+                    switch (entry.getValue().type) {
 
                         case SWITCH:
                             gadgetCards.add(new TemplateModel(TemplateModel.SWITCH_CARD));

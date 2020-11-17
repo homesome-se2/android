@@ -4,4 +4,5 @@ import android.content.res.Resources;
 
 public class ResourceHelper {
     public static Resources resources;
+
 }
