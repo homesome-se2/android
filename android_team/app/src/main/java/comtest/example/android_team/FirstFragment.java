@@ -63,7 +63,7 @@ public class FirstFragment extends Fragment implements UpdateResponse {
         String password = logPass.getText().toString().trim();
 
         AppManager.getInstance().establishConnection();
-        AppManager.getInstance().requestToServer("101::Homer::1234");
+        AppManager.getInstance().requestToServer("101::"+username+"::"+password);
 
     }
 
