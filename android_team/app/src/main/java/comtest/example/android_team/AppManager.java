@@ -40,7 +40,7 @@ public class AppManager {
         return instance;
     }
 
-    private AppManager() {
+    AppManager() {
         handler = new Handler();
         currentFragment = null;
         gadgets = new HashMap<>();
