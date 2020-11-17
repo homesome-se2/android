@@ -83,8 +83,8 @@ public class MultiViewTypeAdapter extends RecyclerView.Adapter<RecyclerView.View
         public SetValueTemplateViewHolder(@NonNull View itemView){
             super(itemView);
             this.alias = itemView.findViewById(R.id.text_alias);
-            this.state = itemView.findViewById(R.id.setValue_state);
-            this.template = itemView.findViewById(R.id.setValue_temp);
+            this.state = itemView.findViewById(R.id.text_state);
+            this.template = itemView.findViewById(R.id.text_template);
             this.background = itemView.findViewById(R.id.sensorBackground);
 
         }
@@ -108,7 +108,7 @@ public class MultiViewTypeAdapter extends RecyclerView.Adapter<RecyclerView.View
                 Log.i(TAG, "SensorTemplateViewHolder( view created.");
                 return new SensorTemplateViewHolder(view);
             case TemplateModel.SET_VALUE_CARD:
-                view = LayoutInflater.from(parent.getContext()).inflate(R.layout.set_value_card, parent, false);
+                view = LayoutInflater.from(parent.getContext()).inflate(R.layout.set_value_card_item, parent, false);
                 Log.i(TAG, "SensorTemplateViewHolder view created.");
                 return new SetValueTemplateViewHolder(view);
         }
@@ -134,7 +134,7 @@ public class MultiViewTypeAdapter extends RecyclerView.Adapter<RecyclerView.View
                     setSensorDetails(((SensorTemplateViewHolder) holder), gadget);
                     break;
                 case TemplateModel.SET_VALUE_CARD:
-                    setValueCardDetails(((Adapters.SetValueTemplateViewHolder) holder), gadget);
+                    setValueCardDetails(((SetValueTemplateViewHolder) holder), gadget);
             }
         }
     }
@@ -205,10 +205,11 @@ public class MultiViewTypeAdapter extends RecyclerView.Adapter<RecyclerView.View
         gadget.state.setText(String.valueOf(gadget_basic.getState()));
         gadget.background.setBackgroundColor(Color.GRAY);
     }
-    private void setValueCardDetails(Adapters.SetValueTemplateViewHolder gadget, Gadget_basic gadget_basic){
+    private void setValueCardDetails(SetValueTemplateViewHolder gadget, Gadget_basic gadget_basic){
         gadget.template.setText(gadget_basic.valueTemplate);
         gadget.alias.setText(gadget_basic.gadgetName);
         gadget.state.setText(String.valueOf(gadget_basic.getState()));
         gadget.background.setBackgroundColor(Color.GREEN);
     }
+
 }

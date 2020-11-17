@@ -17,13 +17,12 @@
         android:id="@+id/card_background"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#3f6cff"
+        android:background="@color/colorPrimaryDark"
         android:padding="5dp">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="#3f6cff"
             android:orientation="vertical">
 
             <LinearLayout
@@ -36,8 +35,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Alias"
-                    android:textColor="#FFFFFF" />
+                    android:text="Alias" />
 
                 <TextView
                     android:id="@+id/text_template"
@@ -45,14 +43,20 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="Template"
-                    android:textAlignment="textEnd"
-                    android:textColor="#FFFFFF" />
+                    android:textAlignment="textEnd" />
             </LinearLayout>
 
-            <androidx.appcompat.widget.SwitchCompat
-                android:id="@+id/switchLamp"
+            <TextView
+                android:id="@+id/text_state"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:text="Value" />
+
+            <SeekBar
+                android:id="@+id/seekBar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:backgroundTint="#FFFFFF" />
         </LinearLayout>
 
     </RelativeLayout>
