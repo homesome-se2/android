@@ -51,7 +51,7 @@
        android:layout_marginRight="207dp"
        android:layout_marginBottom="38dp"
        android:background="#bec4d7"
-       android:text="Log Out" />
+       android:text="Speak" />
 
 
 </RelativeLayout>
