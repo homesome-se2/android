@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.Toast;
 
 
 import androidx.activity.OnBackPressedCallback;
@@ -34,6 +35,8 @@ import comtest.example.android_team.models.gadgets.Gadget;
 import comtest.example.android_team.models.gadgets.Gadget_basic;
 import comtest.example.android_team.voiceSystem.TTS;
 
+import static android.app.Activity.RESULT_OK;
+
 public class SecondFragment extends Fragment implements UpdateResponse {
 
     private static final String TAG = "Info";
@@ -44,6 +47,7 @@ public class SecondFragment extends Fragment implements UpdateResponse {
     private NavController navController;
     private TTS tts;
     private AppManager appManager = new AppManager();
+    private static final int REQUEST_CODE_SPEECH_INPUT = 1000;
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_second, container, false);
@@ -54,6 +58,7 @@ public class SecondFragment extends Fragment implements UpdateResponse {
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         initbtnLogOut(view);
+        btnSpeech(view);
         navController = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment);
         btnLogOut.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -67,6 +72,7 @@ public class SecondFragment extends Fragment implements UpdateResponse {
         btnSpeech.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                speak();
 
             }
         });
@@ -91,23 +97,33 @@ public class SecondFragment extends Fragment implements UpdateResponse {
 
         try {
             // Compare with a string like turn on the lamp
-            ArrayList<String> result = intent.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
-            for (int i = 0; i < appManager.getGadgets().size(); i++) {
-
-
-                if (Objects.requireNonNull(appManager.getGadgets().get(i)).gadgetName.contains(result.get(0))) {
-
-                    AppManager.getInstance().requestToServer("311::" + Objects.requireNonNull(appManager.getGadgets().get(i)).id + "::1");
-                }
-
-            }
-
-
+            startActivityForResult(intent, REQUEST_CODE_SPEECH_INPUT);
         } catch (Exception e) {
-
-            e.printStackTrace();
+            System.out.println(e.getMessage());;
         }
     }
+
+
+        public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+            super.onActivityResult(requestCode, resultCode, data);
+
+            switch (requestCode){
+                case REQUEST_CODE_SPEECH_INPUT:{
+                    ArrayList<String> result = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
+                    for (int i = 0; i < appManager.getGadgets().size(); i++) {
+
+
+                        if (Objects.requireNonNull(appManager.getGadgets().get(i)).gadgetName.contains(result.get(0))) {
+
+                            AppManager.getInstance().requestToServer("311::" + Objects.requireNonNull(appManager.getGadgets().get(i)).id + "::1");
+                        }
+                    }
+                    break;
+                }
+            }
+        }
+
+
 
     private void logOut() {
         AppManager.getInstance().requestToServer("105");
