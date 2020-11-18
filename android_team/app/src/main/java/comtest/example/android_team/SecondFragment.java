@@ -1,7 +1,14 @@
 package comtest.example.android_team;
 
 
+
+import android.annotation.SuppressLint;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.location.Location;
+import android.os.Build;
 import android.content.Intent;
+
 import android.os.Bundle;
 
 import android.speech.RecognizerIntent;
@@ -13,9 +20,19 @@ import android.widget.Button;
 import android.widget.Toast;
 
 
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.tasks.CancellationTokenSource;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+
 import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -28,6 +45,11 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 
+import androidx.work.Constraints;
+import androidx.work.ExistingWorkPolicy;
+import androidx.work.OneTimeWorkRequest;
+import androidx.work.WorkManager;
+import comtest.example.android_team.background.WorkerSendLocation;
 import comtest.example.android_team.models.MultiViewTypeAdapter;
 import comtest.example.android_team.models.ReadWriteCache;
 import comtest.example.android_team.models.TemplateModel;
@@ -38,12 +60,11 @@ import comtest.example.android_team.voiceSystem.TTS;
 import static android.app.Activity.RESULT_OK;
 
 public class SecondFragment extends Fragment implements UpdateResponse {
-
     private static final String TAG = "Info";
     private ArrayList<TemplateModel> gadgetCards;
     private RecyclerView recyclerView;
     private MultiViewTypeAdapter multiViewTypeAdapter;
-    private Button btnLogOut, btnSpeech;
+    private Button btnLogOut, btnSpeech BetaBtn_work, BetaBtn_killWork;
     private NavController navController;
     private TTS tts;
     private AppManager appManager = new AppManager();
@@ -67,19 +88,43 @@ public class SecondFragment extends Fragment implements UpdateResponse {
             }
         });
 
-        // Voice to text
 
+// *************************************************************************************
+        BetaBtn_work = view.findViewById(R.id.btn_worker);
+        BetaBtn_killWork = view.findViewById(R.id.btn_killWorker);
+
+        BetaBtn_work.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+          //      backgroundWorkTask();
+            }
+        });
+
+        BetaBtn_killWork.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+//                WorkManager.getInstance(getContext()).cancelUniqueWork("sendGPSPos");
+//                WorkManager.getInstance(getContext()).cancelAllWorkByTag("sendGPSPos");
+//              boolean str =  WorkManager.getInstance(getContext()).getWorkInfosForUniqueWork("sendGPSPos")
+//                        .isDone();
+//                Log.i(TAG, "Kill Work: " + str);
+
+            }
+        });
+// *****************************************************************************************
+        // Voice to text
         btnSpeech.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 speak();
 
+
             }
         });
 
-
         return view;
     }
+
 
     private void initbtnLogOut(View view) {
         btnLogOut = view.findViewById(R.id.btn_logOut);
@@ -161,11 +206,35 @@ public class SecondFragment extends Fragment implements UpdateResponse {
                 break;
             case 316:
                 Log.i(TAG, message);
-                tts.textToSpeak(message);
-                multiViewTypeAdapter.notifyDataSetChanged();
+        //        tts.textToSpeak(message);
+       //         multiViewTypeAdapter.notifyDataSetChanged();
                 break;
         }
     }
+
+
+
+    //LATE REQUIREMENTS
+    private void backgroundWorkTask(){
+        Constraints constraints = new Constraints.Builder()
+                .setRequiresBatteryNotLow(true)
+                .build();
+
+//        PeriodicWorkRequest periodicWork = new PeriodicWorkRequest.Builder(WorkerTest.class,2, TimeUnit.MINUTES)
+//                .setConstraints(constraints)
+//                .addTag("sendGPSPos")
+//                .build();
+//        WorkManager.getInstance(getContext()).enqueue(workRequest);
+
+
+        OneTimeWorkRequest refreshWork = new OneTimeWorkRequest.Builder(WorkerSendLocation.class)
+                .setConstraints(constraints)
+                .addTag("sendGPSPos")
+                .build();
+        WorkManager.getInstance(getContext()).enqueueUniqueWork("sendGPSPos", ExistingWorkPolicy.KEEP, refreshWork);
+    }
+
+
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {

@@ -53,7 +53,7 @@ public class AppManager {
         httpNetworkService = new HTTPNetworkService(handler);
     }
 
-    public static void endConnection() {
+    public  void endConnection() {
         httpNetworkService.getWebSocketClient().close();
         Log.i(TAG, "C: Socket is closed!");
     }

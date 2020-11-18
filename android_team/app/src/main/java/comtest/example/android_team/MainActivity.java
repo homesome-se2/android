@@ -1,12 +1,32 @@
 package comtest.example.android_team;
 
+import android.Manifest;
+import android.annotation.SuppressLint;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.content.pm.PackageManager;
+import android.location.Address;
+import android.location.Geocoder;
+import android.location.Location;
+import android.os.Build;
 import android.os.Bundle;
 
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.ActivityCompat;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
+import androidx.core.content.ContextCompat;
 import comtest.example.android_team.voiceSystem.ResourceHelper;
 
 import android.util.Log;
@@ -15,15 +35,20 @@ import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import java.io.IOException;
+import java.util.List;
+import java.util.Locale;
+
 public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = "Info";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        if (ResourceHelper.resources ==null){
+        if (ResourceHelper.resources == null) {
             ResourceHelper.resources = getResources();
         }
 
@@ -32,16 +57,19 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+//
+//        FloatingActionButton fab = findViewById(R.id.fab);
+//        fab.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+//                        .setAction("Action", null).show();
+//            }
+//        });
 
-        FloatingActionButton fab = findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
+
     }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -72,10 +100,11 @@ public class MainActivity extends AppCompatActivity {
         super.onBackPressed();
     }
 
+    @Override
     protected void onStart() {
         super.onStart();
-        Log.i(TAG, "MainActivity: In the onStart() event");
     }
+
 
     protected void onRestart() {
         super.onRestart();

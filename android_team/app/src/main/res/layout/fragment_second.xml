@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -7,34 +7,57 @@
     android:background="#c7cbdc"
     tools:context=".SecondFragment">
 
-   <androidx.recyclerview.widget.RecyclerView
-       android:id="@+id/gadgetListView"
+   <LinearLayout
        android:layout_width="match_parent"
-       android:layout_height="585dp"
-       android:background="#c7cbdc"
-       android:padding="4dp"
-       android:scrollbars="vertical" />
+       android:layout_height="match_parent"
+       android:orientation="vertical"
+       app:layout_constraintEnd_toEndOf="parent"
+       app:layout_constraintStart_toStartOf="parent"
+       app:layout_constraintTop_toTopOf="parent">
 
-   <Button
-       android:id="@+id/btn_logOut"
-       android:layout_width="wrap_content"
-       android:layout_height="63dp"
-       android:layout_below="@+id/gadgetListView"
-       android:layout_alignParentStart="true"
-       android:layout_alignParentLeft="true"
-       android:layout_alignParentEnd="true"
-       android:layout_alignParentRight="true"
-       android:layout_alignParentBottom="true"
-       android:layout_marginStart="253dp"
-       android:layout_marginLeft="253dp"
-       android:layout_marginTop="44dp"
-       android:layout_marginEnd="16dp"
-       android:layout_marginRight="16dp"
-       android:layout_marginBottom="39dp"
-       android:background="#bec4d7"
-       android:text="Log Out" />
+      <androidx.recyclerview.widget.RecyclerView
+          android:id="@+id/gadgetListView"
+          android:layout_width="match_parent"
+          android:layout_height="match_parent"
+          android:layout_weight="1"
+          android:background="@android:color/white"
+          android:padding="4dp"
+          android:scrollbars="vertical" />
 
-   <Button
+      <LinearLayout
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:layout_weight="0"
+          android:orientation="horizontal">
+
+         <Button
+             android:id="@+id/btn_logOut"
+             android:layout_width="wrap_content"
+             android:layout_height="63dp"
+             android:layout_weight="1"
+             android:layout_margin="1dp"
+             android:background="#43AEC8"
+             android:text="Log Out" />
+
+         <Button
+             android:id="@+id/btn_worker"
+             android:layout_width="wrap_content"
+             android:layout_height="63dp"
+             android:layout_weight="1"
+             android:background="#43AEC8"
+             android:layout_margin="1dp"
+             android:text="start Worker" />
+
+         <Button
+             android:id="@+id/btn_killWorker"
+             android:layout_width="wrap_content"
+             android:layout_height="63dp"
+             android:layout_weight="1"
+             android:background="#43AEC8"
+             android:layout_margin="1dp"
+             android:text="Kill Work" />
+        
+           <Button
        android:id="@+id/btnSpeech"
        android:layout_width="wrap_content"
        android:layout_height="63dp"
@@ -53,5 +76,9 @@
        android:background="#bec4d7"
        android:text="Speak" />
 
+      </LinearLayout>
+   </LinearLayout>
 
-</RelativeLayout>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

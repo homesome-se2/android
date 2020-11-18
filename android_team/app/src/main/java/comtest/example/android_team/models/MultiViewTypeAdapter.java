@@ -85,7 +85,8 @@ public class MultiViewTypeAdapter extends RecyclerView.Adapter<RecyclerView.View
             this.alias = itemView.findViewById(R.id.text_alias);
             this.state = itemView.findViewById(R.id.text_state);
             this.template = itemView.findViewById(R.id.text_template);
-            this.background = itemView.findViewById(R.id.sensorBackground);
+            this.background = itemView.findViewById(R.id.card_background);
+
 
         }
     }
@@ -97,19 +98,15 @@ public class MultiViewTypeAdapter extends RecyclerView.Adapter<RecyclerView.View
         switch (viewType) {
             case TemplateModel.SWITCH_CARD:
                 view = LayoutInflater.from(parent.getContext()).inflate(R.layout.switch_card_item, parent, false);
-                Log.i(TAG, "SwitchTemplateViewHolder view created.");
                 return new SwitchTemplateViewHolder(view);
             case TemplateModel.BINARY_SENSOR_CARD:
                 view = LayoutInflater.from(parent.getContext()).inflate(R.layout.binary_sensor_card_item, parent, false);
-                Log.i(TAG, "BinarySensorTemplateViewHolder view created.");
                 return new BinarySensorTemplateViewHolder(view);
             case TemplateModel.SENSOR_CARD:
                 view = LayoutInflater.from(parent.getContext()).inflate(R.layout.sensor_card_item, parent, false);
-                Log.i(TAG, "SensorTemplateViewHolder( view created.");
                 return new SensorTemplateViewHolder(view);
             case TemplateModel.SET_VALUE_CARD:
-                view = LayoutInflater.from(parent.getContext()).inflate(R.layout.set_value_card_item, parent, false);
-                Log.i(TAG, "SensorTemplateViewHolder view created.");
+                view = LayoutInflater.from(parent.getContext()).inflate(R.layout.setvalue_card_item, parent, false);
                 return new SetValueTemplateViewHolder(view);
         }
         return null;
@@ -119,10 +116,10 @@ public class MultiViewTypeAdapter extends RecyclerView.Adapter<RecyclerView.View
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         //position is item card index
         TemplateModel object = dataSet.get(position);
-        Log.i(TAG, "In onBindViewHolder");
         ArrayList<Gadget_basic> valuesList = new ArrayList<>(AppManager.getInstance().getGadgets().values());
         Gadget_basic gadget = valuesList.get(position);
         if (object != null) {
+            Log.d(TAG, gadget.toString());
             switch (object.getType()) {
                 case TemplateModel.SWITCH_CARD:
                     setSwitchDetails(((SwitchTemplateViewHolder) holder), gadget);

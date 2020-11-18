@@ -1,6 +1,10 @@
 package comtest.example.android_team;
 
+import android.Manifest;
+import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.pm.PackageManager;
+import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -11,13 +15,26 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.tasks.CancellationTokenSource;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+
+import java.util.concurrent.TimeUnit;
+
 import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import comtest.example.android_team.models.ReadWriteCache;
+
 
 /* This works with the first page in the application. When we login we send request to the public server with Appmanager getInstance () */
 
@@ -27,6 +44,8 @@ public class FirstFragment extends Fragment implements UpdateResponse {
     private NavController navController;
     private Button login_btn;
     private EditText logAcc, logPass;
+
+    private int LOCATION_REQUEST_CODE = 10001;
 
     @Override
     public View onCreateView(
@@ -56,6 +75,7 @@ public class FirstFragment extends Fragment implements UpdateResponse {
         login_btn = view.findViewById(R.id.btnLogin);
         logAcc = view.findViewById(R.id.username);
         logPass = view.findViewById(R.id.passwordField);
+
     }
 
     private void logIn() {
@@ -63,7 +83,9 @@ public class FirstFragment extends Fragment implements UpdateResponse {
         String password = logPass.getText().toString().trim();
 
         AppManager.getInstance().establishConnection();
-        AppManager.getInstance().requestToServer("101::"+username+"::"+password);
+        String logIn = "101::" + username + "::" + password + "";
+        AppManager.getInstance().requestToServer(logIn);
+
 
     }
 
@@ -82,6 +104,53 @@ public class FirstFragment extends Fragment implements UpdateResponse {
             case 903:
                 Toast.makeText(getContext(), message, Toast.LENGTH_LONG).show();
                 break;
+        }
+    }
+
+
+    private void askLocationPermission() {
+        if (!checkLocationPermission()) {
+            ActivityCompat.requestPermissions(getActivity(), new String[]{
+                    Manifest.permission.ACCESS_FINE_LOCATION,
+                    Manifest.permission.ACCESS_COARSE_LOCATION,
+                    Manifest.permission.ACCESS_BACKGROUND_LOCATION
+            }, LOCATION_REQUEST_CODE);
+        }
+    }
+
+    private boolean checkLocationPermission() {
+        int result1 = ContextCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION);
+        int result2 = ContextCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION);
+        int result3 = ContextCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_BACKGROUND_LOCATION);
+        return result1 == PackageManager.PERMISSION_GRANTED &&
+                result2 == PackageManager.PERMISSION_GRANTED &&
+                result3 == PackageManager.PERMISSION_GRANTED;
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        Log.d(TAG, "HomeFragment: In the onStart() event");
+        if (checkLocationPermission()) {
+            // do something directly
+        } else {
+            askLocationPermission();
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        if (requestCode == LOCATION_REQUEST_CODE) {
+            if (grantResults.length > 0) {
+                boolean fineLocation = grantResults[0] == PackageManager.PERMISSION_GRANTED;
+                boolean coarseLocation = grantResults[1] == PackageManager.PERMISSION_GRANTED;
+                boolean backgroundLocation = grantResults[2] == PackageManager.PERMISSION_GRANTED;
+                if (coarseLocation && fineLocation && backgroundLocation) {
+                    // Permission granted
+                } else {
+                    // Permission not granted
+                }
+            }
         }
     }
 
@@ -124,13 +193,6 @@ public class FirstFragment extends Fragment implements UpdateResponse {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         Log.d(TAG, "HomeFragment: In the onActivityCreated() event");
-    }
-
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        Log.d(TAG, "HomeFragment: In the onStart() event");
     }
 
 
