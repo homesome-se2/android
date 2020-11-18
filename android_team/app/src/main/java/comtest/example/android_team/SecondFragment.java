@@ -53,7 +53,6 @@ import comtest.example.android_team.background.WorkerSendLocation;
 import comtest.example.android_team.models.MultiViewTypeAdapter;
 import comtest.example.android_team.models.ReadWriteCache;
 import comtest.example.android_team.models.TemplateModel;
-import comtest.example.android_team.models.gadgets.Gadget;
 import comtest.example.android_team.models.gadgets.Gadget_basic;
 import comtest.example.android_team.voiceSystem.TTS;
 
@@ -64,7 +63,7 @@ public class SecondFragment extends Fragment implements UpdateResponse {
     private ArrayList<TemplateModel> gadgetCards;
     private RecyclerView recyclerView;
     private MultiViewTypeAdapter multiViewTypeAdapter;
-    private Button btnLogOut, btnSpeech BetaBtn_work, BetaBtn_killWork;
+    private Button btnLogOut, btnSpeech, BetaBtn_work, BetaBtn_killWork;
     private NavController navController;
     private TTS tts;
     private AppManager appManager = new AppManager();
@@ -125,7 +124,6 @@ public class SecondFragment extends Fragment implements UpdateResponse {
         return view;
     }
 
-
     private void initbtnLogOut(View view) {
         btnLogOut = view.findViewById(R.id.btn_logOut);
     }
@@ -148,7 +146,6 @@ public class SecondFragment extends Fragment implements UpdateResponse {
         }
     }
 
-
         public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
             super.onActivityResult(requestCode, resultCode, data);
 
@@ -167,7 +164,6 @@ public class SecondFragment extends Fragment implements UpdateResponse {
                 }
             }
         }
-
 
 
     private void logOut() {
@@ -211,7 +207,6 @@ public class SecondFragment extends Fragment implements UpdateResponse {
                 break;
         }
     }
-
 
 
     //LATE REQUIREMENTS

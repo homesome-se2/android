@@ -69,11 +69,10 @@ public class WorkerSendLocation extends Worker {
         }
         fLocation = LocationServices.getFusedLocationProviderClient(currentContext);
         getLocation();
-
         addNewWork();
     }
 
-    private void addNewWork(){
+    private void addNewWork() {
         Log.i("Info", "DO_WORK: Adds new work to que");
         Constraints constraints = new Constraints.Builder()
                 .setRequiresBatteryNotLow(true)
@@ -94,7 +93,7 @@ public class WorkerSendLocation extends Worker {
          * PRIORITY_LOW_POWER = 104
          * PRIORITY_NO_POWER = 105
          */
-        Task<Location> locationTask = fLocation.getCurrentLocation(LocationRequest.PRIORITY_HIGH_ACCURACY,null);
+        Task<Location> locationTask = fLocation.getCurrentLocation(LocationRequest.PRIORITY_HIGH_ACCURACY, null);
         locationTask.addOnSuccessListener(new OnSuccessListener<Location>() {
             @Override
             public void onSuccess(Location location) {
@@ -117,7 +116,6 @@ public class WorkerSendLocation extends Worker {
                     }
 
 
-
                     String completeAddress = getCompleteAddressString(location.getLatitude(), location.getLongitude());
                     NotificationCompat.Builder builder = new NotificationCompat.Builder(currentContext, CHANNEL_ID)
                             .setSmallIcon(android.R.drawable.ic_menu_mylocation)
@@ -132,7 +130,7 @@ public class WorkerSendLocation extends Worker {
                     notificationManager.notify(1001, builder.build());
 
                     AppManager.getInstance().endConnection();
-                } else  {
+                } else {
                     Log.i(TAG, "onSuccess: Location was null...");
                 }
             }
@@ -141,7 +139,7 @@ public class WorkerSendLocation extends Worker {
         locationTask.addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-                Log.i(TAG, "onFailure: " + e.getLocalizedMessage() );
+                Log.i(TAG, "onFailure: " + e.getLocalizedMessage());
             }
         });
     }
