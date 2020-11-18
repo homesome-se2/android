@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#c7cbdc"
     tools:context=".SecondFragment">
 
    <LinearLayout
@@ -55,6 +56,25 @@
              android:background="#43AEC8"
              android:layout_margin="1dp"
              android:text="Kill Work" />
+        
+           <Button
+       android:id="@+id/btnSpeech"
+       android:layout_width="wrap_content"
+       android:layout_height="63dp"
+       android:layout_alignParentStart="true"
+       android:layout_alignParentLeft="true"
+       android:layout_alignParentTop="true"
+       android:layout_alignParentEnd="true"
+       android:layout_alignParentRight="true"
+       android:layout_alignParentBottom="true"
+       android:layout_marginStart="62dp"
+       android:layout_marginLeft="62dp"
+       android:layout_marginTop="629dp"
+       android:layout_marginEnd="207dp"
+       android:layout_marginRight="207dp"
+       android:layout_marginBottom="38dp"
+       android:background="#bec4d7"
+       android:text="Speak" />
 
       </LinearLayout>
    </LinearLayout>

@@ -87,6 +87,7 @@ public class MultiViewTypeAdapter extends RecyclerView.Adapter<RecyclerView.View
             this.template = itemView.findViewById(R.id.text_template);
             this.background = itemView.findViewById(R.id.card_background);
 
+
         }
     }
 
@@ -207,4 +208,5 @@ public class MultiViewTypeAdapter extends RecyclerView.Adapter<RecyclerView.View
         gadget.state.setText(String.valueOf(gadget_basic.getState()));
         gadget.background.setBackgroundColor(Color.GREEN);
     }
+
 }

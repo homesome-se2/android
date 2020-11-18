@@ -86,6 +86,7 @@ public class FirstFragment extends Fragment implements UpdateResponse {
         String logIn = "101::" + username + "::" + password + "";
         AppManager.getInstance().requestToServer(logIn);
 
+
     }
 
 

@@ -1,18 +1,23 @@
 package comtest.example.android_team;
 
 
+
 import android.annotation.SuppressLint;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.location.Location;
 import android.os.Build;
+import android.content.Intent;
+
 import android.os.Bundle;
 
+import android.speech.RecognizerIntent;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.Toast;
 
 
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -36,7 +41,9 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
+import java.util.Locale;
 import java.util.Map;
+import java.util.Objects;
 
 import androidx.work.Constraints;
 import androidx.work.ExistingWorkPolicy;
@@ -46,17 +53,22 @@ import comtest.example.android_team.background.WorkerSendLocation;
 import comtest.example.android_team.models.MultiViewTypeAdapter;
 import comtest.example.android_team.models.ReadWriteCache;
 import comtest.example.android_team.models.TemplateModel;
+import comtest.example.android_team.models.gadgets.Gadget;
 import comtest.example.android_team.models.gadgets.Gadget_basic;
 import comtest.example.android_team.voiceSystem.TTS;
+
+import static android.app.Activity.RESULT_OK;
 
 public class SecondFragment extends Fragment implements UpdateResponse {
     private static final String TAG = "Info";
     private ArrayList<TemplateModel> gadgetCards;
     private RecyclerView recyclerView;
     private MultiViewTypeAdapter multiViewTypeAdapter;
-    private Button btnLogOut, BetaBtn_work, BetaBtn_killWork;
+    private Button btnLogOut, btnSpeech BetaBtn_work, BetaBtn_killWork;
     private NavController navController;
     private TTS tts;
+    private AppManager appManager = new AppManager();
+    private static final int REQUEST_CODE_SPEECH_INPUT = 1000;
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_second, container, false);
@@ -64,10 +76,10 @@ public class SecondFragment extends Fragment implements UpdateResponse {
         AppManager.getInstance().currentFragment = this;
         gadgetCards = new ArrayList<>();
         recyclerView = view.findViewById(R.id.gadgetListView);
-
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         initbtnLogOut(view);
+        btnSpeech(view);
         navController = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment);
         btnLogOut.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -75,6 +87,7 @@ public class SecondFragment extends Fragment implements UpdateResponse {
                 logOut();
             }
         });
+
 
 // *************************************************************************************
         BetaBtn_work = view.findViewById(R.id.btn_worker);
@@ -96,12 +109,18 @@ public class SecondFragment extends Fragment implements UpdateResponse {
 //                        .isDone();
 //                Log.i(TAG, "Kill Work: " + str);
 
+            }
+        });
+// *****************************************************************************************
+        // Voice to text
+        btnSpeech.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                speak();
+
 
             }
         });
-
-// *****************************************************************************************
-
 
         return view;
     }
@@ -111,6 +130,46 @@ public class SecondFragment extends Fragment implements UpdateResponse {
         btnLogOut = view.findViewById(R.id.btn_logOut);
     }
 
+    private void btnSpeech(View view) {
+        btnSpeech = view.findViewById(R.id.btnSpeech);
+    }
+
+    private void speak() {
+        Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
+        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault());
+        intent.putExtra(RecognizerIntent.EXTRA_PROMPT, "Hello! Say something :-)");
+
+        try {
+            // Compare with a string like turn on the lamp
+            startActivityForResult(intent, REQUEST_CODE_SPEECH_INPUT);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());;
+        }
+    }
+
+
+        public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+            super.onActivityResult(requestCode, resultCode, data);
+
+            switch (requestCode){
+                case REQUEST_CODE_SPEECH_INPUT:{
+                    ArrayList<String> result = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
+                    for (int i = 0; i < appManager.getGadgets().size(); i++) {
+
+
+                        if (Objects.requireNonNull(appManager.getGadgets().get(i)).gadgetName.contains(result.get(0))) {
+
+                            AppManager.getInstance().requestToServer("311::" + Objects.requireNonNull(appManager.getGadgets().get(i)).id + "::1");
+                        }
+                    }
+                    break;
+                }
+            }
+        }
+
+
+
     private void logOut() {
         AppManager.getInstance().requestToServer("105");
         ReadWriteCache readWriteCache = new ReadWriteCache(getContext());
@@ -118,13 +177,14 @@ public class SecondFragment extends Fragment implements UpdateResponse {
         navController.navigate(R.id.FirstFragment);
     }
 
+
     @Override
     public void update(int indexProtocol, String message) {
 
         switch (indexProtocol) {
             case 304:
-                for(Map.Entry<Integer, Gadget_basic> entry : AppManager.getInstance().getGadgets().entrySet()) {
-                    switch (entry.getValue().type){
+                for (Map.Entry<Integer, Gadget_basic> entry : AppManager.getInstance().getGadgets().entrySet()) {
+                    switch (entry.getValue().type) {
 
                         case SWITCH:
                             gadgetCards.add(new TemplateModel(TemplateModel.SWITCH_CARD));
