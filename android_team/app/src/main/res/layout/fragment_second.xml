@@ -7,78 +7,67 @@
     android:background="#c7cbdc"
     tools:context=".SecondFragment">
 
-   <LinearLayout
-       android:layout_width="match_parent"
-       android:layout_height="match_parent"
-       android:orientation="vertical"
-       app:layout_constraintEnd_toEndOf="parent"
-       app:layout_constraintStart_toStartOf="parent"
-       app:layout_constraintTop_toTopOf="parent">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
-      <androidx.recyclerview.widget.RecyclerView
-          android:id="@+id/gadgetListView"
-          android:layout_width="match_parent"
-          android:layout_height="match_parent"
-          android:layout_weight="1"
-          android:background="@android:color/white"
-          android:padding="4dp"
-          android:scrollbars="vertical" />
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/gadgetListView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@android:color/white"
+            android:padding="4dp"
+            android:scrollbars="vertical" />
 
-      <LinearLayout
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          android:layout_weight="0"
-          android:orientation="horizontal">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="0"
+            android:orientation="horizontal">
 
-         <Button
-             android:id="@+id/btn_logOut"
-             android:layout_width="wrap_content"
-             android:layout_height="63dp"
-             android:layout_weight="1"
-             android:layout_margin="1dp"
-             android:background="#43AEC8"
-             android:text="Log Out" />
+            <Button
+                android:id="@+id/btn_logOut"
+                android:layout_width="wrap_content"
+                android:layout_height="63dp"
+                android:layout_margin="1dp"
+                android:layout_weight="1"
+                android:background="#43AEC8"
+                android:text="Log Out" />
 
-         <Button
-             android:id="@+id/btn_worker"
-             android:layout_width="wrap_content"
-             android:layout_height="63dp"
-             android:layout_weight="1"
-             android:background="#43AEC8"
-             android:layout_margin="1dp"
-             android:text="start Worker" />
+            <Button
+                android:id="@+id/btn_worker"
+                android:layout_width="wrap_content"
+                android:layout_height="63dp"
+                android:layout_margin="1dp"
+                android:layout_weight="1"
+                android:background="#43AEC8"
+                android:text="start Worker" />
 
-         <Button
-             android:id="@+id/btn_killWorker"
-             android:layout_width="wrap_content"
-             android:layout_height="63dp"
-             android:layout_weight="1"
-             android:background="#43AEC8"
-             android:layout_margin="1dp"
-             android:text="Kill Work" />
-        
-           <Button
-       android:id="@+id/btnSpeech"
-       android:layout_width="wrap_content"
-       android:layout_height="63dp"
-       android:layout_alignParentStart="true"
-       android:layout_alignParentLeft="true"
-       android:layout_alignParentTop="true"
-       android:layout_alignParentEnd="true"
-       android:layout_alignParentRight="true"
-       android:layout_alignParentBottom="true"
-       android:layout_marginStart="62dp"
-       android:layout_marginLeft="62dp"
-       android:layout_marginTop="629dp"
-       android:layout_marginEnd="207dp"
-       android:layout_marginRight="207dp"
-       android:layout_marginBottom="38dp"
-       android:background="#bec4d7"
-       android:text="Speak" />
+            <Button
+                android:id="@+id/btn_killWorker"
+                android:layout_width="wrap_content"
+                android:layout_height="63dp"
+                android:layout_margin="1dp"
+                android:layout_weight="1"
+                android:background="#43AEC8"
+                android:text="Kill Work" />
 
-      </LinearLayout>
-   </LinearLayout>
+            <Button
+                android:id="@+id/btnSpeech"
+                android:layout_width="wrap_content"
+                android:layout_height="63dp"
+                android:layout_margin="1dp"
+                android:layout_weight="1"
+                android:background="#bec4d7"
+                android:text="Speak" />
 
+        </LinearLayout>
+    </LinearLayout>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

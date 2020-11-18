@@ -14,17 +14,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-
-import com.google.android.gms.location.FusedLocationProviderClient;
-import com.google.android.gms.location.LocationRequest;
-import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.tasks.CancellationTokenSource;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
-
-import java.util.concurrent.TimeUnit;
-
 import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -67,9 +56,7 @@ public class FirstFragment extends Fragment implements UpdateResponse {
             }
         });
 
-
     }
-
 
     private void init(View view) {
         login_btn = view.findViewById(R.id.btnLogin);
@@ -85,8 +72,6 @@ public class FirstFragment extends Fragment implements UpdateResponse {
         AppManager.getInstance().establishConnection();
         String logIn = "101::" + username + "::" + password + "";
         AppManager.getInstance().requestToServer(logIn);
-
-
     }
 
 

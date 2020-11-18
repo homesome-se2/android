@@ -1,14 +1,5 @@
 package comtest.example.android_team;
 
-import android.Manifest;
-import android.annotation.SuppressLint;
-import android.app.NotificationChannel;
-import android.app.NotificationManager;
-import android.content.pm.PackageManager;
-import android.location.Address;
-import android.location.Geocoder;
-import android.location.Location;
-import android.os.Build;
 import android.os.Bundle;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -23,21 +14,12 @@ import com.google.android.material.snackbar.Snackbar;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.core.app.ActivityCompat;
-import androidx.core.app.NotificationCompat;
-import androidx.core.app.NotificationManagerCompat;
-import androidx.core.content.ContextCompat;
 import comtest.example.android_team.voiceSystem.ResourceHelper;
 
 import android.util.Log;
-import android.view.View;
 
 import android.view.Menu;
 import android.view.MenuItem;
-
-import java.io.IOException;
-import java.util.List;
-import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
 

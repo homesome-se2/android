@@ -92,7 +92,6 @@ public class AppManager {
 
     }
 
-
     // #102
     private void manuelLogin(String[] commands) {
         String cache = String.format("%s:%s", commands[1], commands[4]);
@@ -121,10 +120,6 @@ public class AppManager {
         }
         currentFragment.update(304, "");
 
-        //TODO tempt print! delete later
-        for (Map.Entry<Integer, Gadget_basic> entry : gadgets.entrySet()) {
-            Log.i(TAG, entry.toString());
-        }
     }
 
 
