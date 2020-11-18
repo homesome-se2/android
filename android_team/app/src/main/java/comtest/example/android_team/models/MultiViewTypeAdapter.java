@@ -83,9 +83,9 @@ public class MultiViewTypeAdapter extends RecyclerView.Adapter<RecyclerView.View
         public SetValueTemplateViewHolder(@NonNull View itemView){
             super(itemView);
             this.alias = itemView.findViewById(R.id.text_alias);
-            this.state = itemView.findViewById(R.id.setValue_state);
-            this.template = itemView.findViewById(R.id.setValue_temp);
-            this.background = itemView.findViewById(R.id.sensorBackground);
+            this.state = itemView.findViewById(R.id.text_state);
+            this.template = itemView.findViewById(R.id.text_template);
+            this.background = itemView.findViewById(R.id.card_background);
 
         }
     }
@@ -97,19 +97,15 @@ public class MultiViewTypeAdapter extends RecyclerView.Adapter<RecyclerView.View
         switch (viewType) {
             case TemplateModel.SWITCH_CARD:
                 view = LayoutInflater.from(parent.getContext()).inflate(R.layout.switch_card_item, parent, false);
-                Log.i(TAG, "SwitchTemplateViewHolder view created.");
                 return new SwitchTemplateViewHolder(view);
             case TemplateModel.BINARY_SENSOR_CARD:
                 view = LayoutInflater.from(parent.getContext()).inflate(R.layout.binary_sensor_card_item, parent, false);
-                Log.i(TAG, "BinarySensorTemplateViewHolder view created.");
                 return new BinarySensorTemplateViewHolder(view);
             case TemplateModel.SENSOR_CARD:
                 view = LayoutInflater.from(parent.getContext()).inflate(R.layout.sensor_card_item, parent, false);
-                Log.i(TAG, "SensorTemplateViewHolder( view created.");
                 return new SensorTemplateViewHolder(view);
             case TemplateModel.SET_VALUE_CARD:
-                view = LayoutInflater.from(parent.getContext()).inflate(R.layout.set_value_card, parent, false);
-                Log.i(TAG, "SensorTemplateViewHolder view created.");
+                view = LayoutInflater.from(parent.getContext()).inflate(R.layout.setvalue_card_item, parent, false);
                 return new SetValueTemplateViewHolder(view);
         }
         return null;
@@ -119,10 +115,10 @@ public class MultiViewTypeAdapter extends RecyclerView.Adapter<RecyclerView.View
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         //position is item card index
         TemplateModel object = dataSet.get(position);
-        Log.i(TAG, "In onBindViewHolder");
         ArrayList<Gadget_basic> valuesList = new ArrayList<>(AppManager.getInstance().getGadgets().values());
         Gadget_basic gadget = valuesList.get(position);
         if (object != null) {
+            Log.d(TAG, gadget.toString());
             switch (object.getType()) {
                 case TemplateModel.SWITCH_CARD:
                     setSwitchDetails(((SwitchTemplateViewHolder) holder), gadget);
@@ -134,7 +130,7 @@ public class MultiViewTypeAdapter extends RecyclerView.Adapter<RecyclerView.View
                     setSensorDetails(((SensorTemplateViewHolder) holder), gadget);
                     break;
                 case TemplateModel.SET_VALUE_CARD:
-                    setValueCardDetails(((Adapters.SetValueTemplateViewHolder) holder), gadget);
+                    setValueCardDetails(((SetValueTemplateViewHolder) holder), gadget);
             }
         }
     }
@@ -205,7 +201,7 @@ public class MultiViewTypeAdapter extends RecyclerView.Adapter<RecyclerView.View
         gadget.state.setText(String.valueOf(gadget_basic.getState()));
         gadget.background.setBackgroundColor(Color.GRAY);
     }
-    private void setValueCardDetails(Adapters.SetValueTemplateViewHolder gadget, Gadget_basic gadget_basic){
+    private void setValueCardDetails(SetValueTemplateViewHolder gadget, Gadget_basic gadget_basic){
         gadget.template.setText(gadget_basic.valueTemplate);
         gadget.alias.setText(gadget_basic.gadgetName);
         gadget.state.setText(String.valueOf(gadget_basic.getState()));
