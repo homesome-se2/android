@@ -11,11 +11,12 @@ import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import java.util.ArrayList;
-
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.SwitchCompat;
 import androidx.recyclerview.widget.RecyclerView;
+
+import java.util.ArrayList;
+
 import comtest.example.android_team.AppManager;
 import comtest.example.android_team.R;
 import comtest.example.android_team.models.gadgets.Gadget_basic;
@@ -202,6 +203,7 @@ public class MultiViewTypeAdapter extends RecyclerView.Adapter<RecyclerView.View
         gadget.state.setText(String.valueOf(gadget_basic.getState()));
         gadget.background.setBackgroundColor(Color.GRAY);
     }
+    //TODO add seakbar to show floating value
     private void setValueCardDetails(SetValueTemplateViewHolder gadget, Gadget_basic gadget_basic){
         gadget.template.setText(gadget_basic.valueTemplate);
         gadget.alias.setText(gadget_basic.gadgetName);

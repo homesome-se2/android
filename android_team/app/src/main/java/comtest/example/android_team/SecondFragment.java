@@ -2,61 +2,40 @@ package comtest.example.android_team;
 
 
 
-import android.annotation.SuppressLint;
-import android.app.NotificationChannel;
-import android.app.NotificationManager;
-import android.location.Location;
-import android.os.Build;
 import android.content.Intent;
-
 import android.os.Bundle;
-
 import android.speech.RecognizerIntent;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.Toast;
-
-
-import com.google.android.gms.location.FusedLocationProviderClient;
-import com.google.android.gms.location.LocationRequest;
-import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.tasks.CancellationTokenSource;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 
 import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.core.app.NotificationCompat;
-import androidx.core.app.NotificationManagerCompat;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.work.Constraints;
+import androidx.work.ExistingWorkPolicy;
+import androidx.work.OneTimeWorkRequest;
+import androidx.work.WorkManager;
 
 import java.util.ArrayList;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 
-import androidx.work.Constraints;
-import androidx.work.ExistingWorkPolicy;
-import androidx.work.OneTimeWorkRequest;
-import androidx.work.WorkManager;
 import comtest.example.android_team.background.WorkerSendLocation;
 import comtest.example.android_team.models.MultiViewTypeAdapter;
 import comtest.example.android_team.models.ReadWriteCache;
 import comtest.example.android_team.models.TemplateModel;
 import comtest.example.android_team.models.gadgets.Gadget_basic;
 import comtest.example.android_team.voiceSystem.TTS;
-
-import static android.app.Activity.RESULT_OK;
 
 public class SecondFragment extends Fragment implements UpdateResponse {
     private static final String TAG = "Info";
@@ -152,12 +131,23 @@ public class SecondFragment extends Fragment implements UpdateResponse {
             switch (requestCode){
                 case REQUEST_CODE_SPEECH_INPUT:{
                     ArrayList<String> result = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
+                    String string = result.get(0);
+
                     for (int i = 0; i < appManager.getGadgets().size(); i++) {
 
-
-                        if (Objects.requireNonNull(appManager.getGadgets().get(i)).gadgetName.contains(result.get(0))) {
-
-                            AppManager.getInstance().requestToServer("311::" + Objects.requireNonNull(appManager.getGadgets().get(i)).id + "::1");
+                        if ((Objects.requireNonNull(appManager.getGadgets().get(i))).gadgetName.contains(string)) {
+                            String type = Objects.requireNonNull(appManager.getGadgets().get(i)).type.name();
+                            switch (type) {
+                                case "SWITCH":
+                                    if (string.contains("on")) {
+                                        AppManager.getInstance().requestToServer("311::" + Objects.requireNonNull(appManager.getGadgets().get(i)).id + "::1");
+                                    } else {
+                                        AppManager.getInstance().requestToServer("311::" + Objects.requireNonNull(appManager.getGadgets().get(i)).id + "::0" );
+                                    }
+                                case "SET_VALUE":
+                                    float f = Float.parseFloat(string.replaceAll("[^\\d.]+|\\.(?!\\d)",""));
+                                    AppManager.getInstance().requestToServer("311::" + Objects.requireNonNull(appManager.getGadgets().get(i)).id + f );
+                            }
                         }
                     }
                     break;
