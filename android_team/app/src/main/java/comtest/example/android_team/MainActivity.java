@@ -25,8 +25,8 @@ public class MainActivity extends AppCompatActivity {
 
         Log.i(TAG, "MainActivity: In the onCreate() event");
 
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+     /*   Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar); */
 
 
     }
