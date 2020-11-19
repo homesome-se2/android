@@ -35,8 +35,6 @@ public class ReadWriteCache {
                     fos.flush();
                     fos.close();
                     Log.i(TAG, "Writing done!");
-                } catch (FileNotFoundException e) {
-                    e.printStackTrace();
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -56,8 +54,6 @@ public class ReadWriteCache {
             Log.i(TAG, str);
             Log.i(TAG, "Reading done!");
             return str;
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         }

@@ -27,14 +27,13 @@ import androidx.work.WorkManager;
 import java.util.ArrayList;
 import java.util.Locale;
 import java.util.Map;
-import java.util.Objects;
 
 import comtest.example.android_team.background.WorkerSendLocation;
 import comtest.example.android_team.models.MultiViewTypeAdapter;
 import comtest.example.android_team.models.ReadWriteCache;
 import comtest.example.android_team.models.TemplateModel;
+import comtest.example.android_team.models.gadgets.Gadget;
 import comtest.example.android_team.models.gadgets.GadgetType;
-import comtest.example.android_team.models.gadgets.Gadget_basic;
 import comtest.example.android_team.voiceSystem.TTS;
 
 public class SecondFragment extends Fragment implements UpdateResponse {
@@ -45,7 +44,6 @@ public class SecondFragment extends Fragment implements UpdateResponse {
     private Button btnLogOut, btnSpeech, BetaBtn_work, BetaBtn_killWork;
     private NavController navController;
     private TTS tts;
-    private AppManager appManager = new AppManager();
     private static final int REQUEST_CODE_SPEECH_INPUT = 1000;
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -134,7 +132,7 @@ public class SecondFragment extends Fragment implements UpdateResponse {
                     String speechInput = result.get(0).toLowerCase();
                     Toast.makeText(getContext(), speechInput, Toast.LENGTH_LONG).show();
 
-                    for (Map.Entry<Integer, Gadget_basic> entry : AppManager.getInstance().getGadgets().entrySet()) {
+                    for (Map.Entry<Integer, Gadget> entry : AppManager.getInstance().getGadgets().entrySet()) {
 
                         String gadgetResult = entry.getValue().gadgetName.toLowerCase();
                         Log.i(TAG, gadgetResult);
@@ -183,7 +181,7 @@ public class SecondFragment extends Fragment implements UpdateResponse {
 
         switch (indexProtocol) {
             case 304:
-                for (Map.Entry<Integer, Gadget_basic> entry : AppManager.getInstance().getGadgets().entrySet()) {
+                for (Map.Entry<Integer, Gadget> entry : AppManager.getInstance().getGadgets().entrySet()) {
                     switch (entry.getValue().type) {
 
                         case SWITCH:

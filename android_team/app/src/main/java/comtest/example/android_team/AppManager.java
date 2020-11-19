@@ -4,12 +4,11 @@ import android.os.Handler;
 import android.util.Log;
 
 import java.util.HashMap;
-import java.util.Map;
 
 import comtest.example.android_team.models.ValueTemplate;
+import comtest.example.android_team.models.gadgets.Gadget;
 import comtest.example.android_team.models.gadgets.GadgetType;
 import comtest.example.android_team.network.HTTPNetworkService;
-import comtest.example.android_team.models.gadgets.Gadget_basic;
 import comtest.example.android_team.voiceSystem.VoiceController;
 
 /* This class works to manipulate and work with the data. To connect to the network, and handle server respones. Background work is done here! */
@@ -30,9 +29,9 @@ public class AppManager {
     }
 
     // map for gadgets. GadgetID/object
-    private HashMap<Integer, Gadget_basic> gadgets;
+    private HashMap<Integer, Gadget> gadgets;
 
-    public HashMap<Integer, Gadget_basic> getGadgets() {
+    public HashMap<Integer, Gadget> getGadgets() {
 
         return gadgets;
     }
@@ -53,7 +52,7 @@ public class AppManager {
         currentFragment = null;
         handler = new Handler();
         gadgets = new HashMap<>();
-        valueTemplate = new ValueTemplate();
+        ValueTemplate.getInstance().fillValueTemplates();
     }
 
 
@@ -125,7 +124,7 @@ public class AppManager {
             String valueTemplate = commands[count++];
             float state = Float.parseFloat(commands[count++]);
             long pollDelaySeconds = Long.parseLong(commands[count++]);
-            Gadget_basic gadgetBasic = new Gadget_basic(gadgetID, alias, type, valueTemplate, state);
+            Gadget gadgetBasic = new Gadget(gadgetID, alias, type, valueTemplate, state);
             gadgets.put(gadgetID, gadgetBasic);
         }
         currentFragment.update(304, "");
