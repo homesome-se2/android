@@ -96,40 +96,8 @@ public class SecondFragment extends Fragment implements UpdateResponse {
         btnSpeech.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //();
-                for (Map.Entry<Integer, Gadget_basic> entry : AppManager.getInstance().getGadgets().entrySet()) {
 
-                    String gadgetResult = entry.getValue().gadgetName.toLowerCase();
-                    Log.i(TAG, gadgetResult);
-
-                    String testString = "window lamp on";
-
-                    if ((gadgetResult.contains(testString))) {
-                        GadgetType type = entry.getValue().type;
-
-
-                        switch (type) {
-                            case SWITCH:
-                                if (testString.contains("on")) {
-                                    String logString = "311::" + entry.getValue().id + "::1";
-                                    Log.i(TAG, logString);
-
-                                    AppManager.getInstance().requestToServer("311::" + entry.getValue().id + "::1");
-                                } else {
-                                    AppManager.getInstance().requestToServer("311::" + entry.getValue().id + "::0" );
-                                }
-                                break;
-                            //case SET_VALUE:
-                                //float f = Float.parseFloat(string.replaceAll("[^\\d.]+|\\.(?!\\d)",""));
-                                //AppManager.getInstance().requestToServer("311::" + Objects.requireNonNull(appManager.getGadgets().get(i)).id + f );
-                        }
-
-
-                    }
-                }
-
-
-
+                speak();
             }
         });
 
@@ -162,38 +130,41 @@ public class SecondFragment extends Fragment implements UpdateResponse {
             super.onActivityResult(requestCode, resultCode, data);
 
 
-
             switch (requestCode){
                 case REQUEST_CODE_SPEECH_INPUT:{
                     ArrayList<String> result = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
-                    String string = result.get(0);
-                    Toast.makeText(getContext(), string, Toast.LENGTH_LONG).show();
+                    String speechInput = result.get(0);
+                    Toast.makeText(getContext(), speechInput, Toast.LENGTH_LONG).show();
 
+                    for (Map.Entry<Integer, Gadget_basic> entry : AppManager.getInstance().getGadgets().entrySet()) {
 
-                    for (int i = 0; i < appManager.getGadgets().size(); i++) {
-
-                        String gadgetResult = appManager.getGadgets().get(i).gadgetName;
+                        String gadgetResult = entry.getValue().gadgetName.toLowerCase();
                         Log.i(TAG, gadgetResult);
 
-                        if ((gadgetResult.contains(string))) {
-                            String type = Objects.requireNonNull(appManager.getGadgets().get(i)).type.name();
-                            Toast.makeText(getContext(), type, Toast.LENGTH_LONG).show();
+
+
+                        if ((speechInput.contains(gadgetResult))) {
+                            GadgetType type = entry.getValue().type;
 
                             switch (type) {
-                                case "SWITCH":
-                                    if (string.contains("on")) {
-                                        AppManager.getInstance().requestToServer("311::" + Objects.requireNonNull(appManager.getGadgets().get(i)).id + "::1");
+                                case SWITCH:
+                                    if (speechInput.contains("on")) {
+                                        String logString = "311::" + entry.getValue().id + "::1";
+                                        Log.i(TAG, logString);
+
+                                        AppManager.getInstance().requestToServer("311::" + entry.getValue().id + "::1");
                                     } else {
-                                        AppManager.getInstance().requestToServer("311::" + Objects.requireNonNull(appManager.getGadgets().get(i)).id + "::0" );
+                                        AppManager.getInstance().requestToServer("311::" + entry.getValue().id + "::0" );
                                     }
-                                case "SET_VALUE":
-                                    float f = Float.parseFloat(string.replaceAll("[^\\d.]+|\\.(?!\\d)",""));
-                                    AppManager.getInstance().requestToServer("311::" + Objects.requireNonNull(appManager.getGadgets().get(i)).id + f );
+                                    break;
+                                //case SET_VALUE:
+                                //float f = Float.parseFloat(string.replaceAll("[^\\d.]+|\\.(?!\\d)",""));
+                                //AppManager.getInstance().requestToServer("311::" + Objects.requireNonNull(appManager.getGadgets().get(i)).id + f );
                             }
+
 
                         }
                     }
-                    break;
                 }
             }
         }
