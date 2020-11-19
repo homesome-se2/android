@@ -6,6 +6,7 @@ import android.util.Log;
 import java.util.HashMap;
 import java.util.Map;
 
+import comtest.example.android_team.models.ValueTemplate;
 import comtest.example.android_team.models.gadgets.GadgetType;
 import comtest.example.android_team.network.HTTPNetworkService;
 import comtest.example.android_team.models.gadgets.Gadget_basic;
@@ -22,6 +23,11 @@ public class AppManager {
     public UpdateResponse currentFragment;
     // NetWork service
 
+    private ValueTemplate valueTemplate;
+
+    public ValueTemplate getValueTemplate() {
+        return valueTemplate;
+    }
 
     // map for gadgets. GadgetID/object
     private HashMap<Integer, Gadget_basic> gadgets;
@@ -41,10 +47,13 @@ public class AppManager {
     }
 
     AppManager() {
-        handler = new Handler();
-        currentFragment = null;
-        gadgets = new HashMap<>();
+    }
 
+    public void initialization(){
+        currentFragment = null;
+        handler = new Handler();
+        gadgets = new HashMap<>();
+        valueTemplate = new ValueTemplate();
     }
 
 
@@ -55,6 +64,7 @@ public class AppManager {
 
     public  void endConnection() {
         httpNetworkService.getWebSocketClient().close();
+        httpNetworkService.setConnected(false);
         Log.i(TAG, "C: Socket is closed!");
     }
 

@@ -6,18 +6,6 @@ public class Gadget_basic extends Gadget {
         super(gadgetID, gadgetName, type, valueTemplate, state);
     }
 
-
-    @Override
-    public void alterState(float requestedState) throws Exception {
-
-    }
-
-    @Override
-    protected String sendCommand(String command) throws Exception {
-        return null;
-    }
-
-
 }
 
 

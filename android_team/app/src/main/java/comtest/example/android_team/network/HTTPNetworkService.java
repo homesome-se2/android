@@ -18,6 +18,7 @@ public class HTTPNetworkService {
     public static final String SERVER_ID = "134.209.198.123";
     public static final int SERVER_PORT = 8084;
     private Handler handler;
+    private boolean isConnected;
 
     public WebSocketClient getWebSocketClient(){
         return webSocketClient;
@@ -25,6 +26,7 @@ public class HTTPNetworkService {
 
     public HTTPNetworkService(Handler handler){
         this.handler = handler;
+        this.isConnected = false;
         URI uri;
 
         try {
@@ -37,6 +39,7 @@ public class HTTPNetworkService {
         webSocketClient = new WebSocketClient(uri) {
             @Override
             public void onOpen() {
+                setConnected(true);
                 Log.i(TAG,"C: Connected to server!");
             }
 
@@ -68,6 +71,7 @@ public class HTTPNetworkService {
 
             @Override
             public void onCloseReceived() {
+                setConnected(false);
                 Log.i(TAG,"S: Connection closed!");
             }
         };
@@ -83,5 +87,11 @@ public class HTTPNetworkService {
        });
     }
 
+    public boolean isConnected() {
+        return isConnected;
+    }
 
+    public void setConnected(boolean connected) {
+        isConnected = connected;
+    }
 }

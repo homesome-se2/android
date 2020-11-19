@@ -1,7 +1,4 @@
 package comtest.example.android_team;
-
-
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.speech.RecognizerIntent;
@@ -11,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Toast;
+
 
 import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
@@ -77,6 +75,7 @@ public class SecondFragment extends Fragment implements UpdateResponse {
             @Override
             public void onClick(View view) {
           //      backgroundWorkTask();
+                AppManager.getInstance().requestToServer("311::6::45.8");
             }
         });
 
@@ -96,7 +95,6 @@ public class SecondFragment extends Fragment implements UpdateResponse {
         btnSpeech.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
                 speak();
             }
         });
@@ -208,8 +206,8 @@ public class SecondFragment extends Fragment implements UpdateResponse {
                 break;
             case 316:
                 Log.i(TAG, message);
-               tts.textToSpeak(message);
-               multiViewTypeAdapter.notifyDataSetChanged();
+        //        tts.textToSpeak(message);
+                multiViewTypeAdapter.notifyDataSetChanged();
                 break;
         }
     }
