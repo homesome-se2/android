@@ -133,15 +133,13 @@ public class SecondFragment extends Fragment implements UpdateResponse {
             switch (requestCode){
                 case REQUEST_CODE_SPEECH_INPUT:{
                     ArrayList<String> result = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
-                    String speechInput = result.get(0);
+                    String speechInput = result.get(0).toLowerCase();
                     Toast.makeText(getContext(), speechInput, Toast.LENGTH_LONG).show();
 
                     for (Map.Entry<Integer, Gadget_basic> entry : AppManager.getInstance().getGadgets().entrySet()) {
 
                         String gadgetResult = entry.getValue().gadgetName.toLowerCase();
                         Log.i(TAG, gadgetResult);
-
-
 
                         if ((speechInput.contains(gadgetResult))) {
                             GadgetType type = entry.getValue().type;
@@ -151,15 +149,19 @@ public class SecondFragment extends Fragment implements UpdateResponse {
                                     if (speechInput.contains("on")) {
                                         String logString = "311::" + entry.getValue().id + "::1";
                                         Log.i(TAG, logString);
-
                                         AppManager.getInstance().requestToServer("311::" + entry.getValue().id + "::1");
-                                    } else {
+                                    } else if (speechInput.contains("off")) {
                                         AppManager.getInstance().requestToServer("311::" + entry.getValue().id + "::0" );
+                                    } else {
+                                        String wrongSentence = "You have to be specific, ON or OFF.";
+                                        Toast.makeText(getContext(), wrongSentence, Toast.LENGTH_LONG).show();
+                                        tts.textToSpeak(wrongSentence);
                                     }
+
                                     break;
-                                //case SET_VALUE:
-                                //float f = Float.parseFloat(string.replaceAll("[^\\d.]+|\\.(?!\\d)",""));
-                                //AppManager.getInstance().requestToServer("311::" + Objects.requireNonNull(appManager.getGadgets().get(i)).id + f );
+                                case SET_VALUE:
+                                float f = Float.parseFloat(speechInput.replaceAll("[^\\d.]+|\\.(?!\\d)",""));
+                                AppManager.getInstance().requestToServer("311::" + entry.getValue().id + f);
                             }
 
 
