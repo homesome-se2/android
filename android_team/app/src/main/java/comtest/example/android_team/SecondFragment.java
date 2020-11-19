@@ -1,12 +1,4 @@
 package comtest.example.android_team;
-
-
-
-import android.annotation.SuppressLint;
-import android.app.NotificationChannel;
-import android.app.NotificationManager;
-import android.location.Location;
-import android.os.Build;
 import android.content.Intent;
 
 import android.os.Bundle;
@@ -17,22 +9,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.Toast;
-
-
-import com.google.android.gms.location.FusedLocationProviderClient;
-import com.google.android.gms.location.LocationRequest;
-import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.tasks.CancellationTokenSource;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 
 import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.core.app.NotificationCompat;
-import androidx.core.app.NotificationManagerCompat;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -56,7 +36,6 @@ import comtest.example.android_team.models.TemplateModel;
 import comtest.example.android_team.models.gadgets.Gadget_basic;
 import comtest.example.android_team.voiceSystem.TTS;
 
-import static android.app.Activity.RESULT_OK;
 
 public class SecondFragment extends Fragment implements UpdateResponse {
     private static final String TAG = "Info";
@@ -96,6 +75,7 @@ public class SecondFragment extends Fragment implements UpdateResponse {
             @Override
             public void onClick(View view) {
           //      backgroundWorkTask();
+                AppManager.getInstance().requestToServer("311::6::45.8");
             }
         });
 
@@ -116,7 +96,6 @@ public class SecondFragment extends Fragment implements UpdateResponse {
             @Override
             public void onClick(View view) {
                 speak();
-
 
             }
         });
@@ -203,7 +182,7 @@ public class SecondFragment extends Fragment implements UpdateResponse {
             case 316:
                 Log.i(TAG, message);
         //        tts.textToSpeak(message);
-       //         multiViewTypeAdapter.notifyDataSetChanged();
+                multiViewTypeAdapter.notifyDataSetChanged();
                 break;
         }
     }

@@ -27,7 +27,11 @@ public class VoiceController {
                 }
                 break;
             case BINARY_SENSOR:
-
+                if (gadget.getState() == 1) {
+                    text = ResourceHelper.resources.getString(R.string.VOICE_ON, gadget.gadgetName);
+                } else {
+                    text = ResourceHelper.resources.getString(R.string.VOICE_OFF, gadget.gadgetName);
+                }
                 break;
             case SENSOR:
                 text = ResourceHelper.resources.getString(R.string.SENSOR_TEMP_VALUE, gadget.gadgetName, String.valueOf(gadget.getState()));

@@ -33,6 +33,7 @@ public class MainActivity extends AppCompatActivity {
         if (ResourceHelper.resources == null) {
             ResourceHelper.resources = getResources();
         }
+        AppManager.getInstance().initialization();
 
         Log.i(TAG, "MainActivity: In the onCreate() event");
 

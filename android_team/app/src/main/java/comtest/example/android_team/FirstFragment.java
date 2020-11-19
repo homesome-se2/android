@@ -55,7 +55,6 @@ public class FirstFragment extends Fragment implements UpdateResponse {
                 logIn();
             }
         });
-
     }
 
     private void init(View view) {
@@ -69,9 +68,20 @@ public class FirstFragment extends Fragment implements UpdateResponse {
         String username = logAcc.getText().toString().trim();
         String password = logPass.getText().toString().trim();
 
-        AppManager.getInstance().establishConnection();
-        String logIn = "101::" + username + "::" + password + "";
-        AppManager.getInstance().requestToServer(logIn);
+        if (checkInputOkay(username,password)) {
+            AppManager.getInstance().establishConnection();
+            String logIn = "101::" + username + "::" + password + "";
+            AppManager.getInstance().requestToServer(logIn);
+        }
+    }
+
+    private boolean checkInputOkay(String username, String password){
+      if (username.isEmpty() || password.isEmpty()){
+          Toast.makeText(getContext(), "Username or Password missing!", Toast.LENGTH_LONG).show();
+          return false;
+      }else {
+          return true;
+      }
     }
 
 

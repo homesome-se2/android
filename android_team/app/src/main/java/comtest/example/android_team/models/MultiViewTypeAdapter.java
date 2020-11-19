@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -38,6 +39,7 @@ public class MultiViewTypeAdapter extends RecyclerView.Adapter<RecyclerView.View
         TextView alias, template;
         RelativeLayout background;
         SwitchCompat switchLamp;
+        ImageView gadgetImage;
 
         public SwitchTemplateViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -45,6 +47,7 @@ public class MultiViewTypeAdapter extends RecyclerView.Adapter<RecyclerView.View
             this.switchLamp = itemView.findViewById(R.id.switchLamp);
             this.template = itemView.findViewById(R.id.text_template);
             this.background = itemView.findViewById(R.id.card_background);
+            this.gadgetImage = itemView.findViewById(R.id.image_item);
         }
     }
 
@@ -66,6 +69,7 @@ public class MultiViewTypeAdapter extends RecyclerView.Adapter<RecyclerView.View
 
         TextView alias, state, template;
         RelativeLayout background;
+        ImageView gadgetImage;
 
         public SensorTemplateViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -73,6 +77,7 @@ public class MultiViewTypeAdapter extends RecyclerView.Adapter<RecyclerView.View
             this.state = itemView.findViewById(R.id.text_state);
             this.template = itemView.findViewById(R.id.text_template);
             this.background = itemView.findViewById(R.id.card_background);
+            this.gadgetImage = itemView.findViewById(R.id.image_item);
         }
     }
 
@@ -86,8 +91,6 @@ public class MultiViewTypeAdapter extends RecyclerView.Adapter<RecyclerView.View
             this.state = itemView.findViewById(R.id.text_state);
             this.template = itemView.findViewById(R.id.text_template);
             this.background = itemView.findViewById(R.id.card_background);
-
-
         }
     }
 
@@ -182,8 +185,10 @@ public class MultiViewTypeAdapter extends RecyclerView.Adapter<RecyclerView.View
 
         if (gadget_basic.getState() == 1) {
             gadget.switchLamp.setChecked(true);
+            gadget.gadgetImage.setImageResource(AppManager.getInstance().getValueTemplate().getSwitchTemplate().get(gadget_basic.valueTemplate).getImageIconON());
         } else {
             gadget.switchLamp.setChecked(false);
+            gadget.gadgetImage.setImageResource(AppManager.getInstance().getValueTemplate().getSwitchTemplate().get(gadget_basic.valueTemplate).getImageIconOFF());
         }
 
     }
@@ -201,6 +206,7 @@ public class MultiViewTypeAdapter extends RecyclerView.Adapter<RecyclerView.View
         gadget.alias.setText(gadget_basic.gadgetName);
         gadget.state.setText(String.valueOf(gadget_basic.getState()));
         gadget.background.setBackgroundColor(Color.GRAY);
+        gadget.gadgetImage.setImageResource(AppManager.getInstance().getValueTemplate().getSensorTemplate().get(gadget_basic.valueTemplate).getImageIcon());
     }
     private void setValueCardDetails(SetValueTemplateViewHolder gadget, Gadget_basic gadget_basic){
         gadget.template.setText(gadget_basic.valueTemplate);

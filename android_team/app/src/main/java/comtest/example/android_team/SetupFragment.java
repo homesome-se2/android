@@ -54,8 +54,6 @@ public class SetupFragment extends Fragment implements UpdateResponse {
             @Override
             public void run() {
                     ReadWriteCache readWriteCache = new ReadWriteCache(getContext());
-                    Log.i(TAG, String.valueOf(readWriteCache.cacheFileExist()));
-                   // readWriteCache.deleteCacheFile();
                     if (readWriteCache.cacheFileExist()) {
                         String cacheData = readWriteCache.readFromCache();
                         String[] commands = cacheData.split(":");

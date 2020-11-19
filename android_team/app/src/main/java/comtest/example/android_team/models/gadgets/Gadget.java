@@ -22,13 +22,6 @@ public abstract class Gadget {
         isPresent = false;
     }
 
-
-    // Request gadget to alter state
-    public abstract void alterState(float requestedState) throws Exception;
-
-    // Communications specifics for sending request to a gadget
-    protected abstract String sendCommand(String command) throws Exception;
-
     // Set instance variable 'state' to match actual state (called when a gadget has reported a state change)
     public void setState(float newState) {
         boolean isBinaryGadget = (type == GadgetType.SWITCH || type == GadgetType.BINARY_SENSOR);
@@ -43,10 +36,6 @@ public abstract class Gadget {
         return state;
     }
 
-    // Translate gadget according to HoSo protocol. Gadget object -> HoSo protocol
-    public String toHoSoProtocol() {
-        return String.format("%s::%s::%s::%s::%s::%s", id, gadgetName, type, valueTemplate, state,0);
-    }
 
     @Override
     public String toString() {
