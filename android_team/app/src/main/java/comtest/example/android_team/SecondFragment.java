@@ -1,14 +1,14 @@
 package comtest.example.android_team;
 import android.content.Intent;
-
 import android.os.Bundle;
-
 import android.speech.RecognizerIntent;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.Toast;
+
 
 import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
@@ -19,23 +19,23 @@ import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.work.Constraints;
+import androidx.work.ExistingWorkPolicy;
+import androidx.work.OneTimeWorkRequest;
+import androidx.work.WorkManager;
 
 import java.util.ArrayList;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 
-import androidx.work.Constraints;
-import androidx.work.ExistingWorkPolicy;
-import androidx.work.OneTimeWorkRequest;
-import androidx.work.WorkManager;
 import comtest.example.android_team.background.WorkerSendLocation;
 import comtest.example.android_team.models.MultiViewTypeAdapter;
 import comtest.example.android_team.models.ReadWriteCache;
 import comtest.example.android_team.models.TemplateModel;
+import comtest.example.android_team.models.gadgets.GadgetType;
 import comtest.example.android_team.models.gadgets.Gadget_basic;
 import comtest.example.android_team.voiceSystem.TTS;
-
 
 public class SecondFragment extends Fragment implements UpdateResponse {
     private static final String TAG = "Info";
@@ -96,7 +96,6 @@ public class SecondFragment extends Fragment implements UpdateResponse {
             @Override
             public void onClick(View view) {
                 speak();
-
             }
         });
 
@@ -128,18 +127,44 @@ public class SecondFragment extends Fragment implements UpdateResponse {
         public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
             super.onActivityResult(requestCode, resultCode, data);
 
+
             switch (requestCode){
                 case REQUEST_CODE_SPEECH_INPUT:{
                     ArrayList<String> result = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
-                    for (int i = 0; i < appManager.getGadgets().size(); i++) {
+                    String speechInput = result.get(0).toLowerCase();
+                    Toast.makeText(getContext(), speechInput, Toast.LENGTH_LONG).show();
+
+                    for (Map.Entry<Integer, Gadget_basic> entry : AppManager.getInstance().getGadgets().entrySet()) {
+
+                        String gadgetResult = entry.getValue().gadgetName.toLowerCase();
+                        Log.i(TAG, gadgetResult);
+
+                        if ((speechInput.contains(gadgetResult))) {
+                            GadgetType type = entry.getValue().type;
+
+                            switch (type) {
+                                case SWITCH:
+                                    if (speechInput.contains("on")) {
+                                        String logString = "311::" + entry.getValue().id + "::1";
+                                        Log.i(TAG, logString);
+                                        AppManager.getInstance().requestToServer("311::" + entry.getValue().id + "::1");
+                                    } else if (speechInput.contains("off")) {
+                                        AppManager.getInstance().requestToServer("311::" + entry.getValue().id + "::0" );
+                                    } else {
+                                        String wrongSentence = "You have to be specific, ON or OFF.";
+                                        Toast.makeText(getContext(), wrongSentence, Toast.LENGTH_LONG).show();
+                                        tts.textToSpeak(wrongSentence);
+                                    }
+
+                                    break;
+                                case SET_VALUE:
+                                float f = Float.parseFloat(speechInput.replaceAll("[^\\d.]+|\\.(?!\\d)",""));
+                                AppManager.getInstance().requestToServer("311::" + entry.getValue().id + f);
+                            }
 
 
-                        if (Objects.requireNonNull(appManager.getGadgets().get(i)).gadgetName.contains(result.get(0))) {
-
-                            AppManager.getInstance().requestToServer("311::" + Objects.requireNonNull(appManager.getGadgets().get(i)).id + "::1");
                         }
                     }
-                    break;
                 }
             }
         }

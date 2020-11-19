@@ -156,5 +156,4 @@ public class AppManager {
         Log.e(TAG, error);
         currentFragment.update(903, error);
     }
-
 }

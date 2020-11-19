@@ -17,7 +17,7 @@
         android:id="@+id/card_background"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/colorPrimaryDark"
+        android:background="#3f6cff"
         android:padding="5dp">
 
         <LinearLayout
@@ -51,6 +51,11 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Value" />
+
+            <SeekBar
+                android:id="@+id/seekBar_state"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
         </LinearLayout>
 
     </RelativeLayout>
