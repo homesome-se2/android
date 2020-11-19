@@ -11,7 +11,7 @@ public class SensorValueModel {
 
 
     public SensorValueModel() {
-        this.imageIcon = R.drawable.def;
+        this.imageIcon = R.drawable.def_on;
         this.unit = "-";
         this.rangeMin = 0;
         this.rangeMax = 1023;

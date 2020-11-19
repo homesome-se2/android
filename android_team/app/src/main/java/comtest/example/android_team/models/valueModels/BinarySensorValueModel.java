@@ -1,21 +1,20 @@
 package comtest.example.android_team.models.valueModels;
 
 import comtest.example.android_team.R;
-import comtest.example.android_team.models.ValueTemplate;
 
-public class SwitchValueModel{
+public class BinarySensorValueModel {
 
     private int[] imageIconList;
     private String valueON;
     private String valueOFF;
 
-    public SwitchValueModel() {
+    public BinarySensorValueModel() {
         this.imageIconList =new int[]{R.drawable.def_on, R.drawable.def_off};
         this.valueOFF = "OFF";
         this.valueON = "ON";
     }
 
-    public SwitchValueModel(int switchImgOn, int switchImgOff, String valueOn, String valueOff) {
+    public BinarySensorValueModel(int switchImgOn, int switchImgOff, String valueOn, String valueOff) {
         this.imageIconList = new int[]{switchImgOn, switchImgOff};
         this.valueON = valueOn;
         this.valueOFF = valueOff;

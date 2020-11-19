@@ -1,6 +1,6 @@
 package comtest.example.android_team.models.gadgets;
 
-public abstract class Gadget {
+public class Gadget {
 
     /* Here we define our parameters for a gadget. Then we add a constructor to the parameters. Method setState is there to make the system to dont bother
      what gadget that is toggled. It is indedendent in that way and only checks for the update */
@@ -10,7 +10,6 @@ public abstract class Gadget {
     public final GadgetType type;
     private float state;
     public String valueTemplate;
-    public boolean isPresent;
 
 
     public Gadget(int gadgetID, String gadgetName, GadgetType type, String valueTemplate, float state) {
@@ -19,7 +18,6 @@ public abstract class Gadget {
         this.type = type;
         this.valueTemplate = valueTemplate;
         this.state = state;
-        isPresent = false;
     }
 
     // Set instance variable 'state' to match actual state (called when a gadget has reported a state change)
@@ -45,7 +43,6 @@ public abstract class Gadget {
                 ", type=" + type +
                 ", state=" + state +
                 ", valueTemplate='" + valueTemplate + '\'' +
-                ", isPresent=" + isPresent +
                 '}';
     }
 }

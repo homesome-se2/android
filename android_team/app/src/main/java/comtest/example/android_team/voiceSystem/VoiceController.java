@@ -1,22 +1,16 @@
 package comtest.example.android_team.voiceSystem;
 
-import android.content.Intent;
-import android.speech.RecognizerIntent;
-import android.speech.tts.TextToSpeech;
-
-import java.util.HashMap;
-
 import comtest.example.android_team.R;
-import comtest.example.android_team.models.gadgets.Gadget_basic;
+import comtest.example.android_team.models.gadgets.Gadget;
 
 public class VoiceController {
 
 
-    public static String generateVoiceAnswer(Gadget_basic gadget) {
+    public static String generateVoiceAnswer(Gadget gadget) {
         return createString(gadget);
     }
 
-    private static String createString(Gadget_basic gadget) {
+    private static String createString(Gadget gadget) {
         String text = "";
         switch (gadget.type) {
             case SWITCH:

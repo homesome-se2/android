@@ -20,7 +20,7 @@ import java.util.ArrayList;
 
 import comtest.example.android_team.AppManager;
 import comtest.example.android_team.R;
-import comtest.example.android_team.models.gadgets.Gadget_basic;
+import comtest.example.android_team.models.gadgets.Gadget;
 
 
 public class MultiViewTypeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
@@ -37,16 +37,15 @@ public class MultiViewTypeAdapter extends RecyclerView.Adapter<RecyclerView.View
 
     public static class SwitchTemplateViewHolder extends RecyclerView.ViewHolder {
 
-        TextView alias, template;
+        TextView alias;
         RelativeLayout background;
-        SwitchCompat switchLamp;
+        SwitchCompat switchCompat;
         ImageView gadgetImage;
 
         public SwitchTemplateViewHolder(@NonNull View itemView) {
             super(itemView);
             this.alias = itemView.findViewById(R.id.text_alias);
-            this.switchLamp = itemView.findViewById(R.id.switchLamp);
-            this.template = itemView.findViewById(R.id.text_template);
+            this.switchCompat = itemView.findViewById(R.id.switchLamp);
             this.background = itemView.findViewById(R.id.card_background);
             this.gadgetImage = itemView.findViewById(R.id.image_item);
         }
@@ -54,21 +53,22 @@ public class MultiViewTypeAdapter extends RecyclerView.Adapter<RecyclerView.View
 
     public static class BinarySensorTemplateViewHolder extends RecyclerView.ViewHolder {
 
-        TextView alias, state, template;
+        TextView alias, state;
         RelativeLayout background;
+        ImageView gadgetImage;
 
         public BinarySensorTemplateViewHolder(@NonNull View itemView) {
             super(itemView);
             this.alias = itemView.findViewById(R.id.text_alias);
             this.state = itemView.findViewById(R.id.text_state);
-            this.template = itemView.findViewById(R.id.text_template);
             this.background = itemView.findViewById(R.id.card_background);
+            this.gadgetImage = itemView.findViewById(R.id.image_item);
         }
     }
 
     public static class SensorTemplateViewHolder extends RecyclerView.ViewHolder {
 
-        TextView alias, state, template;
+        TextView alias, state;
         RelativeLayout background;
         ImageView gadgetImage;
 
@@ -76,7 +76,6 @@ public class MultiViewTypeAdapter extends RecyclerView.Adapter<RecyclerView.View
             super(itemView);
             this.alias = itemView.findViewById(R.id.text_alias);
             this.state = itemView.findViewById(R.id.text_state);
-            this.template = itemView.findViewById(R.id.text_template);
             this.background = itemView.findViewById(R.id.card_background);
             this.gadgetImage = itemView.findViewById(R.id.image_item);
         }
@@ -120,8 +119,8 @@ public class MultiViewTypeAdapter extends RecyclerView.Adapter<RecyclerView.View
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         //position is item card index
         TemplateModel object = dataSet.get(position);
-        ArrayList<Gadget_basic> valuesList = new ArrayList<>(AppManager.getInstance().getGadgets().values());
-        Gadget_basic gadget = valuesList.get(position);
+        ArrayList<Gadget> valuesList = new ArrayList<>(AppManager.getInstance().getGadgets().values());
+        Gadget gadget = valuesList.get(position);
         if (object != null) {
             Log.d(TAG, gadget.toString());
             switch (object.getType()) {
@@ -164,19 +163,18 @@ public class MultiViewTypeAdapter extends RecyclerView.Adapter<RecyclerView.View
 
 
     @SuppressLint("ClickableViewAccessibility")
-    private void setSwitchDetails(final SwitchTemplateViewHolder gadget, final Gadget_basic gadget_basic) {
-        gadget.template.setText(gadget_basic.valueTemplate);
-        gadget.alias.setText(gadget_basic.gadgetName);
+    private void setSwitchDetails(final SwitchTemplateViewHolder holder, final Gadget gadget) {
+        holder.alias.setText(gadget.gadgetName);
 
-        gadget.switchLamp.setOnTouchListener(new View.OnTouchListener() {
+        holder.switchCompat.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View view, MotionEvent event) {
                 if (event.getAction() == MotionEvent.ACTION_UP) {
-                    if (gadget.switchLamp.isChecked()) {
-                        String set = "311::"+gadget_basic.id+"::0";
+                    if (holder.switchCompat.isChecked()) {
+                        String set = "311::"+gadget.id+"::0";
                         AppManager.getInstance().requestToServer(set);
                     } else {
-                        String set = "311::"+gadget_basic.id+"::1";
+                        String set = "311::"+gadget.id+"::1";
                         AppManager.getInstance().requestToServer(set);
                     }
                 }
@@ -184,37 +182,41 @@ public class MultiViewTypeAdapter extends RecyclerView.Adapter<RecyclerView.View
             }
         });
 
-        if (gadget_basic.getState() == 1) {
-            gadget.switchLamp.setChecked(true);
-            gadget.gadgetImage.setImageResource(AppManager.getInstance().getValueTemplate().getSwitchTemplate().get(gadget_basic.valueTemplate).getImageIconON());
+        if (gadget.getState() == 1) {
+            holder.switchCompat.setChecked(true);
+            holder.gadgetImage.setImageResource(ValueTemplate.getInstance().getSwitchTemplate().get(gadget.valueTemplate).getImageIconON());
         } else {
-            gadget.switchLamp.setChecked(false);
-            gadget.gadgetImage.setImageResource(AppManager.getInstance().getValueTemplate().getSwitchTemplate().get(gadget_basic.valueTemplate).getImageIconOFF());
+            holder.switchCompat.setChecked(false);
+            holder.gadgetImage.setImageResource(ValueTemplate.getInstance().getSwitchTemplate().get(gadget.valueTemplate).getImageIconOFF());
         }
 
     }
 
 
-    private void setBinarySensorDetails(BinarySensorTemplateViewHolder gadget, Gadget_basic gadget_basic) {
-        gadget.template.setText(gadget_basic.valueTemplate);
-        gadget.alias.setText(gadget_basic.gadgetName);
-        gadget.state.setText(String.valueOf(gadget_basic.getState()));
-        gadget.background.setBackgroundColor(Color.RED);
+    private void setBinarySensorDetails(BinarySensorTemplateViewHolder holder, Gadget gadget) {
+        holder.alias.setText(gadget.gadgetName);
+        holder.background.setBackgroundColor(Color.RED);
+        if (gadget.getState() == 1) {
+            holder.state.setText(ValueTemplate.getInstance().getBiSensorTemplate().get(gadget.valueTemplate).getValueON());
+            holder.gadgetImage.setImageResource(ValueTemplate.getInstance().getBiSensorTemplate().get(gadget.valueTemplate).getImageIconON());
+        } else {
+            holder.state.setText(ValueTemplate.getInstance().getBiSensorTemplate().get(gadget.valueTemplate).getValueOFF());
+            holder.gadgetImage.setImageResource(ValueTemplate.getInstance().getBiSensorTemplate().get(gadget.valueTemplate).getImageIconOFF());
+        }
     }
 
-    private void setSensorDetails(SensorTemplateViewHolder gadget, Gadget_basic gadget_basic) {
-        gadget.template.setText(gadget_basic.valueTemplate);
-        gadget.alias.setText(gadget_basic.gadgetName);
-        gadget.state.setText(String.valueOf(gadget_basic.getState()));
-        gadget.background.setBackgroundColor(Color.GRAY);
-        gadget.gadgetImage.setImageResource(AppManager.getInstance().getValueTemplate().getSensorTemplate().get(gadget_basic.valueTemplate).getImageIcon());
+    private void setSensorDetails(SensorTemplateViewHolder holder, Gadget gadget) {
+        holder.alias.setText(gadget.gadgetName);
+        holder.state.setText(String.valueOf(gadget.getState()));
+        holder.background.setBackgroundColor(Color.GRAY);
+        holder.gadgetImage.setImageResource(ValueTemplate.getInstance().getSensorTemplate().get(gadget.valueTemplate).getImageIcon());
     }
     //TODO add seakbar to show floating value
-    private void setValueCardDetails(SetValueTemplateViewHolder gadget, Gadget_basic gadget_basic){
-        gadget.template.setText(gadget_basic.valueTemplate);
-        gadget.alias.setText(gadget_basic.gadgetName);
-        gadget.state.setText(String.valueOf(gadget_basic.getState()));
-        gadget.background.setBackgroundColor(Color.GREEN);
+    private void setValueCardDetails(SetValueTemplateViewHolder holder, Gadget gadget){
+        holder.template.setText(gadget.valueTemplate);
+        holder.alias.setText(gadget.gadgetName);
+        holder.state.setText(String.valueOf(gadget.getState()));
+        holder.background.setBackgroundColor(Color.GREEN);
     }
 
 }
