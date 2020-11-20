@@ -104,12 +104,12 @@ public class AppManager {
     // #102
     private void manuelLogin(String[] commands) {
         String cache = String.format("%s:%s", commands[1], commands[4]);
-        currentFragment.update(102, cache);
+        currentFragment.update(102, cache,null);
     }
 
     // #104
     private void automaticLogin(String[] commands) {
-        currentFragment.update(104, "");
+        currentFragment.update(104, "",null);
     }
 
 
@@ -123,11 +123,19 @@ public class AppManager {
             GadgetType type = GadgetType.valueOf(commands[count++]);
             String valueTemplate = commands[count++];
             float state = Float.parseFloat(commands[count++]);
-            long pollDelaySeconds = Long.parseLong(commands[count++]);
-            Gadget gadgetBasic = new Gadget(gadgetID, alias, type, valueTemplate, state);
-            gadgets.put(gadgetID, gadgetBasic);
+            count++; // Skipping pollDelaySec
+
+            // Build gadget
+            Gadget gadget = new Gadget.GadgetBuilder()
+                    .id(gadgetID)
+                    .gadgetName(alias)
+                    .type(type)
+                    .valueTemplate(valueTemplate)
+                    .state(state)
+                    .build();
+            gadgets.put(gadgetID, gadget);
         }
-        currentFragment.update(304, "");
+        currentFragment.update(304, "",null);
 
     }
 
@@ -139,20 +147,20 @@ public class AppManager {
         // Set new state
         gadgets.get(gadgetID).setState(newState);
         String response = VoiceController.generateVoiceAnswer(gadgets.get(gadgetID));
-        currentFragment.update(316, response);
+        currentFragment.update(316, response,gadgetID-1);
     }
 
     // #901
     private void exceptionMSG(String[] commands) {
         String error = "Exception msg: " + commands[1];
         Log.e(TAG, error);
-        currentFragment.update(901, error);
+        currentFragment.update(901, error,null);
     }
 
     // #903
     private void exceptionFailedLogIn(String[] commands) {
         String error = "Exception msg: " + commands[1];
         Log.e(TAG, error);
-        currentFragment.update(903, error);
+        currentFragment.update(903, error,null);
     }
 }

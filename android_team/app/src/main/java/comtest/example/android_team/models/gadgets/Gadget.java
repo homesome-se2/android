@@ -3,21 +3,40 @@ package comtest.example.android_team.models.gadgets;
 public class Gadget {
 
     /* Here we define our parameters for a gadget. Then we add a constructor to the parameters. Method setState is there to make the system to dont bother
-     what gadget that is toggled. It is indedendent in that way and only checks for the update */
+     what gadget that is toggled. It is independent in that way and only checks for the update */
 
-    public final int id;
-    public final String gadgetName;
-    public final GadgetType type;
+    private int id;
+    private String gadgetName;
+    private GadgetType type;
     private float state;
-    public String valueTemplate;
+    private String valueTemplate;
 
+    public Gadget(GadgetBuilder gadgetBuilder) {
+        this.id = gadgetBuilder.id;
+        this.gadgetName = gadgetBuilder.gadgetName;
+        this.type = gadgetBuilder.type;
+        this.valueTemplate = gadgetBuilder.valueTemplate;
+        this.state = gadgetBuilder.state;
+    }
 
-    public Gadget(int gadgetID, String gadgetName, GadgetType type, String valueTemplate, float state) {
-        this.id = gadgetID;
-        this.gadgetName = gadgetName;
-        this.type = type;
-        this.valueTemplate = valueTemplate;
-        this.state = state;
+    public int getId() {
+        return id;
+    }
+
+    public String getGadgetName() {
+        return gadgetName;
+    }
+
+    public GadgetType getType() {
+        return type;
+    }
+
+    public String getValueTemplate() {
+        return valueTemplate;
+    }
+
+    public float getState() {
+        return state;
     }
 
     // Set instance variable 'state' to match actual state (called when a gadget has reported a state change)
@@ -30,11 +49,6 @@ public class Gadget {
         }
     }
 
-    public float getState() {
-        return state;
-    }
-
-
     @Override
     public String toString() {
         return "Gadget{" +
@@ -45,4 +59,44 @@ public class Gadget {
                 ", valueTemplate='" + valueTemplate + '\'' +
                 '}';
     }
+
+    public static class GadgetBuilder {
+        private int id;
+        private String gadgetName;
+        private GadgetType type;
+        private float state;
+        private String valueTemplate;
+
+        public GadgetBuilder id(final int id){
+            this.id = id;
+            return this;
+        }
+
+        public GadgetBuilder gadgetName(final String gadgetName){
+            this.gadgetName =  gadgetName;
+            return this;
+        }
+
+        public GadgetBuilder type(final GadgetType type){
+            this.type = type;
+            return this;
+        }
+
+        public GadgetBuilder state(final float state){
+            this.state = state;
+            return this;
+        }
+
+        public GadgetBuilder valueTemplate(final String valueTemplate){
+            this.valueTemplate = valueTemplate;
+            return this;
+        }
+
+        public Gadget build(){
+            return new Gadget(this);
+        }
+
+
+    }
+
 }
