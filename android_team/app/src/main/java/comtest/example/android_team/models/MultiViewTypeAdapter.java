@@ -26,11 +26,11 @@ import comtest.example.android_team.models.gadgets.Gadget;
 
 public class MultiViewTypeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-    private ArrayList<TemplateModel> dataSet;
+    private ArrayList<CardModel> dataSet;
     private Context mContext;
     private static final String TAG = "Info";
 
-    public MultiViewTypeAdapter(Context context, ArrayList<TemplateModel> data) {
+    public MultiViewTypeAdapter(Context context, ArrayList<CardModel> data) {
         this.dataSet = data;
         this.mContext = context;
     }
@@ -103,16 +103,16 @@ public class MultiViewTypeAdapter extends RecyclerView.Adapter<RecyclerView.View
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view;
         switch (viewType) {
-            case TemplateModel.SWITCH_CARD:
+            case CardModel.SWITCH_CARD:
                 view = LayoutInflater.from(parent.getContext()).inflate(R.layout.switch_card_item, parent, false);
                 return new SwitchTemplateViewHolder(view);
-            case TemplateModel.BINARY_SENSOR_CARD:
+            case CardModel.BINARY_SENSOR_CARD:
                 view = LayoutInflater.from(parent.getContext()).inflate(R.layout.binary_sensor_card_item, parent, false);
                 return new BinarySensorTemplateViewHolder(view);
-            case TemplateModel.SENSOR_CARD:
+            case CardModel.SENSOR_CARD:
                 view = LayoutInflater.from(parent.getContext()).inflate(R.layout.sensor_card_item, parent, false);
                 return new SensorTemplateViewHolder(view);
-            case TemplateModel.SET_VALUE_CARD:
+            case CardModel.SET_VALUE_CARD:
                 view = LayoutInflater.from(parent.getContext()).inflate(R.layout.setvalue_card_item, parent, false);
                 return new SetValueTemplateViewHolder(view);
         }
@@ -122,22 +122,22 @@ public class MultiViewTypeAdapter extends RecyclerView.Adapter<RecyclerView.View
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         //position is item card index
-        TemplateModel object = dataSet.get(position);
+        CardModel object = dataSet.get(position);
         ArrayList<Gadget> valuesList = new ArrayList<>(AppManager.getInstance().getGadgets().values());
         Gadget gadget = valuesList.get(position);
         if (object != null) {
             Log.d(TAG, gadget.toString());
             switch (object.getType()) {
-                case TemplateModel.SWITCH_CARD:
+                case CardModel.SWITCH_CARD:
                     setSwitchDetails(((SwitchTemplateViewHolder) holder), gadget);
                     break;
-                case TemplateModel.BINARY_SENSOR_CARD:
+                case CardModel.BINARY_SENSOR_CARD:
                     setBinarySensorDetails(((BinarySensorTemplateViewHolder) holder), gadget);
                     break;
-                case TemplateModel.SENSOR_CARD:
+                case CardModel.SENSOR_CARD:
                     setSensorDetails(((SensorTemplateViewHolder) holder), gadget);
                     break;
-                case TemplateModel.SET_VALUE_CARD:
+                case CardModel.SET_VALUE_CARD:
                     setValueCardDetails(((SetValueTemplateViewHolder) holder), gadget);
             }
         }
@@ -148,13 +148,13 @@ public class MultiViewTypeAdapter extends RecyclerView.Adapter<RecyclerView.View
 
         switch (dataSet.get(position).getType()) {
             case 0:
-                return TemplateModel.SWITCH_CARD;
+                return CardModel.SWITCH_CARD;
             case 1:
-                return TemplateModel.BINARY_SENSOR_CARD;
+                return CardModel.BINARY_SENSOR_CARD;
             case 2:
-                return TemplateModel.SENSOR_CARD;
+                return CardModel.SENSOR_CARD;
             case 3:
-                return TemplateModel.SET_VALUE_CARD;
+                return CardModel.SET_VALUE_CARD;
             default:
                 return -1;
         }
