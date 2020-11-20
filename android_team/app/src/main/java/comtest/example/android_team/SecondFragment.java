@@ -31,14 +31,15 @@ import java.util.Map;
 import comtest.example.android_team.background.WorkerSendLocation;
 import comtest.example.android_team.models.MultiViewTypeAdapter;
 import comtest.example.android_team.models.ReadWriteCache;
-import comtest.example.android_team.models.TemplateModel;
+import comtest.example.android_team.models.CardModel;
 import comtest.example.android_team.models.gadgets.Gadget;
 import comtest.example.android_team.models.gadgets.GadgetType;
 import comtest.example.android_team.voiceSystem.TTS;
 
 public class SecondFragment extends Fragment implements UpdateResponse {
     private static final String TAG = "Info";
-    private ArrayList<TemplateModel> gadgetCards;
+    private ArrayList<CardModel> gadgetCards;
+
     private RecyclerView recyclerView;
     private MultiViewTypeAdapter multiViewTypeAdapter;
     private Button btnLogOut, btnSpeech, BetaBtn_work, BetaBtn_killWork;
@@ -51,6 +52,7 @@ public class SecondFragment extends Fragment implements UpdateResponse {
         Log.d(TAG, "In the SecondFragment");
         AppManager.getInstance().currentFragment = this;
         gadgetCards = new ArrayList<>();
+
         recyclerView = view.findViewById(R.id.gadgetListView);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
@@ -185,16 +187,16 @@ public class SecondFragment extends Fragment implements UpdateResponse {
                     switch (entry.getValue().getType()) {
 
                         case SWITCH:
-                            gadgetCards.add(new TemplateModel(TemplateModel.SWITCH_CARD));
+                            gadgetCards.add(new CardModel(CardModel.SWITCH_CARD));
                             break;
                         case BINARY_SENSOR:
-                            gadgetCards.add(new TemplateModel(TemplateModel.BINARY_SENSOR_CARD));
+                            gadgetCards.add(new CardModel(CardModel.BINARY_SENSOR_CARD));
                             break;
                         case SENSOR:
-                            gadgetCards.add(new TemplateModel(TemplateModel.SENSOR_CARD));
+                            gadgetCards.add(new CardModel(CardModel.SENSOR_CARD));
                             break;
                         case SET_VALUE:
-                            gadgetCards.add(new TemplateModel(TemplateModel.SET_VALUE_CARD));
+                            gadgetCards.add(new CardModel(CardModel.SET_VALUE_CARD));
                             break;
                     }
                 }

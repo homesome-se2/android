@@ -1,6 +1,6 @@
 package comtest.example.android_team.models;
 
-public class TemplateModel {
+public class CardModel {
 
     /* Used to be call upon to retrieve all the cards */
 
@@ -11,7 +11,7 @@ public class TemplateModel {
 
     private int type;
 
-public TemplateModel(int type){
+public CardModel(int type){
         this.type = type;
 
 }
