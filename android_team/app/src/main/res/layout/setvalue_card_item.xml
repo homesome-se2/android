@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="horizontal"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     app:cardCornerRadius="10dp"
-    app:cardElevation="3dp"
-    android:foreground="?attr/selectableItemBackground"
+    app:cardElevation="1dp"
     app:cardUseCompatPadding="true"
     android:layout_marginEnd="1dp"
     android:layout_marginStart="1dp"
@@ -18,44 +18,50 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="#3f6cff"
-        android:padding="5dp">
+        android:padding="10dp">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:orientation="horizontal">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="horizontal">
+                android:layout_weight="1"
+                android:orientation="vertical">
 
                 <TextView
                     android:id="@+id/text_alias"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Alias" />
+                    android:text="Alias"
+                    android:textColor="#FFFFFF" />
+
 
                 <TextView
-                    android:id="@+id/text_template"
+                    android:id="@+id/text_state"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Template"
-                    android:textAlignment="textEnd" />
+                    android:text="Value"
+                    android:textColor="#FFFFFF" />
+
+                <SeekBar
+                    android:id="@+id/seekBar_state"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+
             </LinearLayout>
 
-            <TextView
-                android:id="@+id/text_state"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Value" />
+            <ImageView
+                android:id="@+id/image_item"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                tools:srcCompat="@drawable/def_on" />
 
-            <SeekBar
-                android:id="@+id/seekBar_state"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
         </LinearLayout>
 
     </RelativeLayout>

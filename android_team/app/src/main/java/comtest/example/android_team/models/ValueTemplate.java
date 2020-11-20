@@ -5,6 +5,7 @@ import java.util.HashMap;
 import comtest.example.android_team.R;
 import comtest.example.android_team.models.valueModels.BinarySensorValueModel;
 import comtest.example.android_team.models.valueModels.SensorValueModel;
+import comtest.example.android_team.models.valueModels.SetValueModel;
 import comtest.example.android_team.models.valueModels.SwitchValueModel;
 
 public class ValueTemplate {
@@ -12,6 +13,7 @@ public class ValueTemplate {
     private HashMap<String, SwitchValueModel> switchTemplate;
     private HashMap<String, SensorValueModel> sensorTemplate;
     private HashMap<String, BinarySensorValueModel> biSensorTemplate;
+    private HashMap<String, SetValueModel> setValueHashMap;
 
     private static ValueTemplate instance = null;
 
@@ -29,6 +31,7 @@ public class ValueTemplate {
         this.switchTemplate = new HashMap<>();
         this.sensorTemplate = new HashMap<>();
         this.biSensorTemplate = new HashMap<>();
+        this.setValueHashMap = new HashMap<>();
 
         // ************ Switch *****************
         this.switchTemplate.put("default", new SwitchValueModel());
@@ -41,6 +44,9 @@ public class ValueTemplate {
         // ************ Sensor *****************
         this.biSensorTemplate.put("default", new BinarySensorValueModel());
         this.biSensorTemplate.put("door", new BinarySensorValueModel(R.drawable.door_open,R.drawable.door_closed,"OPEN", "CLOSED"));
+
+        // ************ Sensor *****************
+        this.setValueHashMap.put("default", new SetValueModel());
     }
 
     public HashMap<String, SwitchValueModel> getSwitchTemplate() {
@@ -53,5 +59,9 @@ public class ValueTemplate {
 
     public HashMap<String, BinarySensorValueModel> getBiSensorTemplate() {
         return biSensorTemplate;
+    }
+
+    public HashMap<String, SetValueModel> getSetValueHashMap() {
+        return setValueHashMap;
     }
 }
