@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.SeekBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -82,15 +83,18 @@ public class MultiViewTypeAdapter extends RecyclerView.Adapter<RecyclerView.View
     }
 
     public static class SetValueTemplateViewHolder extends RecyclerView.ViewHolder{
-        TextView alias, state, template;
+        TextView alias, state;
         RelativeLayout background;
+        SeekBar seekBar;
+        ImageView gadgetImage;
 
         public SetValueTemplateViewHolder(@NonNull View itemView){
             super(itemView);
             this.alias = itemView.findViewById(R.id.text_alias);
             this.state = itemView.findViewById(R.id.text_state);
-            this.template = itemView.findViewById(R.id.text_template);
             this.background = itemView.findViewById(R.id.card_background);
+            this.seekBar = itemView.findViewById(R.id.seekBar_state);
+            this.gadgetImage = itemView.findViewById(R.id.image_item);
         }
     }
 
@@ -208,15 +212,15 @@ public class MultiViewTypeAdapter extends RecyclerView.Adapter<RecyclerView.View
     private void setSensorDetails(SensorTemplateViewHolder holder, Gadget gadget) {
         holder.alias.setText(gadget.gadgetName);
         holder.state.setText(String.valueOf(gadget.getState()));
-        holder.background.setBackgroundColor(Color.GRAY);
+        holder.background.setBackgroundColor(Color.DKGRAY);
         holder.gadgetImage.setImageResource(ValueTemplate.getInstance().getSensorTemplate().get(gadget.valueTemplate).getImageIcon());
     }
     //TODO add seakbar to show floating value
     private void setValueCardDetails(SetValueTemplateViewHolder holder, Gadget gadget){
-        holder.template.setText(gadget.valueTemplate);
         holder.alias.setText(gadget.gadgetName);
         holder.state.setText(String.valueOf(gadget.getState()));
-        holder.background.setBackgroundColor(Color.GREEN);
+        holder.background.setBackgroundColor(Color.MAGENTA);
+        holder.gadgetImage.setImageResource(ValueTemplate.getInstance().getSetValueHashMap().get(gadget.valueTemplate).getImageIcon());
     }
 
 }
