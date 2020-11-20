@@ -12,23 +12,23 @@ public class VoiceController {
 
     private static String createString(Gadget gadget) {
         String text = "";
-        switch (gadget.type) {
+        switch (gadget.getType()) {
             case SWITCH:
                 if (gadget.getState() == 1) {
-                    text = ResourceHelper.resources.getString(R.string.VOICE_ON, gadget.gadgetName);
+                    text = ResourceHelper.resources.getString(R.string.VOICE_ON, gadget.getGadgetName());
                 } else {
-                    text = ResourceHelper.resources.getString(R.string.VOICE_OFF, gadget.gadgetName);
+                    text = ResourceHelper.resources.getString(R.string.VOICE_OFF, gadget.getGadgetName());
                 }
                 break;
             case BINARY_SENSOR:
                 if (gadget.getState() == 1) {
-                    text = ResourceHelper.resources.getString(R.string.VOICE_ON, gadget.gadgetName);
+                    text = ResourceHelper.resources.getString(R.string.VOICE_ON, gadget.getGadgetName());
                 } else {
-                    text = ResourceHelper.resources.getString(R.string.VOICE_OFF, gadget.gadgetName);
+                    text = ResourceHelper.resources.getString(R.string.VOICE_OFF, gadget.getGadgetName());
                 }
                 break;
             case SENSOR:
-                text = ResourceHelper.resources.getString(R.string.SENSOR_TEMP_VALUE, gadget.gadgetName, String.valueOf(gadget.getState()));
+                text = ResourceHelper.resources.getString(R.string.SENSOR_TEMP_VALUE, gadget.getGadgetName(), String.valueOf(gadget.getState()));
                 break;
             case SET_VALUE:
                 break;

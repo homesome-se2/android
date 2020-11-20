@@ -134,20 +134,20 @@ public class SecondFragment extends Fragment implements UpdateResponse {
 
                     for (Map.Entry<Integer, Gadget> entry : AppManager.getInstance().getGadgets().entrySet()) {
 
-                        String gadgetResult = entry.getValue().gadgetName.toLowerCase();
+                        String gadgetResult = entry.getValue().getGadgetName().toLowerCase();
                         Log.i(TAG, gadgetResult);
 
                         if ((speechInput.contains(gadgetResult))) {
-                            GadgetType type = entry.getValue().type;
+                            GadgetType type = entry.getValue().getType();
 
                             switch (type) {
                                 case SWITCH:
                                     if (speechInput.contains("on")) {
-                                        String logString = "311::" + entry.getValue().id + "::1";
+                                        String logString = "311::" + entry.getValue().getId() + "::1";
                                         Log.i(TAG, logString);
-                                        AppManager.getInstance().requestToServer("311::" + entry.getValue().id + "::1");
+                                        AppManager.getInstance().requestToServer("311::" + entry.getValue().getId() + "::1");
                                     } else if (speechInput.contains("off")) {
-                                        AppManager.getInstance().requestToServer("311::" + entry.getValue().id + "::0" );
+                                        AppManager.getInstance().requestToServer("311::" + entry.getValue().getId() + "::0" );
                                     } else {
                                         String wrongSentence = "You have to be specific, ON or OFF.";
                                         Toast.makeText(getContext(), wrongSentence, Toast.LENGTH_LONG).show();
@@ -157,7 +157,7 @@ public class SecondFragment extends Fragment implements UpdateResponse {
                                     break;
                                 case SET_VALUE:
                                 float f = Float.parseFloat(speechInput.replaceAll("[^\\d.]+|\\.(?!\\d)",""));
-                                AppManager.getInstance().requestToServer("311::" + entry.getValue().id + f);
+                                AppManager.getInstance().requestToServer("311::" + entry.getValue().getId() + f);
                             }
 
 
@@ -177,12 +177,12 @@ public class SecondFragment extends Fragment implements UpdateResponse {
 
 
     @Override
-    public void update(int indexProtocol, String message) {
+    public void update(int indexProtocol, String message, Integer gadgetID) {
 
         switch (indexProtocol) {
             case 304:
                 for (Map.Entry<Integer, Gadget> entry : AppManager.getInstance().getGadgets().entrySet()) {
-                    switch (entry.getValue().type) {
+                    switch (entry.getValue().getType()) {
 
                         case SWITCH:
                             gadgetCards.add(new TemplateModel(TemplateModel.SWITCH_CARD));
@@ -205,7 +205,7 @@ public class SecondFragment extends Fragment implements UpdateResponse {
             case 316:
                 Log.i(TAG, message);
         //        tts.textToSpeak(message);
-                multiViewTypeAdapter.notifyDataSetChanged();
+                multiViewTypeAdapter.notifyItemChanged(gadgetID);
                 break;
         }
     }

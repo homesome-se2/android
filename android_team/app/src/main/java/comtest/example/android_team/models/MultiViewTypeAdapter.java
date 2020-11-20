@@ -168,17 +168,17 @@ public class MultiViewTypeAdapter extends RecyclerView.Adapter<RecyclerView.View
 
     @SuppressLint("ClickableViewAccessibility")
     private void setSwitchDetails(final SwitchTemplateViewHolder holder, final Gadget gadget) {
-        holder.alias.setText(gadget.gadgetName);
+        holder.alias.setText(gadget.getGadgetName());
 
         holder.switchCompat.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View view, MotionEvent event) {
                 if (event.getAction() == MotionEvent.ACTION_UP) {
                     if (holder.switchCompat.isChecked()) {
-                        String set = "311::"+gadget.id+"::0";
+                        String set = "311::"+gadget.getId()+"::0";
                         AppManager.getInstance().requestToServer(set);
                     } else {
-                        String set = "311::"+gadget.id+"::1";
+                        String set = "311::"+gadget.getId()+"::1";
                         AppManager.getInstance().requestToServer(set);
                     }
                 }
@@ -188,39 +188,37 @@ public class MultiViewTypeAdapter extends RecyclerView.Adapter<RecyclerView.View
 
         if (gadget.getState() == 1) {
             holder.switchCompat.setChecked(true);
-            holder.gadgetImage.setImageResource(ValueTemplate.getInstance().getSwitchTemplate().get(gadget.valueTemplate).getImageIconON());
+            holder.gadgetImage.setImageResource(ValueTemplate.getInstance().getSwitchTemplate().get(gadget.getValueTemplate()).getImageIconON());
         } else {
             holder.switchCompat.setChecked(false);
-            holder.gadgetImage.setImageResource(ValueTemplate.getInstance().getSwitchTemplate().get(gadget.valueTemplate).getImageIconOFF());
+            holder.gadgetImage.setImageResource(ValueTemplate.getInstance().getSwitchTemplate().get(gadget.getValueTemplate()).getImageIconOFF());
         }
-
     }
 
-
     private void setBinarySensorDetails(BinarySensorTemplateViewHolder holder, Gadget gadget) {
-        holder.alias.setText(gadget.gadgetName);
+        holder.alias.setText(gadget.getGadgetName());
         holder.background.setBackgroundColor(Color.RED);
         if (gadget.getState() == 1) {
-            holder.state.setText(ValueTemplate.getInstance().getBiSensorTemplate().get(gadget.valueTemplate).getValueON());
-            holder.gadgetImage.setImageResource(ValueTemplate.getInstance().getBiSensorTemplate().get(gadget.valueTemplate).getImageIconON());
+            holder.state.setText(ValueTemplate.getInstance().getBiSensorTemplate().get(gadget.getValueTemplate()).getValueON());
+            holder.gadgetImage.setImageResource(ValueTemplate.getInstance().getBiSensorTemplate().get(gadget.getValueTemplate()).getImageIconON());
         } else {
-            holder.state.setText(ValueTemplate.getInstance().getBiSensorTemplate().get(gadget.valueTemplate).getValueOFF());
-            holder.gadgetImage.setImageResource(ValueTemplate.getInstance().getBiSensorTemplate().get(gadget.valueTemplate).getImageIconOFF());
+            holder.state.setText(ValueTemplate.getInstance().getBiSensorTemplate().get(gadget.getValueTemplate()).getValueOFF());
+            holder.gadgetImage.setImageResource(ValueTemplate.getInstance().getBiSensorTemplate().get(gadget.getValueTemplate()).getImageIconOFF());
         }
     }
 
     private void setSensorDetails(SensorTemplateViewHolder holder, Gadget gadget) {
-        holder.alias.setText(gadget.gadgetName);
+        holder.alias.setText(gadget.getGadgetName());
         holder.state.setText(String.valueOf(gadget.getState()));
         holder.background.setBackgroundColor(Color.DKGRAY);
-        holder.gadgetImage.setImageResource(ValueTemplate.getInstance().getSensorTemplate().get(gadget.valueTemplate).getImageIcon());
+        holder.gadgetImage.setImageResource(ValueTemplate.getInstance().getSensorTemplate().get(gadget.getValueTemplate()).getImageIcon());
     }
     //TODO add seakbar to show floating value
     private void setValueCardDetails(SetValueTemplateViewHolder holder, Gadget gadget){
-        holder.alias.setText(gadget.gadgetName);
+        holder.alias.setText(gadget.getGadgetName());
         holder.state.setText(String.valueOf(gadget.getState()));
         holder.background.setBackgroundColor(Color.MAGENTA);
-        holder.gadgetImage.setImageResource(ValueTemplate.getInstance().getSetValueHashMap().get(gadget.valueTemplate).getImageIcon());
+        holder.gadgetImage.setImageResource(ValueTemplate.getInstance().getSetValueHashMap().get(gadget.getValueTemplate()).getImageIcon());
     }
 
 }

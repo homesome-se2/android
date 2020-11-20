@@ -86,6 +86,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onStop() {
         super.onStop();
         Log.i(TAG, "MainActivity: In the onStop() event");
+        //TODO may need to change it
+        finish();
     }
 
     protected void onDestroy() {

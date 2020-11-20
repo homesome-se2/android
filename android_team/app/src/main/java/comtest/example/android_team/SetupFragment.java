@@ -35,7 +35,7 @@ public class SetupFragment extends Fragment implements UpdateResponse {
 
 
     @Override
-    public void update(int indexProtocol, String message) {
+    public void update(int indexProtocol, String message, Integer gadgetID) {
         switch (indexProtocol) {
             case 104:
                 navController.navigate(R.id.SecondFragment);
