@@ -4,6 +4,7 @@ import android.os.Handler;
 import android.util.Log;
 
 import java.util.HashMap;
+import java.util.Objects;
 
 import comtest.example.android_team.models.ValueTemplate;
 import comtest.example.android_team.models.gadgets.Gadget;
@@ -91,6 +92,14 @@ public class AppManager {
             case "316":
                 gadgetStateUpdate(commands);
                 break;
+            case "352":
+                forwardNewGadget(commands);
+                break;
+            case "354":
+                removeGadget(commands);
+                break;
+            case "404":
+                aliasChange(commands);
             case "901":
                 exceptionMSG(commands);
                 break;
@@ -148,6 +157,52 @@ public class AppManager {
         gadgets.get(gadgetID).setState(newState);
         String response = VoiceController.generateVoiceAnswer(gadgets.get(gadgetID));
         currentFragment.update(316, response,gadgetID-1);
+    }
+
+    // #352
+    private void forwardNewGadget(String[] commands) {
+        int count = 1;
+        int gadgetID = Integer.parseInt(commands[count++]);
+        String alias = commands[count++];
+        GadgetType type = GadgetType.valueOf(commands[count++]);
+        String valueTemplate = commands[count++];
+        float state = Float.parseFloat(commands[count++]);
+
+        Gadget gadget = new Gadget.GadgetBuilder()
+                .id(gadgetID)
+                .gadgetName(alias)
+                .type(type)
+                .valueTemplate(valueTemplate)
+                .state(state)
+                .build();
+        gadgets.put(gadgetID, gadget);
+
+        currentFragment.update(352, "", gadgetID-1);
+    }
+
+    //#354
+    private void removeGadget(String[] commands){
+        int index = 0;
+        for (int i = 0; i < gadgets.size(); i++){
+            if (Objects.requireNonNull(gadgets.get(i)).getId() == Integer.parseInt(commands[1])){
+                index = gadgets.get(i).getId();
+                gadgets.remove(i);
+            }
+
+        }
+        currentFragment.update(354,"", index-1);
+    }
+
+    //#404
+    private void aliasChange(String[] commands){
+        int index = 0;
+        for (int i = 0; i < gadgets.size(); i++){
+            if (Objects.requireNonNull(gadgets.get(i)).getId() == Integer.parseInt(commands[1])){
+                Objects.requireNonNull(gadgets.get(i)).setGadgetName(commands[2]);
+                index = gadgets.get(i).getId();
+            }
+        }
+        currentFragment.update(404,"",index-1);
     }
 
     // #901
