@@ -213,12 +213,32 @@ public class MultiViewTypeAdapter extends RecyclerView.Adapter<RecyclerView.View
         holder.background.setBackgroundColor(Color.DKGRAY);
         holder.gadgetImage.setImageResource(ValueTemplate.getInstance().getSensorTemplate().get(gadget.getValueTemplate()).getImageIcon());
     }
-    //TODO add seakbar to show floating value
-    private void setValueCardDetails(SetValueTemplateViewHolder holder, Gadget gadget){
+
+    private void setValueCardDetails(final SetValueTemplateViewHolder holder, final Gadget gadget){
         holder.alias.setText(gadget.getGadgetName());
         holder.state.setText(String.valueOf(gadget.getState()));
         holder.background.setBackgroundColor(Color.MAGENTA);
         holder.gadgetImage.setImageResource(ValueTemplate.getInstance().getSetValueHashMap().get(gadget.getValueTemplate()).getImageIcon());
+        holder.seekBar.setMin(0);
+        holder.seekBar.setMax(100);
+        holder.seekBar.setProgress((int) gadget.getState());
+        holder.seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
+
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+                String set = "311::"+gadget.getId()+"::" + holder.seekBar.getProgress();
+                AppManager.getInstance().requestToServer(set);
+            }
+        });
     }
 
 }

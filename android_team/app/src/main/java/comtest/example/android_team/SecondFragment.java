@@ -209,6 +209,30 @@ public class SecondFragment extends Fragment implements UpdateResponse {
         //        tts.textToSpeak(message);
                 multiViewTypeAdapter.notifyItemChanged(gadgetID);
                 break;
+            case 352:
+                switch (AppManager.getInstance().getGadgets().get(gadgetID).getType()){
+                    case SWITCH:
+                        gadgetCards.add(new CardModel(CardModel.SWITCH_CARD));
+                        break;
+                    case BINARY_SENSOR:
+                        gadgetCards.add(new CardModel(CardModel.BINARY_SENSOR_CARD));
+                        break;
+                    case SENSOR:
+                        gadgetCards.add(new CardModel(CardModel.SENSOR_CARD));
+                        break;
+                    case SET_VALUE:
+                        gadgetCards.add(new CardModel(CardModel.SET_VALUE_CARD));
+                        break;
+                }
+                multiViewTypeAdapter.notifyItemInserted(gadgetID);
+                break;
+            case 354:
+                AppManager.getInstance().getGadgets().remove(gadgetID);
+                multiViewTypeAdapter.notifyItemRemoved(gadgetID);
+                break;
+            case 404:
+                multiViewTypeAdapter.notifyItemChanged(gadgetID);
+                break;
         }
     }
 

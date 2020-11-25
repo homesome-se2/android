@@ -39,6 +39,10 @@ public class Gadget {
         return state;
     }
 
+    public void setGadgetName(String gadgetName) {
+        this.gadgetName = gadgetName;
+    }
+
     // Set instance variable 'state' to match actual state (called when a gadget has reported a state change)
     public void setState(float newState) {
         boolean isBinaryGadget = (type == GadgetType.SWITCH || type == GadgetType.BINARY_SENSOR);
