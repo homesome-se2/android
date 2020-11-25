@@ -1,5 +1,8 @@
 package comtest.example.android_team;
+import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.media.AudioManager;
 import android.os.Bundle;
 import android.speech.RecognizerIntent;
 import android.util.Log;
@@ -8,8 +11,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Toast;
-
-
 import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -23,11 +24,9 @@ import androidx.work.Constraints;
 import androidx.work.ExistingWorkPolicy;
 import androidx.work.OneTimeWorkRequest;
 import androidx.work.WorkManager;
-
 import java.util.ArrayList;
 import java.util.Locale;
 import java.util.Map;
-
 import comtest.example.android_team.background.WorkerSendLocation;
 import comtest.example.android_team.models.MultiViewTypeAdapter;
 import comtest.example.android_team.models.ReadWriteCache;
@@ -42,7 +41,7 @@ public class SecondFragment extends Fragment implements UpdateResponse {
 
     private RecyclerView recyclerView;
     private MultiViewTypeAdapter multiViewTypeAdapter;
-    private Button btnLogOut, btnSpeech, BetaBtn_work, BetaBtn_killWork;
+    private Button btnLogOut, btnSpeech, BetaBtn_work, BetaBtn_killWork, btnMuteSound;
     private NavController navController;
     private TTS tts;
     private static final int REQUEST_CODE_SPEECH_INPUT = 1000;
@@ -96,6 +95,14 @@ public class SecondFragment extends Fragment implements UpdateResponse {
             @Override
             public void onClick(View view) {
                 speak();
+            }
+        });
+        btnMuteSound = (Button) view.findViewById(R.id.btnMuteSound);
+        btnMuteSound.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                btnMuteSound.setSoundEffectsEnabled(false);
             }
         });
 
@@ -161,7 +168,6 @@ public class SecondFragment extends Fragment implements UpdateResponse {
                                 float f = Float.parseFloat(speechInput.replaceAll("[^\\d.]+|\\.(?!\\d)",""));
                                 AppManager.getInstance().requestToServer("311::" + entry.getValue().getId() + f);
                             }
-
 
                         }
                     }
@@ -256,8 +262,6 @@ public class SecondFragment extends Fragment implements UpdateResponse {
                 .build();
         WorkManager.getInstance(getContext()).enqueueUniqueWork("sendGPSPos", ExistingWorkPolicy.KEEP, refreshWork);
     }
-
-
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
