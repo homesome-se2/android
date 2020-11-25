@@ -18,7 +18,7 @@
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/gadgetListView"
             android:layout_width="match_parent"
-            android:layout_height="224dp"
+            android:layout_height="555dp"
             android:layout_weight="1"
             android:background="@android:color/white"
             android:padding="4dp"
@@ -67,6 +67,13 @@
                 android:text="Speak" />
 
         </LinearLayout>
+
+        <Button
+            android:id="@+id/btnMuteSound"
+            android:layout_width="match_parent"
+            android:layout_height="26dp"
+            android:layout_weight="1"
+            android:text="Sound Off" />
     </LinearLayout>
 
 
