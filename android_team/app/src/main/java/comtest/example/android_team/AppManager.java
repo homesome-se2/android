@@ -86,6 +86,9 @@ public class AppManager {
             case "104":
                 automaticLogin(commands);
                 break;
+            case "107":
+                confirmAllLogout(commands);
+                break;
             case "304":
                 receiveAllGadgets(commands);
                 break;
@@ -119,6 +122,13 @@ public class AppManager {
     // #104
     private void automaticLogin(String[] commands) {
         currentFragment.update(104, "",null);
+    }
+
+    // #107
+    private void confirmAllLogout(String[] commands){
+        String message = commands[1];
+        currentFragment.update(107, message, null);
+
     }
 
 

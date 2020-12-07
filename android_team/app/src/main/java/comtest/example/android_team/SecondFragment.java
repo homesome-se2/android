@@ -1,8 +1,6 @@
 package comtest.example.android_team;
-import android.app.Activity;
-import android.content.Context;
+
 import android.content.Intent;
-import android.media.AudioManager;
 import android.os.Bundle;
 import android.speech.RecognizerIntent;
 import android.util.Log;
@@ -11,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Toast;
+
 import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -24,9 +23,11 @@ import androidx.work.Constraints;
 import androidx.work.ExistingWorkPolicy;
 import androidx.work.OneTimeWorkRequest;
 import androidx.work.WorkManager;
+
 import java.util.ArrayList;
 import java.util.Locale;
 import java.util.Map;
+
 import comtest.example.android_team.background.WorkerSendLocation;
 import comtest.example.android_team.models.MultiViewTypeAdapter;
 import comtest.example.android_team.models.ReadWriteCache;
@@ -38,10 +39,9 @@ import comtest.example.android_team.voiceSystem.TTS;
 public class SecondFragment extends Fragment implements UpdateResponse {
     private static final String TAG = "Info";
     private ArrayList<CardModel> gadgetCards;
-
     private RecyclerView recyclerView;
     private MultiViewTypeAdapter multiViewTypeAdapter;
-    private Button btnLogOut, btnSpeech, BetaBtn_work, BetaBtn_killWork, btnMuteSound;
+    private Button btnLogOut, btnSpeech, BetaBtn_work, BetaBtn_killWork, btnMuteSound, btn_logOutAllDev;
     private NavController navController;
     private TTS tts;
     private static final int REQUEST_CODE_SPEECH_INPUT = 1000;
@@ -51,12 +51,12 @@ public class SecondFragment extends Fragment implements UpdateResponse {
         Log.d(TAG, "In the SecondFragment");
         AppManager.getInstance().currentFragment = this;
         gadgetCards = new ArrayList<>();
-
         recyclerView = view.findViewById(R.id.gadgetListView);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         initbtnLogOut(view);
         btnSpeech(view);
+        initBtnLogOutAllDevices(view);
         navController = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment);
         btnLogOut.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -64,6 +64,14 @@ public class SecondFragment extends Fragment implements UpdateResponse {
                 logOut();
             }
         });
+        btn_logOutAllDev.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                logOutAllDevices();
+            }
+        });
+
+
 
 
 // *************************************************************************************
@@ -117,6 +125,9 @@ public class SecondFragment extends Fragment implements UpdateResponse {
         btnSpeech = view.findViewById(R.id.btnSpeech);
     }
 
+    private void initBtnLogOutAllDevices(View view) {btn_logOutAllDev  = view.findViewById(R.id.btn_logOutAllDev); }
+
+
     private void speak() {
         Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
         intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
@@ -166,8 +177,11 @@ public class SecondFragment extends Fragment implements UpdateResponse {
                                     break;
                                 case SET_VALUE:
                                 float f = Float.parseFloat(speechInput.replaceAll("[^\\d.]+|\\.(?!\\d)",""));
-                                AppManager.getInstance().requestToServer("311::" + entry.getValue().getId() + f);
+                                String s = String.valueOf(f);
+                                AppManager.getInstance().requestToServer("311::" + entry.getValue().getId() + "::" + f);
+                                Log.i(TAG, "311::" + entry.getValue().getId() + "::" + f);
                             }
+                            break;
 
                         }
                     }
@@ -178,6 +192,13 @@ public class SecondFragment extends Fragment implements UpdateResponse {
 
     private void logOut() {
         AppManager.getInstance().requestToServer("105");
+        ReadWriteCache readWriteCache = new ReadWriteCache(getContext());
+        readWriteCache.deleteCacheFile();
+        navController.navigate(R.id.FirstFragment);
+    }
+
+    private void logOutAllDevices() {
+        AppManager.getInstance().requestToServer("106");
         ReadWriteCache readWriteCache = new ReadWriteCache(getContext());
         readWriteCache.deleteCacheFile();
         navController.navigate(R.id.FirstFragment);
