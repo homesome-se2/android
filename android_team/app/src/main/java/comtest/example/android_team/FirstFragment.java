@@ -93,6 +93,8 @@ public class FirstFragment extends Fragment implements UpdateResponse {
                 navController.navigate(R.id.SecondFragment);
                 readWriteCache.writeToCache(message);
                 break;
+            case 107:
+                Toast.makeText(getContext(), message, Toast.LENGTH_LONG).show();
             case 901:
             case 903:
                 Toast.makeText(getContext(), message, Toast.LENGTH_LONG).show();
