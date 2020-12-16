@@ -166,7 +166,7 @@ public class AppManager {
         // Set new state
         gadgets.get(gadgetID).setState(newState);
         String response = VoiceController.generateVoiceAnswer(gadgets.get(gadgetID));
-        currentFragment.update(316, response,gadgetID-1);
+        currentFragment.update(316, response,gadgetID);
     }
 
     // #352
@@ -187,7 +187,7 @@ public class AppManager {
                 .build();
         gadgets.put(gadgetID, gadget);
 
-        currentFragment.update(352, "", gadgetID-1);
+        currentFragment.update(352, "", gadgetID);
     }
 
     //#354
@@ -200,7 +200,7 @@ public class AppManager {
             }
 
         }
-        currentFragment.update(354,"", index-1);
+        currentFragment.update(354,"", index);
     }
 
     //#404
@@ -212,7 +212,7 @@ public class AppManager {
                 index = gadgets.get(i).getId();
             }
         }
-        currentFragment.update(404,"",index-1);
+        currentFragment.update(404,"",index);
     }
 
     // #901
