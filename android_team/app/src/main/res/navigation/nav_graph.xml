@@ -24,6 +24,12 @@
         android:name="comtest.example.android_team.SecondFragment"
         android:label="@string/second_fragment_label"
         tools:layout="@layout/fragment_second">
+    </fragment>
 
+    <fragment
+        android:id="@+id/plugPlayFragment"
+        android:name="comtest.example.android_team.plugplay.PlugPlayInitFragment"
+        android:label="PlugPlayFragment"
+        tools:layout="@layout/fragment_plugplay_setup">
     </fragment>
 </navigation>

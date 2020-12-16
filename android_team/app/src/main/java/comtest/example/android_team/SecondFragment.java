@@ -75,7 +75,8 @@ public class SecondFragment extends Fragment implements UpdateResponse {
             @Override
             public void onClick(View view) {
           //      backgroundWorkTask();
-                AppManager.getInstance().requestToServer("311::6::45.8");
+        //        AppManager.getInstance().requestToServer("311::6::45.8");
+                navController.navigate(R.id.plugPlayFragment);
             }
         });
 
