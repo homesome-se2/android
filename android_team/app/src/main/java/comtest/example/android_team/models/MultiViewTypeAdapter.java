@@ -218,9 +218,9 @@ public class MultiViewTypeAdapter extends RecyclerView.Adapter<RecyclerView.View
         holder.alias.setText(gadget.getGadgetName());
         holder.state.setText(String.valueOf(gadget.getState()));
         holder.background.setBackgroundColor(Color.MAGENTA);
-        holder.gadgetImage.setImageResource(ValueTemplate.getInstance().getSetValueHashMap().get(gadget.getValueTemplate()).getImageIcon());
-        holder.seekBar.setMin(0);
-        holder.seekBar.setMax(100);
+        holder.gadgetImage.setImageResource(ValueTemplate.getInstance().getSetValueHashMap().get(gadget.getValueTemplate()).getImageValue(gadget.getState()));
+        holder.seekBar.setMin((int) ValueTemplate.getInstance().getSetValueHashMap().get(gadget.getValueTemplate()).getRangeMin());
+        holder.seekBar.setMax((int) ValueTemplate.getInstance().getSetValueHashMap().get(gadget.getValueTemplate()).getRangeMax());
         holder.seekBar.setProgress((int) gadget.getState());
         holder.seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
