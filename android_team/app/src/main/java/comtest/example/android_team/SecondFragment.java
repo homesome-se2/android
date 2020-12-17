@@ -46,7 +46,6 @@ public class SecondFragment extends Fragment implements UpdateResponse {
     private ArrayList<CardModel> gadgetCards;
     private RecyclerView recyclerView;
     private MultiViewTypeAdapter multiViewTypeAdapter;
-    private Button btnLogOut, btnSpeech, BetaBtn_work, BetaBtn_killWork, btnMuteSound, btn_logOutAllDev;
     private NavController navController;
     private TTS tts;
     private static final int REQUEST_CODE_SPEECH_INPUT = 1000;
@@ -55,8 +54,16 @@ public class SecondFragment extends Fragment implements UpdateResponse {
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_second, container, false);
 
+        Log.d(TAG, "In the SecondFragment");
+        AppManager.getInstance().currentFragment = this;
+        gadgetCards = new ArrayList<>();
+        recyclerView = view.findViewById(R.id.gadgetListView);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
         drawer = view.findViewById(R.id.drawer_layout);
         NavigationView navigationView = view.findViewById(R.id.nav_view);
+        navController = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment);
+
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
@@ -66,15 +73,15 @@ public class SecondFragment extends Fragment implements UpdateResponse {
 
                     case R.id.start_worker:
                         Toast.makeText(getContext(), "Start Work", Toast.LENGTH_SHORT).show();
-                        backgroundWorkTask();
+//                        backgroundWorkTask();
                         break;
                     case R.id.kill_work:
-                        Toast.makeText(getContext(), "Kill Work", Toast.LENGTH_SHORT).show();
-                        WorkManager.getInstance(getContext()).cancelUniqueWork("sendGPSPos");
-                        WorkManager.getInstance(getContext()).cancelAllWorkByTag("sendGPSPos");
-                        boolean str = WorkManager.getInstance(getContext()).getWorkInfosForUniqueWork("sendGPSPos")
-                                .isDone();
-                        Log.i(TAG, "Kill Work: " + str);
+//                        Toast.makeText(getContext(), "Kill Work", Toast.LENGTH_SHORT).show();
+//                        WorkManager.getInstance(getContext()).cancelUniqueWork("sendGPSPos");
+//                        WorkManager.getInstance(getContext()).cancelAllWorkByTag("sendGPSPos");
+//                        boolean str = WorkManager.getInstance(getContext()).getWorkInfosForUniqueWork("sendGPSPos")
+//                                .isDone();
+//                        Log.i(TAG, "Kill Work: " + str);
                         break;
                     case R.id.speak:
                         Toast.makeText(getContext(), "Voice Control", Toast.LENGTH_SHORT).show();
@@ -99,13 +106,6 @@ public class SecondFragment extends Fragment implements UpdateResponse {
         });
 
 
-        Log.d(TAG, "In the SecondFragment");
-        AppManager.getInstance().currentFragment = this;
-        gadgetCards = new ArrayList<>();
-        recyclerView = view.findViewById(R.id.gadgetListView);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        recyclerView.setItemAnimator(new DefaultItemAnimator());
-        navController = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment);
         return view;
     }
 
