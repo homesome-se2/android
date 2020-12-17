@@ -1,12 +1,9 @@
 <component name="libraryTable">
   <library name="Gradle: it.xabaras.android:recyclerview-swipedecorator:1.2.2@aar">
     <CLASSES>
-      <root url="jar://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/f4272cfd06bf20dbb8655beff90bb1c6/jetified-recyclerview-swipedecorator-1.2.2/jars/classes.jar!/" />
-      <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/f4272cfd06bf20dbb8655beff90bb1c6/jetified-recyclerview-swipedecorator-1.2.2/res" />
-      <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/fec2f3c99db4c0ae5ec9864fb69d0ca1/jetified-recyclerview-swipedecorator-1.2.2/AndroidManifest.xml" />
-      <root url="jar://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/fec2f3c99db4c0ae5ec9864fb69d0ca1/jetified-recyclerview-swipedecorator-1.2.2/jars/classes.jar!/" />
-      <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/fec2f3c99db4c0ae5ec9864fb69d0ca1/jetified-recyclerview-swipedecorator-1.2.2/res" />
-
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/d6f9453884ae288704a35fe081aa09eb/jetified-recyclerview-swipedecorator-1.2.2/AndroidManifest.xml" />
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/d6f9453884ae288704a35fe081aa09eb/jetified-recyclerview-swipedecorator-1.2.2/jars/classes.jar!/" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/d6f9453884ae288704a35fe081aa09eb/jetified-recyclerview-swipedecorator-1.2.2/res" />
     </CLASSES>
     <JAVADOC>
       <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/it.xabaras.android/recyclerview-swipedecorator/1.2.2/10befc11c7b0f96a82ea1f23d8888f44d0e4ec8f/recyclerview-swipedecorator-1.2.2-javadoc.jar!/" />

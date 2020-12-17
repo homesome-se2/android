@@ -1,0 +1,25 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/start_worker"
+            android:title="Start work" />
+        <item
+            android:id="@+id/kill_work"
+            android:title="Kill work" />
+        <item
+            android:id="@+id/speak"
+            android:title="Voice Controller" />
+        <item
+            android:id="@+id/soundOff"
+            android:title="Voice OFF"/>
+        <item
+            android:id="@+id/logOut"
+            android:title="Log Out"/>
+        <item
+            android:id="@+id/logOutAllDevices"
+            android:title="Log Out All Devices"/>
+    </group>
+</menu>

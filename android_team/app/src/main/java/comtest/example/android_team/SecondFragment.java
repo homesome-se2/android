@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.speech.RecognizerIntent;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -13,6 +14,8 @@ import android.widget.Toast;
 import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -23,6 +26,8 @@ import androidx.work.Constraints;
 import androidx.work.ExistingWorkPolicy;
 import androidx.work.OneTimeWorkRequest;
 import androidx.work.WorkManager;
+
+import com.google.android.material.navigation.NavigationView;
 
 import java.util.ArrayList;
 import java.util.Locale;
@@ -45,89 +50,64 @@ public class SecondFragment extends Fragment implements UpdateResponse {
     private NavController navController;
     private TTS tts;
     private static final int REQUEST_CODE_SPEECH_INPUT = 1000;
+    private DrawerLayout drawer;
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_second, container, false);
+
+        drawer = view.findViewById(R.id.drawer_layout);
+        NavigationView navigationView = view.findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                int id = item.getItemId();
+
+                switch (id) {
+
+                    case R.id.start_worker:
+                        Toast.makeText(getContext(), "Start Work", Toast.LENGTH_SHORT).show();
+                        backgroundWorkTask();
+                        break;
+                    case R.id.kill_work:
+                        Toast.makeText(getContext(), "Kill Work", Toast.LENGTH_SHORT).show();
+                        WorkManager.getInstance(getContext()).cancelUniqueWork("sendGPSPos");
+                        WorkManager.getInstance(getContext()).cancelAllWorkByTag("sendGPSPos");
+                        boolean str = WorkManager.getInstance(getContext()).getWorkInfosForUniqueWork("sendGPSPos")
+                                .isDone();
+                        Log.i(TAG, "Kill Work: " + str);
+                        break;
+                    case R.id.speak:
+                        Toast.makeText(getContext(), "Voice Control", Toast.LENGTH_SHORT).show();
+                        speak();
+                        break;
+                    case R.id.soundOff:
+                        Toast.makeText(getContext(), "Sound off", Toast.LENGTH_SHORT).show();
+
+                        break;
+                    case R.id.logOut:
+                        Toast.makeText(getContext(), "Logged Out", Toast.LENGTH_SHORT).show();
+                        logOut();
+                        break;
+                    case R.id.logOutAllDevices:
+                        Toast.makeText(getContext(), "All devices logged out", Toast.LENGTH_SHORT).show();
+                        logOutAllDevices();
+                        break;
+                }
+                drawer.closeDrawer(GravityCompat.START);
+                return true;
+            }
+        });
+
+
         Log.d(TAG, "In the SecondFragment");
         AppManager.getInstance().currentFragment = this;
         gadgetCards = new ArrayList<>();
         recyclerView = view.findViewById(R.id.gadgetListView);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
-        initbtnLogOut(view);
-        btnSpeech(view);
-        initBtnLogOutAllDevices(view);
         navController = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment);
-        btnLogOut.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                logOut();
-            }
-        });
-        btn_logOutAllDev.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                logOutAllDevices();
-            }
-        });
-
-
-
-
-// *************************************************************************************
-        BetaBtn_work = view.findViewById(R.id.btn_worker);
-        BetaBtn_killWork = view.findViewById(R.id.btn_killWorker);
-
-        BetaBtn_work.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-          //      backgroundWorkTask();
-        //        AppManager.getInstance().requestToServer("311::6::45.8");
-                navController.navigate(R.id.plugPlayFragment);
-            }
-        });
-
-        BetaBtn_killWork.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-//                WorkManager.getInstance(getContext()).cancelUniqueWork("sendGPSPos");
-//                WorkManager.getInstance(getContext()).cancelAllWorkByTag("sendGPSPos");
-//              boolean str =  WorkManager.getInstance(getContext()).getWorkInfosForUniqueWork("sendGPSPos")
-//                        .isDone();
-//                Log.i(TAG, "Kill Work: " + str);
-
-            }
-        });
-// *****************************************************************************************
-        // Voice to text
-        btnSpeech.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                speak();
-            }
-        });
-        btnMuteSound = (Button) view.findViewById(R.id.btnMuteSound);
-        btnMuteSound.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                btnMuteSound.setSoundEffectsEnabled(false);
-            }
-        });
-
         return view;
     }
-
-    private void initbtnLogOut(View view) {
-        btnLogOut = view.findViewById(R.id.btn_logOut);
-    }
-
-    private void btnSpeech(View view) {
-        btnSpeech = view.findViewById(R.id.btnSpeech);
-    }
-
-    private void initBtnLogOutAllDevices(View view) {btn_logOutAllDev  = view.findViewById(R.id.btn_logOutAllDev); }
-
 
     private void speak() {
         Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
@@ -136,59 +116,59 @@ public class SecondFragment extends Fragment implements UpdateResponse {
         intent.putExtra(RecognizerIntent.EXTRA_PROMPT, "Hello! Say something :-)");
 
         try {
-            // Compare with a string like turn on the lamp
             startActivityForResult(intent, REQUEST_CODE_SPEECH_INPUT);
         } catch (Exception e) {
-            System.out.println(e.getMessage());;
+            System.out.println(e.getMessage());
+
         }
     }
 
-        public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-            super.onActivityResult(requestCode, resultCode, data);
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
 
 
-            switch (requestCode){
-                case REQUEST_CODE_SPEECH_INPUT:{
-                    ArrayList<String> result = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
-                    String speechInput = result.get(0).toLowerCase();
-                    Toast.makeText(getContext(), speechInput, Toast.LENGTH_LONG).show();
+        switch (requestCode) {
+            case REQUEST_CODE_SPEECH_INPUT: {
+                ArrayList<String> result = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
+                String speechInput = result.get(0).toLowerCase();
+                Toast.makeText(getContext(), speechInput, Toast.LENGTH_LONG).show();
 
-                    for (Map.Entry<Integer, Gadget> entry : AppManager.getInstance().getGadgets().entrySet()) {
+                for (Map.Entry<Integer, Gadget> entry : AppManager.getInstance().getGadgets().entrySet()) {
 
-                        String gadgetResult = entry.getValue().getGadgetName().toLowerCase();
-                        Log.i(TAG, gadgetResult);
+                    String gadgetResult = entry.getValue().getGadgetName().toLowerCase();
+                    Log.i(TAG, gadgetResult);
 
-                        if ((speechInput.contains(gadgetResult))) {
-                            GadgetType type = entry.getValue().getType();
+                    if ((speechInput.contains(gadgetResult))) {
+                        GadgetType type = entry.getValue().getType();
 
-                            switch (type) {
-                                case SWITCH:
-                                    if (speechInput.contains("on")) {
-                                        String logString = "311::" + entry.getValue().getId() + "::1";
-                                        Log.i(TAG, logString);
-                                        AppManager.getInstance().requestToServer("311::" + entry.getValue().getId() + "::1");
-                                    } else if (speechInput.contains("off")) {
-                                        AppManager.getInstance().requestToServer("311::" + entry.getValue().getId() + "::0" );
-                                    } else {
-                                        String wrongSentence = "You have to be specific, ON or OFF.";
-                                        Toast.makeText(getContext(), wrongSentence, Toast.LENGTH_LONG).show();
-                                        tts.textToSpeak(wrongSentence);
-                                    }
+                        switch (type) {
+                            case SWITCH:
+                                if (speechInput.contains("on")) {
+                                    String logString = "311::" + entry.getValue().getId() + "::1";
+                                    Log.i(TAG, logString);
+                                    AppManager.getInstance().requestToServer("311::" + entry.getValue().getId() + "::1");
+                                } else if (speechInput.contains("off")) {
+                                    AppManager.getInstance().requestToServer("311::" + entry.getValue().getId() + "::0");
+                                } else {
+                                    String wrongSentence = "You have to be specific, ON or OFF.";
+                                    Toast.makeText(getContext(), wrongSentence, Toast.LENGTH_LONG).show();
+                                    tts.textToSpeak(wrongSentence);
+                                }
 
-                                    break;
-                                case SET_VALUE:
-                                float f = Float.parseFloat(speechInput.replaceAll("[^\\d.]+|\\.(?!\\d)",""));
+                                break;
+                            case SET_VALUE:
+                                float f = Float.parseFloat(speechInput.replaceAll("[^\\d.]+|\\.(?!\\d)", ""));
                                 String s = String.valueOf(f);
                                 AppManager.getInstance().requestToServer("311::" + entry.getValue().getId() + "::" + f);
                                 Log.i(TAG, "311::" + entry.getValue().getId() + "::" + f);
-                            }
-                            break;
-
                         }
+                        break;
+
                     }
                 }
             }
         }
+    }
 
 
     private void logOut() {
@@ -234,11 +214,11 @@ public class SecondFragment extends Fragment implements UpdateResponse {
                 break;
             case 316:
                 Log.i(TAG, message);
-        //        tts.textToSpeak(message);
+                //        tts.textToSpeak(message);
                 multiViewTypeAdapter.notifyItemChanged(gadgetID);
                 break;
             case 352:
-                switch (AppManager.getInstance().getGadgets().get(gadgetID).getType()){
+                switch (AppManager.getInstance().getGadgets().get(gadgetID).getType()) {
                     case SWITCH:
                         gadgetCards.add(new CardModel(CardModel.SWITCH_CARD));
                         break;
@@ -266,7 +246,7 @@ public class SecondFragment extends Fragment implements UpdateResponse {
 
 
     //LATE REQUIREMENTS
-    private void backgroundWorkTask(){
+    private void backgroundWorkTask() {
         Constraints constraints = new Constraints.Builder()
                 .setRequiresBatteryNotLow(true)
                 .build();
