@@ -39,13 +39,15 @@ public class ValueTemplate {
 
         // ************ Sensor *****************
         this.sensorTemplate.put("default", new SensorValueModel());
-        this.sensorTemplate.put("temp", new SensorValueModel(R.drawable.thermometer,"°C",0,1023));
+        this.sensorTemplate.put("temp", new SensorValueModel(R.drawable.thermometer,"°C",-40,60));
+        this.sensorTemplate.put("percent", new SensorValueModel(R.drawable.percent,"%",0,100));
 
-        // ************ Sensor *****************
+        // ************ BinarySensor *****************
         this.biSensorTemplate.put("default", new BinarySensorValueModel());
         this.biSensorTemplate.put("door", new BinarySensorValueModel(R.drawable.door_open,R.drawable.door_closed,"OPEN", "CLOSED"));
+        this.biSensorTemplate.put("person", new BinarySensorValueModel(R.drawable.home,R.drawable.away,"HOME", "AWAY"));
 
-        // ************ Sensor *****************
+        // ************ Setvalue *****************
         this.setValueHashMap.put("default", new SetValueModel());
     }
 
