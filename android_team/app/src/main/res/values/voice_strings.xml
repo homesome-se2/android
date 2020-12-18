@@ -2,5 +2,7 @@
 <resources>
     <string name="VOICE_ON">%1$s is on.</string>
     <string name="VOICE_OFF">%1$s is off.</string>
-    <string name="SENSOR_TEMP_VALUE">%1$s new value is %2$s Celsius.</string>
+    <string name="SENSOR_VALUE">%1$s changed to %2$s.</string>
+    <string name="SENSOR_TEMP_VALUE">%1$s changed to %2$s Celsius.</string>
+    <string name="SENSOR_PERCENT_VALUE">%1$s changed to %2$s Percent.</string>
 </resources>

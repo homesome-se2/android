@@ -211,10 +211,14 @@ public class SecondFragment extends Fragment implements UpdateResponse {
                 multiViewTypeAdapter = new MultiViewTypeAdapter(getContext(), gadgetCards);
                 recyclerView.setAdapter(multiViewTypeAdapter);
                 multiViewTypeAdapter.notifyDataSetChanged();
+                if (gadgetCards.isEmpty()){
+                    String logIn = "301";
+                    AppManager.getInstance().requestToServer(logIn);
+                }
                 break;
             case 316:
                 Log.i(TAG, message);
-                //        tts.textToSpeak(message);
+                tts.textToSpeak(message);
                 multiViewTypeAdapter.notifyItemChanged(gadgetID);
                 break;
             case 352:
@@ -283,22 +287,21 @@ public class SecondFragment extends Fragment implements UpdateResponse {
     @Override
     public void onStart() {
         super.onStart();
-        Log.d(TAG, "SecondFragment: In the onStartView() event");
+        Log.i(TAG, "SecondFragment: In the onStartView() event");
         tts = new TTS(getContext());
         tts.initTTS();
-
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        Log.d(TAG, "SecondFragment: In the onResumeView() event");
+        Log.i(TAG, "SecondFragment: In the onResumeView() event");
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        Log.d(TAG, "SecondFragment: In the onPauseView() event");
+        Log.i(TAG, "SecondFragment: In the onPauseView() event");
     }
 
     @Override

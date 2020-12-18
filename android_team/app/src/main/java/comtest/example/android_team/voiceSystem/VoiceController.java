@@ -28,7 +28,7 @@ public class VoiceController {
                 }
                 break;
             case SENSOR:
-                text = ResourceHelper.resources.getString(R.string.SENSOR_TEMP_VALUE, gadget.getGadgetName(), String.valueOf(gadget.getState()));
+                text = sensorString(gadget);
                 break;
             case SET_VALUE:
                 break;
@@ -36,5 +36,16 @@ public class VoiceController {
         return text;
     }
 
-    
+    private static String sensorString(Gadget gadget) {
+        switch (gadget.getValueTemplate()) {
+            case "default":
+                return ResourceHelper.resources.getString(R.string.SENSOR_VALUE, gadget.getGadgetName(), String.valueOf(gadget.getState()));
+            case "temp":
+                return ResourceHelper.resources.getString(R.string.SENSOR_TEMP_VALUE, gadget.getGadgetName(), String.valueOf(gadget.getState()));
+            case "percent":
+                return ResourceHelper.resources.getString(R.string.SENSOR_PERCENT_VALUE, gadget.getGadgetName(), String.valueOf(gadget.getState()));
+        }
+        return "";
+    }
+
 }
