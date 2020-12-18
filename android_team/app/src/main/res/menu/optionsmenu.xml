@@ -11,15 +11,19 @@
             android:title="Kill work" />
         <item
             android:id="@+id/speak"
-            android:title="Voice Controller" />
+            android:title="Voice Controller"
+            android:icon="@drawable/ic_speak"/>
         <item
             android:id="@+id/soundOff"
-            android:title="Voice OFF"/>
+            android:title="Voice OFF"
+            android:icon="@drawable/ic_soundoff"/>
         <item
             android:id="@+id/logOut"
-            android:title="Log Out"/>
+            android:title="Log Out"
+            android:icon="@drawable/ic_logout"/>
         <item
             android:id="@+id/logOutAllDevices"
-            android:title="Log Out All Devices"/>
+            android:title="Log Out All Devices"
+            android:icon="@drawable/ic_logoutall"/>
     </group>
 </menu>

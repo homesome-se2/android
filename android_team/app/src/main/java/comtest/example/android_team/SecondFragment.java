@@ -89,6 +89,7 @@ public class SecondFragment extends Fragment implements UpdateResponse {
                         break;
                     case R.id.soundOff:
                         Toast.makeText(getContext(), "Sound off", Toast.LENGTH_SHORT).show();
+                        tts.stopTTS();
 
                         break;
                     case R.id.logOut:
