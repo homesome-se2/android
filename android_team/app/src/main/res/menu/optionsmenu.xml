@@ -8,7 +8,8 @@
             android:title="Start work" />
         <item
             android:id="@+id/kill_work"
-            android:title="Kill work" />
+            android:title="Kill work"
+            android:icon="@drawable/ic_workoff"/>
         <item
             android:id="@+id/speak"
             android:title="Voice Controller"
