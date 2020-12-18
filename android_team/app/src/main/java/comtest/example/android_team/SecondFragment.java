@@ -8,7 +8,6 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.Toast;
 
 import androidx.activity.OnBackPressedCallback;
@@ -38,7 +37,8 @@ import comtest.example.android_team.models.MultiViewTypeAdapter;
 import comtest.example.android_team.models.ReadWriteCache;
 import comtest.example.android_team.models.CardModel;
 import comtest.example.android_team.models.gadgets.Gadget;
-import comtest.example.android_team.models.gadgets.GadgetType;
+
+import comtest.example.android_team.voiceSystem.SpeakController;
 import comtest.example.android_team.voiceSystem.TTS;
 
 public class SecondFragment extends Fragment implements UpdateResponse {
@@ -50,6 +50,7 @@ public class SecondFragment extends Fragment implements UpdateResponse {
     private TTS tts;
     private static final int REQUEST_CODE_SPEECH_INPUT = 1000;
     private DrawerLayout drawer;
+    private boolean isSoundOn;
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_second, container, false);
@@ -73,7 +74,7 @@ public class SecondFragment extends Fragment implements UpdateResponse {
 
                     case R.id.start_worker:
                         Toast.makeText(getContext(), "Start Work", Toast.LENGTH_SHORT).show();
-//                        backgroundWorkTask();
+                        backgroundWorkTask();
                         break;
                     case R.id.kill_work:
 //                        Toast.makeText(getContext(), "Kill Work", Toast.LENGTH_SHORT).show();
@@ -89,8 +90,15 @@ public class SecondFragment extends Fragment implements UpdateResponse {
                         break;
                     case R.id.soundOff:
                         Toast.makeText(getContext(), "Sound off", Toast.LENGTH_SHORT).show();
-                        tts.stopTTS();
-
+                        if (isSoundOn) {
+                            tts.stopTTS();
+                            isSoundOn = false;
+                            item.setTitle("Voice OFF");
+                        } else {
+                            tts.initTTS();
+                            isSoundOn = true;
+                            item.setTitle("Voice ON");
+                        }
                         break;
                     case R.id.logOut:
                         Toast.makeText(getContext(), "Logged Out", Toast.LENGTH_SHORT).show();
@@ -115,59 +123,21 @@ public class SecondFragment extends Fragment implements UpdateResponse {
         intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
         intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault());
         intent.putExtra(RecognizerIntent.EXTRA_PROMPT, "Hello! Say something :-)");
-
         try {
             startActivityForResult(intent, REQUEST_CODE_SPEECH_INPUT);
         } catch (Exception e) {
-            System.out.println(e.getMessage());
+            Log.e(TAG, "speak: " + e.getMessage());
 
         }
     }
 
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
-
-        switch (requestCode) {
-            case REQUEST_CODE_SPEECH_INPUT: {
-                ArrayList<String> result = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
-                String speechInput = result.get(0).toLowerCase();
-                Toast.makeText(getContext(), speechInput, Toast.LENGTH_LONG).show();
-
-                for (Map.Entry<Integer, Gadget> entry : AppManager.getInstance().getGadgets().entrySet()) {
-
-                    String gadgetResult = entry.getValue().getGadgetName().toLowerCase();
-                    Log.i(TAG, gadgetResult);
-
-                    if ((speechInput.contains(gadgetResult))) {
-                        GadgetType type = entry.getValue().getType();
-
-                        switch (type) {
-                            case SWITCH:
-                                if (speechInput.contains("on")) {
-                                    String logString = "311::" + entry.getValue().getId() + "::1";
-                                    Log.i(TAG, logString);
-                                    AppManager.getInstance().requestToServer("311::" + entry.getValue().getId() + "::1");
-                                } else if (speechInput.contains("off")) {
-                                    AppManager.getInstance().requestToServer("311::" + entry.getValue().getId() + "::0");
-                                } else {
-                                    String wrongSentence = "You have to be specific, ON or OFF.";
-                                    Toast.makeText(getContext(), wrongSentence, Toast.LENGTH_LONG).show();
-                                    tts.textToSpeak(wrongSentence);
-                                }
-
-                                break;
-                            case SET_VALUE:
-                                float f = Float.parseFloat(speechInput.replaceAll("[^\\d.]+|\\.(?!\\d)", ""));
-                                String s = String.valueOf(f);
-                                AppManager.getInstance().requestToServer("311::" + entry.getValue().getId() + "::" + f);
-                                Log.i(TAG, "311::" + entry.getValue().getId() + "::" + f);
-                        }
-                        break;
-
-                    }
-                }
-            }
+        if (requestCode == REQUEST_CODE_SPEECH_INPUT) {
+            ArrayList<String> result = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
+            String speechInput = result.get(0).toLowerCase();
+            SpeakController speakController = new SpeakController(getContext());
+            speakController.voiceCommand(speechInput, tts);
         }
     }
 
@@ -212,7 +182,7 @@ public class SecondFragment extends Fragment implements UpdateResponse {
                 multiViewTypeAdapter = new MultiViewTypeAdapter(getContext(), gadgetCards);
                 recyclerView.setAdapter(multiViewTypeAdapter);
                 multiViewTypeAdapter.notifyDataSetChanged();
-                if (gadgetCards.isEmpty()){
+                if (gadgetCards.isEmpty()) {
                     String logIn = "301";
                     AppManager.getInstance().requestToServer(logIn);
                 }
@@ -291,6 +261,7 @@ public class SecondFragment extends Fragment implements UpdateResponse {
         Log.i(TAG, "SecondFragment: In the onStartView() event");
         tts = new TTS(getContext());
         tts.initTTS();
+        isSoundOn = true;
     }
 
     @Override

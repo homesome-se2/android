@@ -16,7 +16,7 @@
             android:icon="@drawable/ic_speak"/>
         <item
             android:id="@+id/soundOff"
-            android:title="Voice OFF"
+            android:title="Voice ON"
             android:icon="@drawable/ic_soundoff"/>
         <item
             android:id="@+id/logOut"
