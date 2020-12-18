@@ -134,6 +134,7 @@ public class AppManager {
 
     // #304
     private void receiveAllGadgets(String[] commands) {
+        gadgets.clear();
         int nbrOfGadgets = Integer.parseInt(commands[1]);
         int count = 2; // Start index to read in gadgets
         for (int i = 0; i < nbrOfGadgets; i++) {
