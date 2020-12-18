@@ -22,6 +22,10 @@ import java.util.ArrayList;
 import comtest.example.android_team.AppManager;
 import comtest.example.android_team.R;
 import comtest.example.android_team.models.gadgets.Gadget;
+import comtest.example.android_team.models.valueModels.BinarySensorValueModel;
+import comtest.example.android_team.models.valueModels.SensorValueModel;
+import comtest.example.android_team.models.valueModels.SetValueModel;
+import comtest.example.android_team.models.valueModels.SwitchValueModel;
 
 
 public class MultiViewTypeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
@@ -168,8 +172,15 @@ public class MultiViewTypeAdapter extends RecyclerView.Adapter<RecyclerView.View
 
     @SuppressLint("ClickableViewAccessibility")
     private void setSwitchDetails(final SwitchTemplateViewHolder holder, final Gadget gadget) {
-        holder.alias.setText(gadget.getGadgetName());
+        SwitchValueModel valueTemplate;
+        boolean okTemplate =  ValueTemplate.getInstance().getSwitchTemplate().containsKey(gadget.getValueTemplate());
+        if (okTemplate){
+            valueTemplate = ValueTemplate.getInstance().getSwitchTemplate().get(gadget.getValueTemplate());
+        }else {
+            valueTemplate = ValueTemplate.getInstance().getSwitchTemplate().get("default");
+        }
 
+        holder.alias.setText(gadget.getGadgetName());
         holder.switchCompat.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View view, MotionEvent event) {
@@ -188,39 +199,60 @@ public class MultiViewTypeAdapter extends RecyclerView.Adapter<RecyclerView.View
 
         if (gadget.getState() == 1) {
             holder.switchCompat.setChecked(true);
-            holder.gadgetImage.setImageResource(ValueTemplate.getInstance().getSwitchTemplate().get(gadget.getValueTemplate()).getImageIconON());
+            holder.gadgetImage.setImageResource(valueTemplate.getImageIconON());
         } else {
             holder.switchCompat.setChecked(false);
-            holder.gadgetImage.setImageResource(ValueTemplate.getInstance().getSwitchTemplate().get(gadget.getValueTemplate()).getImageIconOFF());
+            holder.gadgetImage.setImageResource(valueTemplate.getImageIconOFF());
         }
     }
 
     private void setBinarySensorDetails(BinarySensorTemplateViewHolder holder, Gadget gadget) {
+        BinarySensorValueModel valueTemplate;
+        boolean okTemplate =  ValueTemplate.getInstance().getBiSensorTemplate().containsKey(gadget.getValueTemplate());
+        if (okTemplate){
+            valueTemplate = ValueTemplate.getInstance().getBiSensorTemplate().get(gadget.getValueTemplate());
+        }else {
+            valueTemplate = ValueTemplate.getInstance().getBiSensorTemplate().get("default");
+        }
         holder.alias.setText(gadget.getGadgetName());
         holder.background.setBackgroundColor(Color.RED);
         if (gadget.getState() == 1) {
-            holder.state.setText(ValueTemplate.getInstance().getBiSensorTemplate().get(gadget.getValueTemplate()).getValueON());
-            holder.gadgetImage.setImageResource(ValueTemplate.getInstance().getBiSensorTemplate().get(gadget.getValueTemplate()).getImageIconON());
+            holder.state.setText(valueTemplate.getValueON());
+            holder.gadgetImage.setImageResource(valueTemplate.getImageIconON());
         } else {
-            holder.state.setText(ValueTemplate.getInstance().getBiSensorTemplate().get(gadget.getValueTemplate()).getValueOFF());
-            holder.gadgetImage.setImageResource(ValueTemplate.getInstance().getBiSensorTemplate().get(gadget.getValueTemplate()).getImageIconOFF());
+            holder.state.setText(valueTemplate.getValueOFF());
+            holder.gadgetImage.setImageResource(valueTemplate.getImageIconOFF());
         }
     }
 
     private void setSensorDetails(SensorTemplateViewHolder holder, Gadget gadget) {
+        SensorValueModel valueTemplate;
+        boolean okTemplate =  ValueTemplate.getInstance().getSensorTemplate().containsKey(gadget.getValueTemplate());
+        if (okTemplate){
+            valueTemplate = ValueTemplate.getInstance().getSensorTemplate().get(gadget.getValueTemplate());
+        }else {
+            valueTemplate = ValueTemplate.getInstance().getSensorTemplate().get("default");
+        }
         holder.alias.setText(gadget.getGadgetName());
         holder.state.setText(String.valueOf(gadget.getState()));
         holder.background.setBackgroundColor(Color.DKGRAY);
-        holder.gadgetImage.setImageResource(ValueTemplate.getInstance().getSensorTemplate().get(gadget.getValueTemplate()).getImageIcon());
+        holder.gadgetImage.setImageResource(valueTemplate.getImageIcon());
     }
 
     private void setValueCardDetails(final SetValueTemplateViewHolder holder, final Gadget gadget){
+        SetValueModel valueTemplate;
+        boolean okTemplate =  ValueTemplate.getInstance().getSetValueHashMap().containsKey(gadget.getValueTemplate());
+        if (okTemplate){
+            valueTemplate = ValueTemplate.getInstance().getSetValueHashMap().get(gadget.getValueTemplate());
+        }else {
+            valueTemplate = ValueTemplate.getInstance().getSetValueHashMap().get("default");
+        }
         holder.alias.setText(gadget.getGadgetName());
         holder.state.setText(String.valueOf(gadget.getState()));
         holder.background.setBackgroundColor(Color.MAGENTA);
-        holder.gadgetImage.setImageResource(ValueTemplate.getInstance().getSetValueHashMap().get(gadget.getValueTemplate()).getImageValue(gadget.getState()));
-        holder.seekBar.setMin((int) ValueTemplate.getInstance().getSetValueHashMap().get(gadget.getValueTemplate()).getRangeMin());
-        holder.seekBar.setMax((int) ValueTemplate.getInstance().getSetValueHashMap().get(gadget.getValueTemplate()).getRangeMax());
+        holder.gadgetImage.setImageResource(valueTemplate.getImageValue(gadget.getState()));
+        holder.seekBar.setMin((int) valueTemplate.getRangeMin());
+        holder.seekBar.setMax((int) valueTemplate.getRangeMax());
         holder.seekBar.setProgress((int) gadget.getState());
         holder.seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
