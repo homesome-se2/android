@@ -20,14 +20,10 @@ public class AppManager {
     // Handler of UI-thread. For communication: Service threads -> UI thread
     private Handler handler;
 
+    public boolean appInFocus;
+
     public UpdateResponse currentFragment;
     // NetWork service
-
-    private ValueTemplate valueTemplate;
-
-    public ValueTemplate getValueTemplate() {
-        return valueTemplate;
-    }
 
     // map for gadgets. GadgetID/object
     private HashMap<Integer, Gadget> gadgets;
@@ -47,10 +43,11 @@ public class AppManager {
     }
 
     AppManager() {
+        appInFocus = false;
+        currentFragment = null;
     }
 
     public void initialization(){
-        currentFragment = null;
         handler = new Handler();
         gadgets = new HashMap<>();
         ValueTemplate.getInstance().fillValueTemplates();
@@ -167,6 +164,7 @@ public class AppManager {
         // Set new state
         gadgets.get(gadgetID).setState(newState);
         String response = VoiceController.generateVoiceAnswer(gadgets.get(gadgetID));
+        Log.i(TAG, "gadgetStateUpdate: " + response +" " + gadgetID);
         currentFragment.update(316, response,gadgetID);
     }
 

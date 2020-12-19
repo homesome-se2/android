@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.Toast;
 
 import androidx.activity.OnBackPressedCallback;
@@ -54,7 +55,7 @@ public class SecondFragment extends Fragment implements UpdateResponse {
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_second, container, false);
-
+        getActivity().getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         Log.d(TAG, "In the SecondFragment");
         AppManager.getInstance().currentFragment = this;
         gadgetCards = new ArrayList<>();
@@ -77,12 +78,12 @@ public class SecondFragment extends Fragment implements UpdateResponse {
                         backgroundWorkTask();
                         break;
                     case R.id.kill_work:
-//                        Toast.makeText(getContext(), "Kill Work", Toast.LENGTH_SHORT).show();
-//                        WorkManager.getInstance(getContext()).cancelUniqueWork("sendGPSPos");
-//                        WorkManager.getInstance(getContext()).cancelAllWorkByTag("sendGPSPos");
-//                        boolean str = WorkManager.getInstance(getContext()).getWorkInfosForUniqueWork("sendGPSPos")
-//                                .isDone();
-//                        Log.i(TAG, "Kill Work: " + str);
+                        Toast.makeText(getContext(), "Kill Work", Toast.LENGTH_SHORT).show();
+                        WorkManager.getInstance(getContext()).cancelUniqueWork("sendGPSPos");
+                        WorkManager.getInstance(getContext()).cancelAllWorkByTag("sendGPSPos");
+                        boolean str = WorkManager.getInstance(getContext()).getWorkInfosForUniqueWork("sendGPSPos")
+                                .isDone();
+                        Log.i(TAG, "Kill Work: " + str);
                         break;
                     case R.id.speak:
                         Toast.makeText(getContext(), "Voice Control", Toast.LENGTH_SHORT).show();
@@ -188,9 +189,10 @@ public class SecondFragment extends Fragment implements UpdateResponse {
                 }
                 break;
             case 316:
-                Log.i(TAG, message);
                 tts.textToSpeak(message);
-                multiViewTypeAdapter.notifyItemChanged(gadgetID);
+                Log.i(TAG, ""+ gadgetID);
+              //  multiViewTypeAdapter.notifyItemChanged(gadgetID);
+                multiViewTypeAdapter.notifyDataSetChanged();
                 break;
             case 352:
                 switch (AppManager.getInstance().getGadgets().get(gadgetID).getType()) {
@@ -207,14 +209,17 @@ public class SecondFragment extends Fragment implements UpdateResponse {
                         gadgetCards.add(new CardModel(CardModel.SET_VALUE_CARD));
                         break;
                 }
-                multiViewTypeAdapter.notifyItemInserted(gadgetID);
+             //   multiViewTypeAdapter.notifyItemInserted(gadgetID);
+                multiViewTypeAdapter.notifyDataSetChanged();
                 break;
             case 354:
                 AppManager.getInstance().getGadgets().remove(gadgetID);
-                multiViewTypeAdapter.notifyItemRemoved(gadgetID);
+           //     multiViewTypeAdapter.notifyItemRemoved(gadgetID);
+                multiViewTypeAdapter.notifyDataSetChanged();
                 break;
             case 404:
-                multiViewTypeAdapter.notifyItemChanged(gadgetID);
+           //     multiViewTypeAdapter.notifyItemChanged(gadgetID);
+                multiViewTypeAdapter.notifyDataSetChanged();
                 break;
         }
     }

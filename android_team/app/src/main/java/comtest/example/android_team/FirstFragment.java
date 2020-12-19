@@ -68,6 +68,7 @@ public class FirstFragment extends Fragment implements UpdateResponse {
 
         if (checkInputOkay(username,password)) {
             AppManager.getInstance().establishConnection();
+            AppManager.getInstance().appInFocus = true;
             String logIn = "101::" + username + "::" + password + "";
             AppManager.getInstance().requestToServer(logIn);
         }

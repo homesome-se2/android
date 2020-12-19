@@ -7,8 +7,10 @@ import android.content.Context;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
+import android.location.LocationManager;
 import android.os.Build;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationRequest;
@@ -32,6 +34,7 @@ import androidx.work.Worker;
 import androidx.work.WorkerParameters;
 import comtest.example.android_team.AppManager;
 import comtest.example.android_team.R;
+import comtest.example.android_team.models.ReadWriteCache;
 
 public class WorkerSendLocation extends Worker {
 
@@ -57,34 +60,19 @@ public class WorkerSendLocation extends Worker {
         return Result.success();
     }
 
-
     private void doTheActualProcessingWork() {
-        Log.i("Info", "DO_TASK: Start EXECUTING TASK!!!!");
-        AppManager.getInstance().establishConnection();
-        try {
-            Thread.sleep(1000);//5 minutes cycle
-        } catch (InterruptedException e) {
-            Log.e("Info", "DO_WORK: Thread sleep failed...");
-            e.printStackTrace();
+        Log.i("Info", "DO_WORK: Start EXECUTING TASK!!!!");
+        final LocationManager manager = (LocationManager)currentContext.getSystemService(Context.LOCATION_SERVICE );
+
+        if (!manager.isProviderEnabled( LocationManager.GPS_PROVIDER)) {
+            Log.i("Info", "GPS NOT AVAILABLE");
+        }else {
+            Log.i("Info", "GPS IS AVAILABLE");
+            fLocation = LocationServices.getFusedLocationProviderClient(currentContext);
+            getLocation();
         }
-        fLocation = LocationServices.getFusedLocationProviderClient(currentContext);
-        getLocation();
         addNewWork();
     }
-
-    private void addNewWork() {
-        Log.i("Info", "DO_WORK: Adds new work to que");
-        Constraints constraints = new Constraints.Builder()
-                .setRequiresBatteryNotLow(true)
-                .build();
-
-        OneTimeWorkRequest refreshWork = new OneTimeWorkRequest.Builder(WorkerSendLocation.class)
-                .setConstraints(constraints)
-                .addTag("sendGPSPos")
-                .build();
-        WorkManager.getInstance(currentContext).enqueueUniqueWork("sendGPSPos", ExistingWorkPolicy.REPLACE, refreshWork);
-    }
-
 
     @SuppressLint("MissingPermission")
     private void getLocation() {
@@ -99,8 +87,8 @@ public class WorkerSendLocation extends Worker {
             public void onSuccess(Location location) {
                 if (location != null) {
                     //We have a location
-                    Log.i(TAG, "onSuccess: LATITUDE: " + location.getLatitude());
                     Log.i(TAG, "onSuccess: LONGITUDE: " + location.getLongitude());
+                    Log.i(TAG, "onSuccess: LATITUDE: " + location.getLatitude());
 
                     // Create the NotificationChannel, but only on API 26+ because
                     // the NotificationChannel class is new and not in the support library
@@ -115,7 +103,6 @@ public class WorkerSendLocation extends Worker {
                         notificationManager.createNotificationChannel(channel);
                     }
 
-
                     String completeAddress = getCompleteAddressString(location.getLatitude(), location.getLongitude());
                     NotificationCompat.Builder builder = new NotificationCompat.Builder(currentContext, CHANNEL_ID)
                             .setSmallIcon(android.R.drawable.ic_menu_mylocation)
@@ -129,7 +116,36 @@ public class WorkerSendLocation extends Worker {
                     // notificationId is a unique int for each notification that you must define
                     notificationManager.notify(1001, builder.build());
 
-                    AppManager.getInstance().endConnection();
+                    // Server connect
+                    if (!AppManager.getInstance().appInFocus) {
+                        Log.i("Info", "SEND DATA TO SERVER: App not in focus, background");
+                        ReadWriteCache readWriteCache = new ReadWriteCache(currentContext);
+                        if (readWriteCache.cacheFileExist()) {
+                            String cacheData = readWriteCache.readFromCache();
+                            String[] commands = cacheData.split(":");
+                            String username = commands[0].trim();
+                            String sessionKey = commands[1].trim();
+                            AppManager.getInstance().establishConnection();
+                            try {
+                                Thread.sleep(1000);
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
+                            String logIn = "501::" + username + "::" + sessionKey + "::" + location.getLongitude() + "::" + location.getLatitude() + "";
+                            AppManager.getInstance().requestToServer(logIn);
+                            Log.i("Info", "SEND DATA TO SERVER: App not in focus, SENDING REQUEST");
+                            try {
+                                Thread.sleep(1000);
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
+                            AppManager.getInstance().endConnection();
+                        }
+                    } else {
+                        Log.i("Info", "SEND DATA TO SERVER: App in focus, background");
+                        String logIn = "502::" + location.getLongitude() + "::" + location.getLatitude() + "";
+                        AppManager.getInstance().requestToServer(logIn);
+                    }
                 } else {
                     Log.i(TAG, "onSuccess: Location was null...");
                 }
@@ -164,4 +180,16 @@ public class WorkerSendLocation extends Worker {
         return strAdd;
     }
 
+    private void addNewWork() {
+        Log.i("Info", "DO_WORK: Adds new work to que");
+        Constraints constraints = new Constraints.Builder()
+                .setRequiresBatteryNotLow(true)
+                .build();
+
+        OneTimeWorkRequest refreshWork = new OneTimeWorkRequest.Builder(WorkerSendLocation.class)
+                .setConstraints(constraints)
+                .addTag("sendGPSPos")
+                .build();
+        WorkManager.getInstance(currentContext).enqueueUniqueWork("sendGPSPos", ExistingWorkPolicy.REPLACE, refreshWork);
+    }
 }
