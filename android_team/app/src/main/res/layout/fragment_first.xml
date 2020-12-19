@@ -10,9 +10,10 @@
 
     <EditText
         android:id="@+id/passwordField"
-        android:layout_width="182dp"
+        android:layout_width="250dp"
         android:layout_height="44dp"
         android:layout_marginTop="32dp"
+        android:drawableStart="@drawable/lock"
         android:ems="10"
         android:gravity="center_horizontal"
         android:hint="Password"
@@ -25,13 +26,15 @@
 
     <Button
         android:id="@+id/btnLogin"
-        android:layout_width="109dp"
-        android:layout_height="58dp"
-        android:layout_marginTop="50dp"
-        android:background="#3f6cff"
-        android:shadowColor="#FFFFFF"
-        android:text="Log In"
-        android:textColor="#FFFFFF"
+        android:layout_width="300dp"
+        android:layout_height="45dp"
+        android:layout_marginTop="100dp"
+        android:background="@drawable/button"
+        android:drawableEnd="@drawable/arrow"
+        android:paddingLeft="45dp"
+        android:paddingEnd="20dp"
+        android:text="Login"
+        android:textColor="@color/design_default_color_on_primary"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
@@ -39,9 +42,10 @@
 
     <EditText
         android:id="@+id/username"
-        android:layout_width="182dp"
+        android:layout_width="250dp"
         android:layout_height="44dp"
         android:layout_marginTop="32dp"
+        android:drawableStart="@drawable/account"
         android:ems="10"
         android:gravity="center_horizontal"
         android:hint="Username"

@@ -1,9 +1,12 @@
 package comtest.example.android_team;
 
+import android.content.Context;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -26,10 +29,12 @@ public class MainActivity extends AppCompatActivity {
 
         Log.i(TAG, "MainActivity: In the onCreate() event");
 
-     /*   Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar); */
+        final LocationManager manager = (LocationManager)getSystemService(Context.LOCATION_SERVICE );
 
-
+        if ( !manager.isProviderEnabled( LocationManager.GPS_PROVIDER ) )
+            Toast.makeText(getApplicationContext(), "GPS is disable!", Toast.LENGTH_LONG).show();
+        else
+            Toast.makeText(getApplicationContext(), "GPS is Enable!", Toast.LENGTH_LONG).show();
     }
 
 
@@ -86,7 +91,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onStop() {
         super.onStop();
         Log.i(TAG, "MainActivity: In the onStop() event");
-        //TODO may need to change it
         finish();
     }
 
@@ -95,6 +99,7 @@ public class MainActivity extends AppCompatActivity {
         Log.i(TAG, "MainActivity: In the onDestroy() event");
         if (AppManager.getInstance().networkNotNull()) {
             AppManager.getInstance().endConnection();
+            AppManager.getInstance().appInFocus = false;
         }
     }
 }

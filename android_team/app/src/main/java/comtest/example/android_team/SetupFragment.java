@@ -62,6 +62,7 @@ public class SetupFragment extends Fragment implements UpdateResponse {
                         String request = "103::" + username + "::" + sessionKey;
                         AppManager.getInstance().establishConnection();
                         AppManager.getInstance().requestToServer(request);
+                        AppManager.getInstance().appInFocus = true;
                     } else {
                         navController.navigate(R.id.FirstFragment);
                     }
