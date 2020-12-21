@@ -42,16 +42,15 @@ public class MultiViewTypeAdapter extends RecyclerView.Adapter<RecyclerView.View
 
     public static class SwitchTemplateViewHolder extends RecyclerView.ViewHolder {
 
-        TextView alias;
-        RelativeLayout background;
+        TextView alias, unit;
         SwitchCompat switchCompat;
         ImageView gadgetImage;
 
         public SwitchTemplateViewHolder(@NonNull View itemView) {
             super(itemView);
+            this.unit = itemView.findViewById(R.id.textValue);
             this.alias = itemView.findViewById(R.id.text_alias);
             this.switchCompat = itemView.findViewById(R.id.switchLamp);
-            this.background = itemView.findViewById(R.id.card_background);
             this.gadgetImage = itemView.findViewById(R.id.image_item);
         }
     }
@@ -59,14 +58,12 @@ public class MultiViewTypeAdapter extends RecyclerView.Adapter<RecyclerView.View
     public static class BinarySensorTemplateViewHolder extends RecyclerView.ViewHolder {
 
         TextView alias, state;
-        RelativeLayout background;
         ImageView gadgetImage;
 
         public BinarySensorTemplateViewHolder(@NonNull View itemView) {
             super(itemView);
             this.alias = itemView.findViewById(R.id.text_alias);
             this.state = itemView.findViewById(R.id.text_state);
-            this.background = itemView.findViewById(R.id.card_background);
             this.gadgetImage = itemView.findViewById(R.id.image_item);
         }
     }
@@ -74,29 +71,26 @@ public class MultiViewTypeAdapter extends RecyclerView.Adapter<RecyclerView.View
     public static class SensorTemplateViewHolder extends RecyclerView.ViewHolder {
 
         TextView alias, state;
-        RelativeLayout background;
         ImageView gadgetImage;
 
         public SensorTemplateViewHolder(@NonNull View itemView) {
             super(itemView);
             this.alias = itemView.findViewById(R.id.text_alias);
             this.state = itemView.findViewById(R.id.text_state);
-            this.background = itemView.findViewById(R.id.card_background);
             this.gadgetImage = itemView.findViewById(R.id.image_item);
         }
     }
 
-    public static class SetValueTemplateViewHolder extends RecyclerView.ViewHolder{
-        TextView alias, state;
-        RelativeLayout background;
+    public static class SetValueTemplateViewHolder extends RecyclerView.ViewHolder {
+        TextView alias, state,state2;
         SeekBar seekBar;
         ImageView gadgetImage;
 
-        public SetValueTemplateViewHolder(@NonNull View itemView){
+        public SetValueTemplateViewHolder(@NonNull View itemView) {
             super(itemView);
             this.alias = itemView.findViewById(R.id.text_alias);
             this.state = itemView.findViewById(R.id.text_state);
-            this.background = itemView.findViewById(R.id.card_background);
+            this.state2 = itemView.findViewById(R.id.text_state2);
             this.seekBar = itemView.findViewById(R.id.seekBar_state);
             this.gadgetImage = itemView.findViewById(R.id.image_item);
         }
@@ -127,10 +121,9 @@ public class MultiViewTypeAdapter extends RecyclerView.Adapter<RecyclerView.View
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         //position is item card index
         CardModel object = dataSet.get(position);
-        ArrayList<Gadget> valuesList = new ArrayList<>(AppManager.getInstance().getGadgets().values());
-        Gadget gadget = valuesList.get(position);
+        Log.i(TAG, "onBindViewHolder: " + position);
         if (object != null) {
-            Log.d(TAG, gadget.toString());
+            Gadget gadget = AppManager.getInstance().getListGadgetMapping().get(position);
             switch (object.getType()) {
                 case CardModel.SWITCH_CARD:
                     setSwitchDetails(((SwitchTemplateViewHolder) holder), gadget);
@@ -173,10 +166,10 @@ public class MultiViewTypeAdapter extends RecyclerView.Adapter<RecyclerView.View
     @SuppressLint("ClickableViewAccessibility")
     private void setSwitchDetails(final SwitchTemplateViewHolder holder, final Gadget gadget) {
         SwitchValueModel valueTemplate;
-        boolean okTemplate =  ValueTemplate.getInstance().getSwitchTemplate().containsKey(gadget.getValueTemplate());
-        if (okTemplate){
+        boolean okTemplate = ValueTemplate.getInstance().getSwitchTemplate().containsKey(gadget.getValueTemplate());
+        if (okTemplate) {
             valueTemplate = ValueTemplate.getInstance().getSwitchTemplate().get(gadget.getValueTemplate());
-        }else {
+        } else {
             valueTemplate = ValueTemplate.getInstance().getSwitchTemplate().get("default");
         }
 
@@ -186,10 +179,10 @@ public class MultiViewTypeAdapter extends RecyclerView.Adapter<RecyclerView.View
             public boolean onTouch(View view, MotionEvent event) {
                 if (event.getAction() == MotionEvent.ACTION_UP) {
                     if (holder.switchCompat.isChecked()) {
-                        String set = "311::"+gadget.getId()+"::0";
+                        String set = "311::" + gadget.getId() + "::0";
                         AppManager.getInstance().requestToServer(set);
                     } else {
-                        String set = "311::"+gadget.getId()+"::1";
+                        String set = "311::" + gadget.getId() + "::1";
                         AppManager.getInstance().requestToServer(set);
                     }
                 }
@@ -199,23 +192,24 @@ public class MultiViewTypeAdapter extends RecyclerView.Adapter<RecyclerView.View
 
         if (gadget.getState() == 1) {
             holder.switchCompat.setChecked(true);
+            holder.unit.setText(valueTemplate.getValueON());
             holder.gadgetImage.setImageResource(valueTemplate.getImageIconON());
         } else {
             holder.switchCompat.setChecked(false);
+            holder.unit.setText(valueTemplate.getValueOFF());
             holder.gadgetImage.setImageResource(valueTemplate.getImageIconOFF());
         }
     }
 
     private void setBinarySensorDetails(BinarySensorTemplateViewHolder holder, Gadget gadget) {
         BinarySensorValueModel valueTemplate;
-        boolean okTemplate =  ValueTemplate.getInstance().getBiSensorTemplate().containsKey(gadget.getValueTemplate());
-        if (okTemplate){
+        boolean okTemplate = ValueTemplate.getInstance().getBiSensorTemplate().containsKey(gadget.getValueTemplate());
+        if (okTemplate) {
             valueTemplate = ValueTemplate.getInstance().getBiSensorTemplate().get(gadget.getValueTemplate());
-        }else {
+        } else {
             valueTemplate = ValueTemplate.getInstance().getBiSensorTemplate().get("default");
         }
         holder.alias.setText(gadget.getGadgetName());
-        holder.background.setBackgroundColor(Color.RED);
         if (gadget.getState() == 1) {
             holder.state.setText(valueTemplate.getValueON());
             holder.gadgetImage.setImageResource(valueTemplate.getImageIconON());
@@ -227,29 +221,28 @@ public class MultiViewTypeAdapter extends RecyclerView.Adapter<RecyclerView.View
 
     private void setSensorDetails(SensorTemplateViewHolder holder, Gadget gadget) {
         SensorValueModel valueTemplate;
-        boolean okTemplate =  ValueTemplate.getInstance().getSensorTemplate().containsKey(gadget.getValueTemplate());
-        if (okTemplate){
+        boolean okTemplate = ValueTemplate.getInstance().getSensorTemplate().containsKey(gadget.getValueTemplate());
+        if (okTemplate) {
             valueTemplate = ValueTemplate.getInstance().getSensorTemplate().get(gadget.getValueTemplate());
-        }else {
+        } else {
             valueTemplate = ValueTemplate.getInstance().getSensorTemplate().get("default");
         }
         holder.alias.setText(gadget.getGadgetName());
-        holder.state.setText(String.valueOf(gadget.getState()));
-        holder.background.setBackgroundColor(Color.DKGRAY);
+        holder.state.setText(String.format("%s %s", gadget.getState(), valueTemplate.getUnit()));
         holder.gadgetImage.setImageResource(valueTemplate.getImageIcon());
     }
 
-    private void setValueCardDetails(final SetValueTemplateViewHolder holder, final Gadget gadget){
+    private void setValueCardDetails(final SetValueTemplateViewHolder holder, final Gadget gadget) {
         SetValueModel valueTemplate;
-        boolean okTemplate =  ValueTemplate.getInstance().getSetValueHashMap().containsKey(gadget.getValueTemplate());
-        if (okTemplate){
+        boolean okTemplate = ValueTemplate.getInstance().getSetValueHashMap().containsKey(gadget.getValueTemplate());
+        if (okTemplate) {
             valueTemplate = ValueTemplate.getInstance().getSetValueHashMap().get(gadget.getValueTemplate());
-        }else {
+        } else {
             valueTemplate = ValueTemplate.getInstance().getSetValueHashMap().get("default");
         }
         holder.alias.setText(gadget.getGadgetName());
-        holder.state.setText(String.valueOf(gadget.getState()));
-        holder.background.setBackgroundColor(Color.MAGENTA);
+        holder.state.setText(String.valueOf((int) valueTemplate.getRangeMin()));
+        holder.state2.setText(String.valueOf((int) valueTemplate.getRangeMax()));
         holder.gadgetImage.setImageResource(valueTemplate.getImageValue(gadget.getState()));
         holder.seekBar.setMin((int) valueTemplate.getRangeMin());
         holder.seekBar.setMax((int) valueTemplate.getRangeMax());
@@ -267,7 +260,7 @@ public class MultiViewTypeAdapter extends RecyclerView.Adapter<RecyclerView.View
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
-                String set = "311::"+gadget.getId()+"::" + holder.seekBar.getProgress();
+                String set = "311::" + gadget.getId() + "::" + holder.seekBar.getProgress();
                 AppManager.getInstance().requestToServer(set);
             }
         });

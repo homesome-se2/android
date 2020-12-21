@@ -82,23 +82,27 @@ public class SecondFragment extends Fragment implements UpdateResponse {
                         WorkManager.getInstance(getContext()).cancelUniqueWork("sendGPSPos");
                         WorkManager.getInstance(getContext()).cancelAllWorkByTag("sendGPSPos");
                         boolean str = WorkManager.getInstance(getContext()).getWorkInfosForUniqueWork("sendGPSPos")
-                                .isDone();
+                                .isCancelled();
                         Log.i(TAG, "Kill Work: " + str);
+                        break;
+                    case R.id.plug_play:
+                        navController.navigate(R.id.plugPlayFragment);
                         break;
                     case R.id.speak:
                         Toast.makeText(getContext(), "Voice Control", Toast.LENGTH_SHORT).show();
                         speak();
                         break;
                     case R.id.soundOff:
-                        Toast.makeText(getContext(), "Sound off", Toast.LENGTH_SHORT).show();
                         if (isSoundOn) {
                             tts.stopTTS();
                             isSoundOn = false;
                             item.setTitle("Voice OFF");
+                            Toast.makeText(getContext(), "Sound off", Toast.LENGTH_SHORT).show();
                         } else {
                             tts.initTTS();
                             isSoundOn = true;
                             item.setTitle("Voice ON");
+                            Toast.makeText(getContext(), "Sound on", Toast.LENGTH_SHORT).show();
                         }
                         break;
                     case R.id.logOut:
@@ -134,38 +138,40 @@ public class SecondFragment extends Fragment implements UpdateResponse {
 
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == REQUEST_CODE_SPEECH_INPUT) {
-            ArrayList<String> result = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
-            String speechInput = result.get(0).toLowerCase();
-            SpeakController speakController = new SpeakController(getContext());
-            speakController.voiceCommand(speechInput, tts);
+        try {
+            if (requestCode == REQUEST_CODE_SPEECH_INPUT) {
+                ArrayList<String> result = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
+                String speechInput = result.get(0).toLowerCase();
+                SpeakController speakController = new SpeakController(getContext());
+                speakController.voiceCommand(speechInput, tts);
+            }
+        } catch (Exception e) {
+            Log.e(TAG, "onActivityResult: " + e.getMessage());
         }
     }
 
 
     private void logOut() {
         AppManager.getInstance().requestToServer("105");
-        ReadWriteCache readWriteCache = new ReadWriteCache(getContext());
-        readWriteCache.deleteCacheFile();
-        navController.navigate(R.id.FirstFragment);
     }
 
     private void logOutAllDevices() {
         AppManager.getInstance().requestToServer("106");
-        ReadWriteCache readWriteCache = new ReadWriteCache(getContext());
-        readWriteCache.deleteCacheFile();
-        navController.navigate(R.id.FirstFragment);
     }
 
 
     @Override
-    public void update(int indexProtocol, String message, Integer gadgetID) {
+    public void update(int indexProtocol, String message, int gadgetID) {
 
         switch (indexProtocol) {
+            case 107:
+                ReadWriteCache readWriteCache = new ReadWriteCache(getContext());
+                readWriteCache.deleteCacheFile();
+                navController.navigate(R.id.FirstFragment);
+                break;
             case 304:
-                for (Map.Entry<Integer, Gadget> entry : AppManager.getInstance().getGadgets().entrySet()) {
-                    switch (entry.getValue().getType()) {
-
+                for (Gadget entry : AppManager.getInstance().getListGadgetMapping()) {
+                    switch (entry.getType()) {
                         case SWITCH:
                             gadgetCards.add(new CardModel(CardModel.SWITCH_CARD));
                             break;
@@ -183,19 +189,15 @@ public class SecondFragment extends Fragment implements UpdateResponse {
                 multiViewTypeAdapter = new MultiViewTypeAdapter(getContext(), gadgetCards);
                 recyclerView.setAdapter(multiViewTypeAdapter);
                 multiViewTypeAdapter.notifyDataSetChanged();
-                if (gadgetCards.isEmpty()) {
-                    String logIn = "301";
-                    AppManager.getInstance().requestToServer(logIn);
-                }
                 break;
             case 316:
-                tts.textToSpeak(message);
-                Log.i(TAG, ""+ gadgetID);
-              //  multiViewTypeAdapter.notifyItemChanged(gadgetID);
-                multiViewTypeAdapter.notifyDataSetChanged();
+                if (!gadgetCards.isEmpty()) {
+                    //       tts.textToSpeak(message);
+                    multiViewTypeAdapter.notifyItemChanged(gadgetID);
+                }
                 break;
             case 352:
-                switch (AppManager.getInstance().getGadgets().get(gadgetID).getType()) {
+                switch (AppManager.getInstance().getListGadgetMapping().get(gadgetID).getType()) {
                     case SWITCH:
                         gadgetCards.add(new CardModel(CardModel.SWITCH_CARD));
                         break;
@@ -209,17 +211,21 @@ public class SecondFragment extends Fragment implements UpdateResponse {
                         gadgetCards.add(new CardModel(CardModel.SET_VALUE_CARD));
                         break;
                 }
-             //   multiViewTypeAdapter.notifyItemInserted(gadgetID);
-                multiViewTypeAdapter.notifyDataSetChanged();
+                multiViewTypeAdapter.notifyItemInserted(gadgetID);
                 break;
             case 354:
-                AppManager.getInstance().getGadgets().remove(gadgetID);
-           //     multiViewTypeAdapter.notifyItemRemoved(gadgetID);
-                multiViewTypeAdapter.notifyDataSetChanged();
+                gadgetCards.remove(gadgetID);
+                multiViewTypeAdapter.notifyItemRemoved(gadgetID);
                 break;
             case 404:
-           //     multiViewTypeAdapter.notifyItemChanged(gadgetID);
-                multiViewTypeAdapter.notifyDataSetChanged();
+                multiViewTypeAdapter.notifyItemChanged(gadgetID);
+                break;
+            case 901:
+                Toast.makeText(getContext(), message, Toast.LENGTH_LONG).show();
+                break;
+            case 904:
+                Toast.makeText(getContext(), message, Toast.LENGTH_LONG).show();
+                navController.navigate(R.id.FirstFragment);
                 break;
         }
     }
@@ -273,12 +279,18 @@ public class SecondFragment extends Fragment implements UpdateResponse {
     public void onResume() {
         super.onResume();
         Log.i(TAG, "SecondFragment: In the onResumeView() event");
+        if (gadgetCards.isEmpty()) {
+            gadgetCards.clear();
+            String logIn = "301";
+            AppManager.getInstance().requestToServer(logIn);
+        }
     }
 
     @Override
     public void onPause() {
         super.onPause();
         Log.i(TAG, "SecondFragment: In the onPauseView() event");
+        gadgetCards.clear();
     }
 
     @Override

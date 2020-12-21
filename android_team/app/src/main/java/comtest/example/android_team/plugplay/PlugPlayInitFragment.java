@@ -22,6 +22,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -106,6 +107,7 @@ public class PlugPlayInitFragment extends Fragment {
     private void launch() {
         if (!wifiManager.isWifiEnabled()) {
             Log.i(TAG, "Enable WiFi and try again.");
+            Toast.makeText(getContext(), "Enable WiFi and try again.", Toast.LENGTH_SHORT).show();
         } else {
             //    reset();
             scanWifi();
@@ -117,7 +119,8 @@ public class PlugPlayInitFragment extends Fragment {
         reachableSSIDs.clear();
         getActivity().registerReceiver(onWiFiScanComplete, new IntentFilter(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION));
         wifiManager.startScan(); // Limited usage since Android P. Foreground apps: Max 4 scans every 2 minutes.
-        //Toast.makeText(this, "Scanning WiFi...", Toast.LENGTH_SHORT).show();
+        Log.i(TAG, "Scanning WiFi...");
+        Toast.makeText(getContext(), "Scanning WiFi...", Toast.LENGTH_SHORT).show();
     }
 
     BroadcastReceiver onWiFiScanComplete = new BroadcastReceiver() {
@@ -180,9 +183,7 @@ public class PlugPlayInitFragment extends Fragment {
     }
 
     private void dialogListNetworkAPs() {
-
         final String[] items = reachableSSIDs.toArray(new String[0]);
-
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         builder.setTitle("Select your home network");
         // Define list items and actions.
