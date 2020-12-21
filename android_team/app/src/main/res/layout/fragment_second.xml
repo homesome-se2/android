@@ -7,7 +7,6 @@
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
     tools:openDrawer="start"
-
     android:background="#c7cbdc"
     tools:context=".SecondFragment">
 
@@ -24,7 +23,7 @@
             android:layout_width="match_parent"
             android:layout_height="555dp"
             android:layout_weight="1"
-            android:background="@android:color/white"
+            android:background="#F1F1F1"
             android:padding="4dp"
             android:scrollbars="vertical" />
 

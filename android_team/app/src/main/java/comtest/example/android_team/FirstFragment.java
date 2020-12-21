@@ -15,8 +15,6 @@ import android.widget.Toast;
 import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -31,8 +29,6 @@ public class FirstFragment extends Fragment implements UpdateResponse {
     private NavController navController;
     private Button login_btn;
     private EditText logAcc, logPass;
-
-    private int LOCATION_REQUEST_CODE = 10001;
 
     @Override
     public View onCreateView(
@@ -83,9 +79,8 @@ public class FirstFragment extends Fragment implements UpdateResponse {
       }
     }
 
-
     @Override
-    public void update(int indexProtocol, String message, Integer gadgetID) {
+    public void update(int indexProtocol, String message, int gadgetID) {
 
         switch (indexProtocol) {
 
@@ -103,53 +98,11 @@ public class FirstFragment extends Fragment implements UpdateResponse {
         }
     }
 
-
-    private void askLocationPermission() {
-        if (!checkLocationPermission()) {
-            ActivityCompat.requestPermissions(getActivity(), new String[]{
-                    Manifest.permission.ACCESS_FINE_LOCATION,
-                    Manifest.permission.ACCESS_COARSE_LOCATION,
-                    Manifest.permission.ACCESS_BACKGROUND_LOCATION
-            }, LOCATION_REQUEST_CODE);
-        }
-    }
-
-    private boolean checkLocationPermission() {
-        int result1 = ContextCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION);
-        int result2 = ContextCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION);
-        int result3 = ContextCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_BACKGROUND_LOCATION);
-        return result1 == PackageManager.PERMISSION_GRANTED &&
-                result2 == PackageManager.PERMISSION_GRANTED &&
-                result3 == PackageManager.PERMISSION_GRANTED;
-    }
-
     @Override
     public void onStart() {
         super.onStart();
         Log.d(TAG, "HomeFragment: In the onStart() event");
-        if (checkLocationPermission()) {
-            // do something directly
-        } else {
-            askLocationPermission();
-        }
     }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        if (requestCode == LOCATION_REQUEST_CODE) {
-            if (grantResults.length > 0) {
-                boolean fineLocation = grantResults[0] == PackageManager.PERMISSION_GRANTED;
-                boolean coarseLocation = grantResults[1] == PackageManager.PERMISSION_GRANTED;
-                boolean backgroundLocation = grantResults[2] == PackageManager.PERMISSION_GRANTED;
-                if (coarseLocation && fineLocation && backgroundLocation) {
-                    // Permission granted
-                } else {
-                    // Permission not granted
-                }
-            }
-        }
-    }
-
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -164,60 +117,6 @@ public class FirstFragment extends Fragment implements UpdateResponse {
         };
         requireActivity().getOnBackPressedDispatcher().addCallback(this, callback);
         // The callback can be enabled or disabled here or in handleOnBackPressed()
-    }
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        Log.d(TAG, "HomeFragment: In the onDestroyView() event");
-    }
-
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        Log.d(TAG, "HomeFragment: In the onAttach() event");
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        //       AppManager.getInstance().establishConnection();
-    }
-
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        Log.d(TAG, "HomeFragment: In the onActivityCreated() event");
-    }
-
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        Log.d(TAG, "HomeFragment: In the onPause() event");
-//        gadgets.clear();
-    }
-
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        Log.d(TAG, "HomeFragment: In the onStop() event");
-    }
-
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        Log.d(TAG, "HomeFragment: In the onDestroy() event");
-    }
-
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        Log.d(TAG, "HomeFragment: In the onDetach() event");
     }
 
 }

@@ -6,23 +6,34 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     app:cardCornerRadius="10dp"
-    app:cardElevation="1dp"
-    app:cardUseCompatPadding="true"
+    app:cardElevation="3dp"
+    android:layout_margin="5dp"
+    app:cardUseCompatPadding="false"
     android:layout_marginStart="1dp"
     android:layout_marginEnd="1dp">
 
 
-    <RelativeLayout
+    <LinearLayout
         android:id="@+id/card_background"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#3f6cff"
-        android:padding="10dp">
+        android:paddingTop="12dp"
+        android:paddingBottom="12dp"
+        android:paddingStart="10dp"
+        android:paddingEnd="10dp">
+
+        <ImageView
+            android:id="@+id/image_item"
+            android:padding="5dp"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:background="@drawable/circle"
+            tools:srcCompat="@drawable/def_on" />
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="#3f6cff"
+            android:layout_height="match_parent"
+            android:paddingStart="10dp"
             android:orientation="horizontal">
 
             <LinearLayout
@@ -37,26 +48,43 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="Alias"
-                    android:textColor="#FFFFFF" />
+                    android:textColor="@color/design_default_color_on_secondary" />
 
 
-                <androidx.appcompat.widget.SwitchCompat
-                    android:id="@+id/switchLamp"
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1" />
+                    android:layout_weight="1"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/textValue"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:text="ON"
+                        android:textSize="24sp" />
+
+                    <androidx.appcompat.widget.SwitchCompat
+                        android:id="@+id/switchLamp"
+                        android:checked="true"
+                        android:paddingEnd="10dp"
+                        app:thumbTint="@color/colorPrimaryDark"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:scaleY="1.5"
+                        android:scaleX="1.6"
+                        app:trackTint="#B9E6FF"
+                        app:switchPadding="20dp"
+                        android:layout_weight="0" />
+                </LinearLayout>
 
 
             </LinearLayout>
 
-            <ImageView
-                android:id="@+id/image_item"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                tools:srcCompat="@drawable/def_on" />
 
         </LinearLayout>
 
-    </RelativeLayout>
+    </LinearLayout>
 
 </androidx.cardview.widget.CardView>

@@ -1,6 +1,8 @@
 package comtest.example.android_team;
 
+import android.Manifest;
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -10,6 +12,8 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -22,6 +26,8 @@ public class SetupFragment extends Fragment implements UpdateResponse {
 
     private static final String TAG = "Info";
     private NavController navController;
+    private int LOCATION_REQUEST_CODE = 10001;
+
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_setup, container, false);
@@ -29,13 +35,11 @@ public class SetupFragment extends Fragment implements UpdateResponse {
         navController = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment);
         AppManager.getInstance().currentFragment = this;
 
-
         return view;
     }
 
-
     @Override
-    public void update(int indexProtocol, String message, Integer gadgetID) {
+    public void update(int indexProtocol, String message, int gadgetID) {
         switch (indexProtocol) {
             case 104:
                 navController.navigate(R.id.SecondFragment);
@@ -50,25 +54,39 @@ public class SetupFragment extends Fragment implements UpdateResponse {
     }
 
     private void checkCache() {
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                    ReadWriteCache readWriteCache = new ReadWriteCache(getContext());
-                    if (readWriteCache.cacheFileExist()) {
-                        String cacheData = readWriteCache.readFromCache();
-                        String[] commands = cacheData.split(":");
-                        String username = commands[0].trim();
-                        String sessionKey = commands[1].trim();
-                        String request = "103::" + username + "::" + sessionKey;
-                        AppManager.getInstance().establishConnection();
-                        AppManager.getInstance().requestToServer(request);
-                        AppManager.getInstance().appInFocus = true;
-                    } else {
-                        navController.navigate(R.id.FirstFragment);
-                    }
-            }
-        }).start();
+        ReadWriteCache readWriteCache = new ReadWriteCache(getContext());
+        if (readWriteCache.cacheFileExist()) {
+            String cacheData = readWriteCache.readFromCache();
+            String[] commands = cacheData.split(":");
+            String username = commands[0].trim();
+            String sessionKey = commands[1].trim();
+            String request = "103::" + username + "::" + sessionKey;
+            AppManager.getInstance().establishConnection();
+            AppManager.getInstance().requestToServer(request);
+            AppManager.getInstance().appInFocus = true;
+        } else {
+            navController.navigate(R.id.FirstFragment);
+        }
 
+    }
+
+    private void askLocationPermission() {
+        if (!checkLocationPermission()) {
+            ActivityCompat.requestPermissions(getActivity(), new String[]{
+                    Manifest.permission.ACCESS_FINE_LOCATION,
+                    Manifest.permission.ACCESS_COARSE_LOCATION,
+                    Manifest.permission.ACCESS_BACKGROUND_LOCATION
+            }, LOCATION_REQUEST_CODE);
+        }
+    }
+
+    private boolean checkLocationPermission() {
+        int result1 = ContextCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION);
+        int result2 = ContextCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION);
+        int result3 = ContextCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_BACKGROUND_LOCATION);
+        return result1 == PackageManager.PERMISSION_GRANTED &&
+                result2 == PackageManager.PERMISSION_GRANTED &&
+                result3 == PackageManager.PERMISSION_GRANTED;
     }
 
 
@@ -103,6 +121,30 @@ public class SetupFragment extends Fragment implements UpdateResponse {
     public void onStart() {
         super.onStart();
         Log.i(TAG, "SetupFragment: In the onStart() event");
+        if (checkLocationPermission()) {
+            // do something directly
+        } else {
+            askLocationPermission();
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        if (requestCode == LOCATION_REQUEST_CODE) {
+            if (grantResults.length > 0) {
+                boolean fineLocation = grantResults[0] == PackageManager.PERMISSION_GRANTED;
+                boolean coarseLocation = grantResults[1] == PackageManager.PERMISSION_GRANTED;
+                boolean backgroundLocation = grantResults[2] == PackageManager.PERMISSION_GRANTED;
+                if (coarseLocation && fineLocation && backgroundLocation) {
+                    // Permission granted
+                    Log.i(TAG, "SetupFragment: Permission granted");
+                } else {
+                    // Permission not granted
+                    Log.i(TAG, "SetupFragment: Permission not granted");
+
+                }
+            }
+        }
     }
 
 

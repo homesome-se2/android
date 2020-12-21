@@ -3,6 +3,7 @@ package comtest.example.android_team;
 import android.os.Handler;
 import android.util.Log;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Objects;
 
@@ -33,6 +34,12 @@ public class AppManager {
         return gadgets;
     }
 
+    private ArrayList<Gadget> listGadgetMapping;
+
+    public ArrayList<Gadget> getListGadgetMapping() {
+        return listGadgetMapping;
+    }
+
     public static AppManager instance = null;
 
     public static AppManager getInstance() {
@@ -47,9 +54,10 @@ public class AppManager {
         currentFragment = null;
     }
 
-    public void initialization(){
+    public void initialization() {
         handler = new Handler();
         gadgets = new HashMap<>();
+        listGadgetMapping = new ArrayList<>();
         ValueTemplate.getInstance().fillValueTemplates();
     }
 
@@ -59,7 +67,7 @@ public class AppManager {
         httpNetworkService = new HTTPNetworkService(handler);
     }
 
-    public  void endConnection() {
+    public void endConnection() {
         httpNetworkService.getWebSocketClient().close();
         httpNetworkService.setConnected(false);
         Log.i(TAG, "C: Socket is closed!");
@@ -106,6 +114,9 @@ public class AppManager {
             case "903":
                 exceptionFailedLogIn(commands);
                 break;
+            case "904":
+                exceptionHub(commands);
+                break;
         }
 
     }
@@ -113,18 +124,18 @@ public class AppManager {
     // #102
     private void manuelLogin(String[] commands) {
         String cache = String.format("%s:%s", commands[1], commands[4]);
-        currentFragment.update(102, cache,null);
+        currentFragment.update(102, cache, -1);
     }
 
     // #104
     private void automaticLogin(String[] commands) {
-        currentFragment.update(104, "",null);
+        currentFragment.update(104, "", -1);
     }
 
     // #107
-    private void confirmAllLogout(String[] commands){
+    private void confirmAllLogout(String[] commands) {
         String message = commands[1];
-        currentFragment.update(107, message, null);
+        currentFragment.update(107, message, -1);
 
     }
 
@@ -151,8 +162,10 @@ public class AppManager {
                     .state(state)
                     .build();
             gadgets.put(gadgetID, gadget);
+
         }
-        currentFragment.update(304, "",null);
+        listGadgetMapping = new ArrayList<>(gadgets.values());
+        currentFragment.update(304, "", -1);
 
     }
 
@@ -162,10 +175,12 @@ public class AppManager {
         int gadgetID = Integer.parseInt(commands[1]);
         float newState = Float.parseFloat(commands[2]);
         // Set new state
-        gadgets.get(gadgetID).setState(newState);
+        Objects.requireNonNull(gadgets.get(gadgetID)).setState(newState);
         String response = VoiceController.generateVoiceAnswer(gadgets.get(gadgetID));
-        Log.i(TAG, "gadgetStateUpdate: " + response +" " + gadgetID);
-        currentFragment.update(316, response,gadgetID);
+
+        int index = getMapIndex(gadgetID);
+        listGadgetMapping.set(index, gadgets.get(gadgetID));
+        currentFragment.update(316, response, index);
     }
 
     // #352
@@ -186,45 +201,62 @@ public class AppManager {
                 .build();
         gadgets.put(gadgetID, gadget);
 
-        currentFragment.update(352, "", gadgetID);
+        listGadgetMapping.add(gadget);
+        int index = getMapIndex(gadgetID);
+        currentFragment.update(352, "", index);
     }
 
     //#354
-    private void removeGadget(String[] commands){
-        int index = 0;
-        for (int i = 0; i < gadgets.size(); i++){
-            if (Objects.requireNonNull(gadgets.get(i)).getId() == Integer.parseInt(commands[1])){
-                index = gadgets.get(i).getId();
-                gadgets.remove(i);
-            }
-
-        }
-        currentFragment.update(354,"", index);
+    private void removeGadget(String[] commands) {
+        int gadgetID = Integer.parseInt(commands[1]);
+        int index = getMapIndex(gadgetID);
+        gadgets.remove(gadgetID);
+        Log.i(TAG, "removeGadget: " + index);
+        getListGadgetMapping().remove(index);
+        currentFragment.update(354, "", index);
     }
 
     //#404
-    private void aliasChange(String[] commands){
-        int index = 0;
-        for (int i = 0; i < gadgets.size(); i++){
-            if (Objects.requireNonNull(gadgets.get(i)).getId() == Integer.parseInt(commands[1])){
-                Objects.requireNonNull(gadgets.get(i)).setGadgetName(commands[2]);
-                index = gadgets.get(i).getId();
-            }
-        }
-        currentFragment.update(404,"",index);
+    private void aliasChange(String[] commands) {
+        int gadgetID = Integer.parseInt(commands[1]);
+        String newAlias = commands[2];
+        Objects.requireNonNull(gadgets.get(gadgetID)).setGadgetName(newAlias);
+
+        int index = getMapIndex(gadgetID);
+        listGadgetMapping.set(index, gadgets.get(gadgetID));
+        currentFragment.update(404, "", index);
     }
 
     // #901
     private void exceptionMSG(String[] commands) {
         String error = "Exception msg: " + commands[1];
         Log.e(TAG, error);
-        currentFragment.update(901, error,null);
+        currentFragment.update(901, error, -1);
     }
 
     // #903
     private void exceptionFailedLogIn(String[] commands) {
         String error = "Exception msg: " + commands[1];
         Log.e(TAG, error);
-        currentFragment.update(903, error,null);
+        currentFragment.update(903, error, -1);
+    }
+
+    // #904
+    private void exceptionHub(String[] commands) {
+        String error = "Exception msg: " + commands[1];
+        Log.e(TAG, error);
+        currentFragment.update(904, error, -1);
+    }
+
+
+    private int getMapIndex(int gadgetId) {
+        int countIndex = 0;
+        for (Gadget entry : getListGadgetMapping()) {
+            if (entry.getId() == gadgetId) {
+                return countIndex;
+            }
+            countIndex++;
+        }
+        return -1;
     }
 }

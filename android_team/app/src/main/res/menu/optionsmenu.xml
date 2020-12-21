@@ -5,26 +5,31 @@
     <group android:checkableBehavior="single">
         <item
             android:id="@+id/start_worker"
+            android:icon="@drawable/android"
             android:title="Start work" />
         <item
             android:id="@+id/kill_work"
-            android:title="Kill work"
-            android:icon="@drawable/ic_workoff"/>
+            android:icon="@drawable/android"
+            android:title="Kill work" />
+        <item
+            android:id="@+id/plug_play"
+            android:icon="@drawable/android"
+            android:title="Plug and Play" />
         <item
             android:id="@+id/speak"
-            android:title="Voice Controller"
-            android:icon="@drawable/ic_speak"/>
+            android:icon="@drawable/ic_speak"
+            android:title="Voice Controller" />
         <item
             android:id="@+id/soundOff"
-            android:title="Voice ON"
-            android:icon="@drawable/ic_soundoff"/>
+            android:icon="@drawable/ic_soundoff"
+            android:title="Voice ON" />
         <item
             android:id="@+id/logOut"
-            android:title="Log Out"
-            android:icon="@drawable/ic_logout"/>
+            android:icon="@drawable/ic_logout"
+            android:title="Log Out" />
         <item
             android:id="@+id/logOutAllDevices"
-            android:title="Log Out All Devices"
-            android:icon="@drawable/ic_logoutall"/>
+            android:icon="@drawable/ic_logoutall"
+            android:title="Log Out All Devices" />
     </group>
 </menu>

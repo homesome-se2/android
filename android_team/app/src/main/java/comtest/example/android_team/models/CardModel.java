@@ -16,7 +16,14 @@ public CardModel(int type){
 
 }
 
-public int getType(){
+    @Override
+    public String toString() {
+        return "CardModel{" +
+                "type=" + type +
+                '}';
+    }
+
+    public int getType(){
     return type;
 }
 
