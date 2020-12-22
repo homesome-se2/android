@@ -3,6 +3,7 @@ package comtest.example.android_team;
 import android.Manifest;
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -27,6 +28,7 @@ public class SetupFragment extends Fragment implements UpdateResponse {
     private static final String TAG = "Info";
     private NavController navController;
     private int LOCATION_REQUEST_CODE = 10001;
+    private static int defaultStatusBarColor;
 
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -34,6 +36,8 @@ public class SetupFragment extends Fragment implements UpdateResponse {
         Log.i(TAG, "In the SetupFragment");
         navController = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment);
         AppManager.getInstance().currentFragment = this;
+        defaultStatusBarColor = getActivity().getWindow().getStatusBarColor();
+        getActivity().getWindow().setStatusBarColor(getResources().getColor(R.color.colorPrimaryDark));
 
         return view;
     }
@@ -43,11 +47,13 @@ public class SetupFragment extends Fragment implements UpdateResponse {
         switch (indexProtocol) {
             case 104:
                 navController.navigate(R.id.SecondFragment);
+                getActivity().getWindow().setStatusBarColor(defaultStatusBarColor);
                 Log.i(TAG, "Open Second fragment");
                 break;
             case 901:
             case 903:
                 Toast.makeText(getContext(), message, Toast.LENGTH_LONG).show();
+                getActivity().getWindow().setStatusBarColor(defaultStatusBarColor);
                 navController.navigate(R.id.FirstFragment);
                 break;
         }

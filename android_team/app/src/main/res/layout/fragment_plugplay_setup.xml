@@ -4,16 +4,24 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/fragment_background">
+    android:background="#F1F1F1">
 
     <LinearLayout
         android:id="@+id/linearLayout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:orientation="vertical"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_weight="0"
+            android:background="@drawable/first_screendesign">
+
+        </FrameLayout>
 
         <androidx.cardview.widget.CardView
 
@@ -44,7 +52,7 @@
                         android:layout_height="match_parent"
                         android:layout_gravity="start"
                         android:layout_weight="1"
-                        android:text="1. Home network"
+                        android:text="1. Home Network"
                         android:textSize="20sp"
                         android:textStyle="bold" />
 
@@ -70,15 +78,16 @@
                         android:layout_height="match_parent"
                         android:layout_gravity="center"
                         android:layout_weight="1"
-                        android:text=" "
+                        android:text=""
                         android:textColor="@color/colorPrimary"
                         android:textSize="20sp" />
 
                     <ImageButton
                         android:id="@+id/btn_search_SSID"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:paddingHorizontal="20dp"
+                        android:background="@drawable/button2"
+                        android:textColor="@color/design_default_color_on_primary"
+                        android:layout_width="70dp"
+                        android:layout_height="35dp"
                         android:src="@drawable/icon_search" />
 
                 </LinearLayout>
@@ -98,37 +107,79 @@
             app:cardElevation="3dp"
             app:cardUseCompatPadding="true">
 
-
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="100dp"
+                android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:paddingHorizontal="15dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:orientation="horizontal">
+                    android:layout_height="100dp"
+                    android:orientation="vertical">
 
-                    <TextView
+                    <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_gravity="start"
+                        android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="1. Home network"
-                        android:textSize="20sp"
-                        android:textStyle="bold" />
+                        android:orientation="horizontal">
 
-                    <ImageView
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_gravity="start"
+                            android:layout_weight="1"
+                            android:text="2. Locate Hub"
+                            android:textSize="20sp"
+                            android:textStyle="bold" />
 
-                        android:layout_width="40dp"
-                        android:layout_height="40dp"
-                        android:layout_gravity="end"
-                        android:layout_weight="0"
-                        android:src="@drawable/icon_verify_no" />
+                        <ImageView
+                            android:id="@+id/verify_process2"
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:layout_gravity="end"
+                            android:layout_weight="0"
+                            android:src="@drawable/icon_verify_no" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/hub_alias"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_gravity="center"
+                            android:layout_weight="1"
+                            android:text=" "
+                            android:textColor="@color/colorPrimary"
+                            android:textSize="20sp" />
+
+                        <ImageButton
+                            android:id="@+id/btn_inspect_hub"
+                            android:background="@drawable/button2"
+                            android:textColor="@color/design_default_color_on_primary"
+                            android:layout_width="70dp"
+                            android:layout_height="35dp"
+                            android:src="@drawable/icon_search" />
+
+                    </LinearLayout>
 
                 </LinearLayout>
+
+                <ProgressBar
+                    android:id="@+id/progressBarhub"
+                    style="?android:attr/progressBarStyleHorizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:progressDrawable="@drawable/seekbar_style"
+                    android:progressTint="@color/colorAccent"
+                    android:scaleY="0.7"
+                    android:visibility="invisible" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -136,25 +187,16 @@
                     android:layout_weight="1"
                     android:orientation="horizontal">
 
-                    <TextView
-
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_gravity="center"
-                        android:layout_weight="1"
-                        android:text=" "
-                        android:textColor="@color/colorPrimary"
-                        android:textSize="20sp" />
-
-                    <ImageButton
-
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:paddingHorizontal="20dp"
-                        android:src="@drawable/icon_search" />
+                    <Button
+                        android:id="@+id/btn_manual_input_hub"
+                        android:layout_margin="5dp"
+                        android:background="@drawable/button2"
+                        android:textColor="@color/design_default_color_on_primary"
+                        android:layout_width="75dp"
+                        android:layout_height="35dp"
+                        android:text="Manual" />
 
                 </LinearLayout>
-
             </LinearLayout>
 
         </androidx.cardview.widget.CardView>
@@ -170,35 +212,67 @@
             app:cardElevation="3dp"
             app:cardUseCompatPadding="true">
 
-
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="100dp"
+                android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:paddingHorizontal="15dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:orientation="horizontal">
+                    android:layout_height="100dp"
+                    android:orientation="vertical">
 
-                    <TextView
+                    <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_gravity="start"
+                        android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="1. Home network"
-                        android:textSize="20sp"
-                        android:textStyle="bold" />
+                        android:orientation="horizontal">
 
-                    <ImageView
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_gravity="start"
+                            android:layout_weight="1"
+                            android:text="3. Locate Gadget"
+                            android:textSize="20sp"
+                            android:textStyle="bold" />
 
-                        android:layout_width="40dp"
-                        android:layout_height="40dp"
-                        android:layout_gravity="end"
-                        android:layout_weight="0"
-                        android:src="@drawable/icon_verify_no" />
+                        <ImageView
+                            android:id="@+id/verify_process3"
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:layout_gravity="end"
+                            android:layout_weight="0"
+                            android:src="@drawable/icon_verify_no" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/gadget_SSID"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_gravity="center"
+                            android:layout_weight="1"
+                            android:text=" "
+                            android:textColor="@color/colorPrimary"
+                            android:textSize="20sp" />
+
+                        <ImageButton
+                            android:id="@+id/btn_search_AP"
+                            android:background="@drawable/button2"
+                            android:textColor="@color/design_default_color_on_primary"
+                            android:layout_width="70dp"
+                            android:layout_height="35dp"
+                            android:src="@drawable/icon_search" />
+
+                    </LinearLayout>
 
                 </LinearLayout>
 
@@ -208,26 +282,25 @@
                     android:layout_weight="1"
                     android:orientation="horizontal">
 
-                    <TextView
+                    <Button
+                        android:id="@+id/btn_connect_to_AP"
+                        android:layout_margin="5dp"
+                        android:background="@drawable/button2"
+                        android:layout_width="75dp"
+                        android:layout_height="35dp"
+                        android:textColor="@color/design_default_color_on_primary"
+                        android:text="Connect" />
 
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_gravity="center"
-                        android:layout_weight="1"
-                        android:text=" "
-                        android:textColor="@color/colorPrimary"
-                        android:textSize="20sp" />
-
-                    <ImageButton
-
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:paddingHorizontal="20dp"
-                        android:src="@drawable/icon_search" />
+                    <Button
+                        android:id="@+id/btn_test_AP"
+                        android:layout_margin="5dp"
+                        android:background="@drawable/button2"
+                        android:textColor="@color/design_default_color_on_primary"
+                        android:layout_width="75dp"
+                        android:layout_height="35dp"
+                        android:text="Test" />
 
                 </LinearLayout>
-
-
             </LinearLayout>
 
         </androidx.cardview.widget.CardView>
@@ -236,8 +309,9 @@
             android:id="@+id/frameLoading"
             android:layout_width="120dp"
             android:layout_height="120dp"
-            android:layout_marginTop="20dp"
             android:layout_gravity="center"
+            android:layout_marginTop="20dp"
+            android:layout_weight="1"
             tools:layout_editor_absoluteY="611dp">
 
             <ImageView
@@ -256,18 +330,26 @@
                 android:scrollbarStyle="insideOverlay" />
         </FrameLayout>
 
-        <Button
-            android:id="@+id/sync_btn"
-            android:layout_width="340dp"
-            android:layout_height="45dp"
-            android:layout_gravity="center"
-            android:layout_marginTop="50dp"
-            android:background="@drawable/button"
-            android:paddingLeft="20dp"
-            android:paddingEnd="20dp"
-            android:text="Sync Gadget"
-            android:textColor="@color/design_default_color_on_primary"
-            android:textSize="16sp" />
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/second_screendesign">
+
+
+            <Button
+                android:id="@+id/sync_btn"
+                android:layout_width="340dp"
+                android:layout_height="45dp"
+                android:layout_gravity="center"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:background="@drawable/button"
+                android:text="Sync Gadget"
+                android:textColor="@color/design_default_color_on_primary"
+                android:textSize="16sp" />
+        </FrameLayout>
+
 
     </LinearLayout>
 

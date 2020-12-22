@@ -27,6 +27,7 @@ public class TTS {
                     if (result == TextToSpeech.LANG_MISSING_DATA || result == TextToSpeech.LANG_NOT_SUPPORTED) {
                         Log.e(TAG, "onInit: TTS Language not supported");
                     }
+                    Log.i(TAG, "onInit: TTS System is ON");
                 } else {
                     Log.e(TAG, "onInit: TTS Initialization Failed");
                 }
@@ -46,6 +47,7 @@ public class TTS {
         if (mtts != null) {
             mtts.stop();
             mtts.shutdown();
+            Log.i(TAG, "onInit: TTS System is OFF");
         }
     }
 }
