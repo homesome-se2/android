@@ -3,6 +3,7 @@ package comtest.example.android_team;
 import android.Manifest;
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -29,6 +30,7 @@ public class FirstFragment extends Fragment implements UpdateResponse {
     private NavController navController;
     private Button login_btn;
     private EditText logAcc, logPass;
+    private static int defaultStatusBarColor;
 
     @Override
     public View onCreateView(
@@ -41,6 +43,8 @@ public class FirstFragment extends Fragment implements UpdateResponse {
 
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        defaultStatusBarColor = getActivity().getWindow().getStatusBarColor();
+        getActivity().getWindow().setStatusBarColor(Color.WHITE);
         init(view);
 
         login_btn.setOnClickListener(new View.OnClickListener() {
@@ -62,7 +66,7 @@ public class FirstFragment extends Fragment implements UpdateResponse {
         String username = logAcc.getText().toString().trim();
         String password = logPass.getText().toString().trim();
 
-        if (checkInputOkay(username,password)) {
+        if (checkInputOkay(username, password)) {
             AppManager.getInstance().establishConnection();
             AppManager.getInstance().appInFocus = true;
             String logIn = "101::" + username + "::" + password + "";
@@ -70,13 +74,13 @@ public class FirstFragment extends Fragment implements UpdateResponse {
         }
     }
 
-    private boolean checkInputOkay(String username, String password){
-      if (username.isEmpty() || password.isEmpty()){
-          Toast.makeText(getContext(), "Username or Password missing!", Toast.LENGTH_LONG).show();
-          return false;
-      }else {
-          return true;
-      }
+    private boolean checkInputOkay(String username, String password) {
+        if (username.isEmpty() || password.isEmpty()) {
+            Toast.makeText(getContext(), "Username or Password missing!", Toast.LENGTH_LONG).show();
+            return false;
+        } else {
+            return true;
+        }
     }
 
     @Override
@@ -87,6 +91,7 @@ public class FirstFragment extends Fragment implements UpdateResponse {
             case 102:
                 ReadWriteCache readWriteCache = new ReadWriteCache(getContext());
                 navController.navigate(R.id.SecondFragment);
+                getActivity().getWindow().setStatusBarColor(defaultStatusBarColor);
                 readWriteCache.writeToCache(message);
                 break;
             case 107:

@@ -5,7 +5,7 @@
     android:id="@+id/linearLayout2"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#04A7F1">
+    android:background="@drawable/fragment_background">
 
     <TextView
         android:id="@+id/textView19"

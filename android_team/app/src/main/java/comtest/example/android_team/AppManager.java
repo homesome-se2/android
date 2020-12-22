@@ -175,12 +175,14 @@ public class AppManager {
         int gadgetID = Integer.parseInt(commands[1]);
         float newState = Float.parseFloat(commands[2]);
         // Set new state
-        Objects.requireNonNull(gadgets.get(gadgetID)).setState(newState);
-        String response = VoiceController.generateVoiceAnswer(gadgets.get(gadgetID));
+        if (!gadgets.isEmpty()) {
+            Objects.requireNonNull(gadgets.get(gadgetID)).setState(newState);
+            String response = VoiceController.generateVoiceAnswer(gadgets.get(gadgetID));
 
-        int index = getMapIndex(gadgetID);
-        listGadgetMapping.set(index, gadgets.get(gadgetID));
-        currentFragment.update(316, response, index);
+            int index = getMapIndex(gadgetID);
+            listGadgetMapping.set(index, gadgets.get(gadgetID));
+            currentFragment.update(316, response, index);
+        }
     }
 
     // #352
@@ -208,23 +210,27 @@ public class AppManager {
 
     //#354
     private void removeGadget(String[] commands) {
-        int gadgetID = Integer.parseInt(commands[1]);
-        int index = getMapIndex(gadgetID);
-        gadgets.remove(gadgetID);
-        Log.i(TAG, "removeGadget: " + index);
-        getListGadgetMapping().remove(index);
-        currentFragment.update(354, "", index);
+        if (!gadgets.isEmpty()) {
+            int gadgetID = Integer.parseInt(commands[1]);
+            int index = getMapIndex(gadgetID);
+            gadgets.remove(gadgetID);
+            Log.i(TAG, "removeGadget: " + index);
+            getListGadgetMapping().remove(index);
+            currentFragment.update(354, "", index);
+        }
     }
 
     //#404
     private void aliasChange(String[] commands) {
-        int gadgetID = Integer.parseInt(commands[1]);
-        String newAlias = commands[2];
-        Objects.requireNonNull(gadgets.get(gadgetID)).setGadgetName(newAlias);
+        if (!gadgets.isEmpty()) {
+            int gadgetID = Integer.parseInt(commands[1]);
+            String newAlias = commands[2];
+            Objects.requireNonNull(gadgets.get(gadgetID)).setGadgetName(newAlias);
 
-        int index = getMapIndex(gadgetID);
-        listGadgetMapping.set(index, gadgets.get(gadgetID));
-        currentFragment.update(404, "", index);
+            int index = getMapIndex(gadgetID);
+            listGadgetMapping.set(index, gadgets.get(gadgetID));
+            currentFragment.update(404, "", index);
+        }
     }
 
     // #901

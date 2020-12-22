@@ -1,6 +1,7 @@
 package comtest.example.android_team;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.speech.RecognizerIntent;
 import android.util.Log;
@@ -9,6 +10,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.view.animation.OvershootInterpolator;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 import androidx.activity.OnBackPressedCallback;
@@ -52,19 +55,21 @@ public class SecondFragment extends Fragment implements UpdateResponse {
     private static final int REQUEST_CODE_SPEECH_INPUT = 1000;
     private DrawerLayout drawer;
     private boolean isSoundOn;
+    private ImageButton imageButton;
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_second, container, false);
         getActivity().getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-        Log.d(TAG, "In the SecondFragment");
         AppManager.getInstance().currentFragment = this;
         gadgetCards = new ArrayList<>();
         recyclerView = view.findViewById(R.id.gadgetListView);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         drawer = view.findViewById(R.id.drawer_layout);
+        imageButton = view.findViewById(R.id.imageButton);
         NavigationView navigationView = view.findViewById(R.id.nav_view);
         navController = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment);
+
 
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
@@ -119,6 +124,13 @@ public class SecondFragment extends Fragment implements UpdateResponse {
             }
         });
 
+
+        imageButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                drawer.openDrawer(GravityCompat.START);
+            }
+        });
 
         return view;
     }
@@ -293,13 +305,13 @@ public class SecondFragment extends Fragment implements UpdateResponse {
         gadgetCards.clear();
     }
 
+
     @Override
     public void onStop() {
         super.onStop();
         Log.d(TAG, "SecondFragment: In the onStopView() event");
         tts.stopTTS();
     }
-
     @Override
     public void onDestroy() {
         super.onDestroy();
