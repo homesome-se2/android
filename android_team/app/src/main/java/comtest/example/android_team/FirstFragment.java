@@ -13,6 +13,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import java.util.Objects;
+
 import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -91,7 +93,7 @@ public class FirstFragment extends Fragment implements UpdateResponse {
             case 102:
                 ReadWriteCache readWriteCache = new ReadWriteCache(getContext());
                 navController.navigate(R.id.SecondFragment);
-                getActivity().getWindow().setStatusBarColor(defaultStatusBarColor);
+                requireActivity().getWindow().setStatusBarColor(defaultStatusBarColor);
                 readWriteCache.writeToCache(message);
                 break;
             case 107:
@@ -117,7 +119,7 @@ public class FirstFragment extends Fragment implements UpdateResponse {
         OnBackPressedCallback callback = new OnBackPressedCallback(true /* enabled by default */) {
             @Override
             public void handleOnBackPressed() {
-                getActivity().finish();
+                requireActivity().finish();
             }
         };
         requireActivity().getOnBackPressedDispatcher().addCallback(this, callback);
