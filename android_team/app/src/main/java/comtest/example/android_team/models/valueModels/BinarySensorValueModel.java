@@ -9,9 +9,9 @@ public class BinarySensorValueModel {
     private String valueOFF;
 
     public BinarySensorValueModel() {
-        this.imageIconList =new int[]{R.drawable.def_on, R.drawable.def_off};
-        this.valueOFF = "OFF";
-        this.valueON = "ON";
+        this.imageIconList =new int[]{R.drawable.sensor_on, R.drawable.sensor_off};
+        this.valueOFF = "IDLE";
+        this.valueON = "TRIGGERED";
     }
 
     public BinarySensorValueModel(int switchImgOn, int switchImgOff, String valueOn, String valueOff) {

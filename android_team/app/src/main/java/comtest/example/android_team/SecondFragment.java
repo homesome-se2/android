@@ -204,7 +204,7 @@ public class SecondFragment extends Fragment implements UpdateResponse {
                 break;
             case 316:
                 if (!gadgetCards.isEmpty()) {
-                    //       tts.textToSpeak(message);
+                    tts.textToSpeak(message);
                     multiViewTypeAdapter.notifyItemChanged(gadgetID);
                 }
                 break;

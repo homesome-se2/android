@@ -22,15 +22,16 @@ public class VoiceController {
                 break;
             case BINARY_SENSOR:
                 if (gadget.getState() == 1) {
-                    text = ResourceHelper.resources.getString(R.string.VOICE_ON, gadget.getGadgetName());
+                    text = ResourceHelper.resources.getString(R.string.BINARY_SENSOR_TRIGGERED, gadget.getGadgetName());
                 } else {
-                    text = ResourceHelper.resources.getString(R.string.VOICE_OFF, gadget.getGadgetName());
+                    text = ResourceHelper.resources.getString(R.string.BINARY_SENSOR_IDLE, gadget.getGadgetName());
                 }
                 break;
             case SENSOR:
                 text = sensorString(gadget);
                 break;
             case SET_VALUE:
+                text = ResourceHelper.resources.getString(R.string.SET_VALUE_PERCENT, gadget.getGadgetName(), String.valueOf(gadget.getState()));
                 break;
         }
         return text;
@@ -47,5 +48,6 @@ public class VoiceController {
         }
         return "";
     }
+
 
 }
