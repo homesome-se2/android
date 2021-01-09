@@ -36,6 +36,7 @@ public class ValueTemplate {
         // ************ Switch *****************
         this.switchTemplate.put("default", new SwitchValueModel());
         this.switchTemplate.put("light", new SwitchValueModel(R.drawable.light_on,R.drawable.light_off, "ON", "OFF"));
+        this.switchTemplate.put("fan", new SwitchValueModel(R.drawable.fan_on,R.drawable.fan_off, "ON", "OFF"));
 
         // ************ Sensor *****************
         this.sensorTemplate.put("default", new SensorValueModel());
@@ -46,6 +47,7 @@ public class ValueTemplate {
         this.biSensorTemplate.put("default", new BinarySensorValueModel());
         this.biSensorTemplate.put("door", new BinarySensorValueModel(R.drawable.door_open,R.drawable.door_closed,"OPEN", "CLOSED"));
         this.biSensorTemplate.put("person", new BinarySensorValueModel(R.drawable.home,R.drawable.away,"HOME", "AWAY"));
+        this.biSensorTemplate.put("detectorBurglar", new BinarySensorValueModel(R.drawable.motion_sens_on,R.drawable.motion_sens_off,"MOTION DETECTED!", "IDLE"));
 
         // ************ Setvalue *****************
         this.setValueHashMap.put("default", new SetValueModel());

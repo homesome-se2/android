@@ -173,6 +173,7 @@ public class AppManager {
     // #316
     private void gadgetStateUpdate(String[] commands) {
         int gadgetID = Integer.parseInt(commands[1]);
+        Log.i(TAG, "Gadget to update: " + gadgetID);
         float newState = Float.parseFloat(commands[2]);
         // Set new state
         if (!gadgets.isEmpty()) {
@@ -212,11 +213,16 @@ public class AppManager {
     private void removeGadget(String[] commands) {
         if (!gadgets.isEmpty()) {
             int gadgetID = Integer.parseInt(commands[1]);
+            Log.i(TAG, "Gadget to remove: " + gadgetID);
             int index = getMapIndex(gadgetID);
-            gadgets.remove(gadgetID);
             Log.i(TAG, "removeGadget: " + index);
-            getListGadgetMapping().remove(index);
-            currentFragment.update(354, "", index);
+            if (index == -1) {
+                Log.e(TAG, "removeGadget: Gadget don't exist");
+            }else {
+                gadgets.remove(gadgetID);
+                getListGadgetMapping().remove(index);
+                currentFragment.update(354, "", index);
+            }
         }
     }
 
@@ -258,6 +264,7 @@ public class AppManager {
     private int getMapIndex(int gadgetId) {
         int countIndex = 0;
         for (Gadget entry : getListGadgetMapping()) {
+     //       Log.i(TAG, entry.toString());
             if (entry.getId() == gadgetId) {
                 return countIndex;
             }

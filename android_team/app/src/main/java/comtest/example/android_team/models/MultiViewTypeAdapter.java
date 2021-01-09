@@ -9,6 +9,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
@@ -59,12 +60,14 @@ public class MultiViewTypeAdapter extends RecyclerView.Adapter<RecyclerView.View
 
         TextView alias, state;
         ImageView gadgetImage;
+        LinearLayout background;
 
         public BinarySensorTemplateViewHolder(@NonNull View itemView) {
             super(itemView);
             this.alias = itemView.findViewById(R.id.text_alias);
             this.state = itemView.findViewById(R.id.text_state);
             this.gadgetImage = itemView.findViewById(R.id.image_item);
+            this.background = itemView.findViewById(R.id.card_background);
         }
     }
 
@@ -212,10 +215,14 @@ public class MultiViewTypeAdapter extends RecyclerView.Adapter<RecyclerView.View
         holder.alias.setText(gadget.getGadgetName());
         if (gadget.getState() == 1) {
             holder.state.setText(valueTemplate.getValueON());
+            if (!gadget.getValueTemplate().equals("person")) {
+                holder.background.setBackgroundColor(mContext.getResources().getColor(R.color.alert));
+            }
             holder.gadgetImage.setImageResource(valueTemplate.getImageIconON());
         } else {
             holder.state.setText(valueTemplate.getValueOFF());
             holder.gadgetImage.setImageResource(valueTemplate.getImageIconOFF());
+            holder.background.setBackgroundColor(Color.WHITE);
         }
     }
 
