@@ -7,5 +7,6 @@
     <string name="SENSOR_PERCENT_VALUE">%1$s changed to %2$s Percent.</string>
     <string name="BINARY_SENSOR_TRIGGERED">%1$s have been triggered.</string>
     <string name="BINARY_SENSOR_IDLE">%1$s is now idle.</string>
+    <string name="BINARY_SENSOR_TRIGGER_VALUE">%1$s is %2$s.</string>
     <string name="SET_VALUE_PERCENT">%1$s have been set to %2$s Percent.</string>
 </resources>
