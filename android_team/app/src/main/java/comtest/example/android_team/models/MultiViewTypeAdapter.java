@@ -216,6 +216,7 @@ public class MultiViewTypeAdapter extends RecyclerView.Adapter<RecyclerView.View
         if (gadget.getState() == 1) {
             holder.state.setText(valueTemplate.getValueON());
             if (!gadget.getValueTemplate().equals("person")) {
+                Log.e(TAG, gadget.getValueTemplate());
                 holder.background.setBackgroundColor(mContext.getResources().getColor(R.color.alert));
             }
             holder.gadgetImage.setImageResource(valueTemplate.getImageIconON());
